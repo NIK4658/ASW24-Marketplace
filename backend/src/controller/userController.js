@@ -37,7 +37,8 @@ exports.createUser = (req, res) => {
 }
 
 exports.deleteUser = (req, res) => {
-  const { username, password } = req.body
+  const username = req.params.username
+  const password = req.body.password
 
   // Search user by username
   userModel.findOne({ username })
