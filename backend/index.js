@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const userRouter = require('./src/routes/userRouter')
+const postRouter = require('./src/routes/postRouter')
 const cors = require('cors');
 
 mongoose.connect('mongodb://root:rc43ogjdi9mdw3@detu.ddns.net:27017/web?authSource=admin');
@@ -9,6 +11,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+app.use('/user', userRouter);
+app.use('/post', postRouter);
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
