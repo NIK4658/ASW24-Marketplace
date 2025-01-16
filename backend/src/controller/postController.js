@@ -1,57 +1,34 @@
 const { postModel } = require('../model/postModel')
-
-exports.searchPost = (req, res) => {
-  postModel.findById(req.params.id)
-    .then((result) => {
-      if (!result) {
-        return res.status(404).json({ message: 'Post not found' })
-      }
-      res.json(result)
-    })
-    .catch((error) => {
-      res.status(500).json(error)
-    })
-}
+const { userModel } = require('../model/userModel')
+const mongoose = require('mongoose')
 
 exports.createPost = (req, res) => {
-  console.log(req.body + 'createPost')
-  const post = new postModel(req.body)
-  post.save()
-    .then((result) => {
-      res.json(result)
-    })
-    .catch((error) => {
-      res.json(error)
-    })
-}
+  const { username, title, price, condition, description } = req.body
 
-exports.updatePost = (req, res) => {
-  postModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then((result) => {
-      if (!result) {
-        return res.status(404).json({ message: 'Post not found' })
+  userModel.findOne({ username })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' })
       }
-      res.json(result)
+
+      const newPost = new postModel({
+        title, price, condition, description, user: user._id
+      })
+
+      newPost.save()
+        .then((result) => {
+          res.status(201).json(result)
+        })
+        .catch((error) => {
+          res.status(500).json({ message: 'Error creating the post', error })
+        })
     })
     .catch((error) => {
-      res.status(500).json(error)
+      res.status(500).json({ message: 'Error finding user', error })
     })
 }
 
-exports.deletePost = (req, res) => {
-  postModel.findByIdAndDelete(req.params.id)
-    .then((result) => {
-      if (!result) {
-        return res.status(404).json({ message: 'Post not found' })
-      }
-      res.json({ message: 'Post deleted successfully', deletedPost: result })
-    })
-    .catch((error) => {
-      res.status(500).json(error)
-    })
-}
-
-exports.getAllPosts  = (req, res) => {
+exports.getAllPosts = (req, res) => {
   postModel.find()
     .populate('user', 'username email')
     .then((posts) => {
@@ -65,3 +42,64 @@ exports.getAllPosts  = (req, res) => {
     })
 }
 
+exports.deletePost = (req, res) => {
+  const id = req.params.id
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid post ID' })
+  }
+
+  postModel.findByIdAndDelete(id)
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+      res.json({ message: 'Post deleted successfully', deletedPost: result })
+    })
+    .catch((error) => {
+      res.status(500).json(error)
+    })
+}
+
+exports.searchPost = (req, res) => {
+  const id = req.params.id
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid post ID' })
+  }
+
+  postModel.findById(id)
+    .populate('user', 'username email')
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+      res.json(result)
+    })
+    .catch((error) => {
+      res.status(500).json({ message: 'Error retrieving post', error })
+    })
+}
+
+exports.updatePost = (req, res) => {
+  const id = req.params.id
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid post ID' })
+  }
+
+  const { title, price, condition, description } = req.body
+
+  postModel.findByIdAndUpdate(id, {
+    title, price, condition, description
+  }, { new: true })
+    .then((updatedPost) => {
+      if (!updatedPost) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+      res.json(updatedPost)
+    })
+    .catch((error) => {
+      res.status(500).json({ message: 'Error updating the post', error })
+    })
+}

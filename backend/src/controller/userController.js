@@ -1,4 +1,5 @@
 const { userModel } = require('../model/userModel')
+const { postModel } = require('../model/postModel');
 const bcrypt = require('bcrypt')
 
 exports.searchByUsername = (req, res) => {
@@ -61,6 +62,9 @@ exports.deleteUser = (req, res) => {
         userModel.deleteOne({ username })
           .then(() => {
             res.json({ message: 'User deleted successfully' })
+
+            // Delete all posts from the user
+            postModel.deleteMany({ user: user._id })
           })
           .catch((error) => {
             res.status(500).json({ message: 'Error deleting user', error })
