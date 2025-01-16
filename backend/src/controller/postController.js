@@ -1,16 +1,20 @@
 const { postModel } = require('../model/postModel')
 
 exports.searchPost = (req, res) => {
-  postModel.find()
+  postModel.findById(req.params.id)
     .then((result) => {
+      if (!result) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
       res.json(result)
     })
     .catch((error) => {
-      res.json(error)
+      res.status(500).json(error)
     })
 }
 
 exports.createPost = (req, res) => {
+  console.log(req.body + 'createPost')
   const post = new postModel(req.body)
   post.save()
     .then((result) => {
@@ -47,14 +51,17 @@ exports.deletePost = (req, res) => {
     })
 }
 
-exports.listPosts = (req, res) => {
+exports.getAllPosts  = (req, res) => {
   postModel.find()
-    .then((result) => {
-      res.json(result);
+    .populate('user', 'username email')
+    .then((posts) => {
+      if (posts.length === 0) {
+        return res.status(404).json({ message: 'No posts found' })
+      }
+      res.json(posts)
     })
     .catch((error) => {
-      res.status(500).json({ message: 'Error retrieving posts', error });
-    });
-};
-
+      res.status(500).json({ message: 'Error fetching posts', error })
+    })
+}
 

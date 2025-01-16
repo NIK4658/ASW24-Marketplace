@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('../controller/postController');
 
 router.route('/')
-  .get(controller.listPosts)
+  .get(controller.getAllPosts )
   .post(controller.createPost);
 
 router.route('/:id')
