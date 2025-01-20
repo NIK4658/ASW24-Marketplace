@@ -1,31 +1,20 @@
 # aws24-marketplace
 
-Basic AWS Marketplace clone with Vue 3 and Vite.
+Basic AWS Marketplace with Vue 3.
 
-## Recommended IDE Setup
+## Start the backend
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+In the backend folder, run:
 
-## Project Setup
-
-```sh
-npm install
+```
+node .
 ```
 
-### Compile and Hot-Reload for Development
+## Start the frontend
 
-```sh
+In the frontend folder, run:
+
+```
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
