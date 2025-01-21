@@ -34,7 +34,17 @@ exports.getAllPosts = async (req, res) => {
       .populate('seller', 'username email')
       .populate('buyer', 'username email')
       .exec();
-    res.status(200).json(posts);
+    const formattedPosts = posts.map(post => {
+      const formattedImages = post.images.map(image => ({
+        data: image.data.toString('base64'), // Convert Buffer to base64
+        contentType: image.contentType,
+      }));
+      return {
+        ...post.toObject(),
+        images: formattedImages,
+      };
+    });
+    res.status(200).json(formattedPosts);
   } catch (error) {
     console.error(error);
     res.status(500).json({error: 'Something went wrong while fetching the posts.'});
@@ -104,7 +114,6 @@ exports.updatePost = async (req, res) => {
     let sellerId = existingPost.seller;
     let buyerId = existingPost.buyer;
 
-    // Handle seller update by username
     if (updates.seller) {
       const seller = await userModel.findOne({username: updates.seller});
       if (!seller) {
@@ -123,18 +132,15 @@ exports.updatePost = async (req, res) => {
       updates.buyer = buyer._id;
     }
 
-    // Check that seller and buyer are not the same person
     if (sellerId && buyerId && sellerId.toString() === buyerId.toString()) {
       return res.status(400).json({message: 'Seller and buyer cannot be the same person'});
     }
 
-    // Update the post
     const updatedPost = await postModel.findByIdAndUpdate(postId, updates, {new: true, runValidators: true})
       .populate('seller', 'username email')
       .populate('buyer', 'username email')
       .exec();
 
-    // Respond with the updated post
     res.status(200).json(updatedPost);
   } catch (error) {
     console.error(error);
