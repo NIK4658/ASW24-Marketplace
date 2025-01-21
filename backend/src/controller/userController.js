@@ -1,12 +1,12 @@
-const { userModel } = require('../model/userModel')
-const { postModel } = require('../model/postModel');
+const {userModel} = require('../model/userModel')
+const {postModel} = require('../model/postModel');
 const bcrypt = require('bcrypt')
 
 exports.searchByUsername = (req, res) => {
-  userModel.findOne({ username: req.params.username })
+  userModel.findOne({username: req.params.username})
     .then((result) => {
       if (!result) {
-        return res.status(404).json({ message: 'User not found' })
+        return res.status(404).json({message: 'User not found'})
       }
       res.json(result)
     })
@@ -16,11 +16,11 @@ exports.searchByUsername = (req, res) => {
 }
 
 exports.createUser = (req, res) => {
-  const { username, email, password } = req.body
+  const {username, email, password} = req.body
 
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
-      return res.status(500).json({ message: 'Error while encrypting password', error: err })
+      return res.status(500).json({message: 'Error while encrypting password', error: err})
     }
 
     const user = new userModel({
@@ -32,7 +32,7 @@ exports.createUser = (req, res) => {
         res.json(result)
       })
       .catch((error) => {
-        res.status(500).json({ message: 'Error creating the user', error })
+        res.status(500).json({message: 'Error creating the user', error})
       })
   })
 }
@@ -42,37 +42,37 @@ exports.deleteUser = (req, res) => {
   const password = req.body.password
 
   // Search user by username
-  userModel.findOne({ username })
+  userModel.findOne({username})
     .then((user) => {
       if (!user) {
-        return res.status(404).json({ message: 'User not found' })
+        return res.status(404).json({message: 'User not found'})
       }
 
       // Compare password
       bcrypt.compare(password, user.password, (err, isMatch) => {
         if (err) {
-          return res.status(500).json({ message: 'Server error during password comparison' })
+          return res.status(500).json({message: 'Server error during password comparison'})
         }
 
         if (!isMatch) {
-          return res.status(401).json({ message: 'Incorrect password' })
+          return res.status(401).json({message: 'Incorrect password'})
         }
 
         // Delete user if password is correct
-        userModel.deleteOne({ username })
+        userModel.deleteOne({username})
           .then(() => {
-            res.json({ message: 'User deleted successfully' })
+            res.json({message: 'User deleted successfully'})
 
             // Delete all posts from the user
-            postModel.deleteMany({ user: user._id })
+            postModel.deleteMany({user: user._id})
           })
           .catch((error) => {
-            res.status(500).json({ message: 'Error deleting user', error })
+            res.status(500).json({message: 'Error deleting user', error})
           })
       })
     })
     .catch((error) => {
-      res.status(500).json({ message: 'Error finding user', error })
+      res.status(500).json({message: 'Error finding user', error})
     })
 }
 
