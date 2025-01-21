@@ -1,6 +1,8 @@
 const {userModel} = require('../models/userModel')
 const {postModel} = require('../models/postModel');
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
+const jwtSettings =require('../../settings.json').jwt;
 
 exports.searchByUsername = (req, res) => {
   userModel.findOne({username: req.params.username})
@@ -84,4 +86,29 @@ exports.getAllUsers = (req, res) => {
     .catch((error) => {
       res.status(500).json(error)
     })
+}
+
+exports.loginUser = async (req, res) => {
+  const {username, password} = req.body;
+
+  try {
+    const user = await userModel.findOne({username});
+    if (!user) {
+      return res.status(404).json({message: 'User not found'});
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({message: 'Invalid password'});
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({userId: user._id, username: user.username}, jwtSettings.secret, {expiresIn: jwtSettings.expires});
+
+    // Respond with the token
+    res.json({message: 'Authentication successful', token});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Authentication failed'});
+  }
 }
