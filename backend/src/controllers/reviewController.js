@@ -1,6 +1,6 @@
-const {postModel} = require('../model/postModel')
-const {reviewModel} = require('../model/reviewModel')
-const {userModel} = require('../model/userModel')
+const {postModel} = require('../models/postModel')
+const {reviewModel} = require('../models/reviewModel')
+const {userModel} = require('../models/userModel')
 const mongoose = require('mongoose')
 
 exports.createReview = async (req, res) => {

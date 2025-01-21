@@ -6,7 +6,7 @@ const reviewRouter = require('./src/routes/reviewRouter')
 const cors = require('cors');
 
 mongoose.connect('mongodb://root:rc43ogjdi9mdw3@detu.ddns.net:27017/webProject?authSource=admin');
-// mongoose.connect('mongodb://localhost:27017/dbMovies');
+// mongoose.connect('mongodb://localhost:27017/webProject');
 
 const app = express();
 app.use(cors());

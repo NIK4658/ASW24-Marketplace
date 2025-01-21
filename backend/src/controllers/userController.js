@@ -1,5 +1,5 @@
-const {userModel} = require('../model/userModel')
-const {postModel} = require('../model/postModel');
+const {userModel} = require('../models/userModel')
+const {postModel} = require('../models/postModel');
 const bcrypt = require('bcrypt')
 
 exports.searchByUsername = (req, res) => {

@@ -1,5 +1,5 @@
-const {postModel} = require('../model/postModel')
-const {userModel} = require('../model/userModel')
+const {postModel} = require('../models/postModel')
+const {userModel} = require('../models/userModel')
 const defaultImage = require('fs').readFileSync('public/EmptyPost.png');
 const mongoose = require('mongoose')
 
