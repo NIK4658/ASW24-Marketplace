@@ -1,8 +1,9 @@
 const {userModel} = require('../models/userModel')
 const {postModel} = require('../models/postModel');
 const bcrypt = require('bcrypt')
+const defaultImage = require('fs').readFileSync('public/DefaultPfp.png');
 const jwt = require('jsonwebtoken');
-const jwtSettings =require('../../settings.json').jwt;
+const jwtSettings = require('../../settings.json').jwt;
 
 exports.searchByUsername = (req, res) => {
   userModel.findOne({username: req.params.username})
@@ -18,15 +19,21 @@ exports.searchByUsername = (req, res) => {
 }
 
 exports.createUser = (req, res) => {
-  const {username, email, password} = req.body
+  const {username, email, password, image} = req.body
 
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
       return res.status(500).json({message: 'Error while encrypting password', error: err})
     }
 
+    const formattedImage = image ? {
+      data: Buffer.from(image, 'base64'), contentType: 'image/jpeg',
+    } : {
+      data: defaultImage, contentType: 'image/png',
+    };
+
     const user = new userModel({
-      username, email, password: hashedPassword
+      username, email, password: hashedPassword, image: formattedImage
     })
 
     user.save()
@@ -103,7 +110,9 @@ exports.loginUser = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({userId: user._id, username: user.username}, jwtSettings.secret, {expiresIn: jwtSettings.expires});
+    const token = jwt.sign({
+      userId: user._id, username: user.username
+    }, jwtSettings.secret, {expiresIn: jwtSettings.expires});
 
     // Respond with the token
     res.json({message: 'Authentication successful', token});
