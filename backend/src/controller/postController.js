@@ -141,3 +141,19 @@ exports.updatePost = async (req, res) => {
     res.status(500).json({message: 'Something went wrong while updating the post'});
   }
 };
+
+exports.getPostsMadeByUser = async (req, res) => {
+  const username = req.params.id;
+  try {
+    const user = await userModel.findOne({username});
+    if (!user) {
+      return res.status(404).json({message: 'User not found'});
+    }
+
+    const posts = await postModel.find({seller: user._id}).populate('seller', 'username email');
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Error fetching posts', error});
+  }
+};
