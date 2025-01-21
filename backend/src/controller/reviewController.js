@@ -31,7 +31,7 @@ exports.createReview = (req, res) => {
                 return res.status(404).json({message: 'Post not found'});
               }
 
-              if (!(productPost.user).equals(userSeller._id)) {
+              if (!(productPost.seller).equals(userSeller._id)) {
                 return res.status(500).json({
                   message:
                     'Error, seller is not the seller of the post'
