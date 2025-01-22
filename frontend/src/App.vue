@@ -1,10 +1,13 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
   <RouterView />
 </template>
 
-<style scoped>
-
+<style>
+@media (min-width: 1024px) {
+  #app {
+    display: flex;
+  }
+}
 </style>
