@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios'
 import { ref } from 'vue'
-import ImputField from '@/components/InputField.vue'
+import InputField from '@/components/login/InputField.vue'
 
 const username = ref('')
 const password = ref('')
@@ -27,15 +27,7 @@ function handleLogin() {
 		<h1>Login</h1>
 		<form @submit.prevent="handleLogin">
 			<input-field placeholder="Enter your username" idField="Username" inputType="text" />
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input
-					type="password"
-					id="password"
-					v-model="password"
-					placeholder="Enter your password"
-				/>
-			</div>
+			<input-field placeholder="Enter your password" idField="Password" inputType="password" />
 			<button type="submit">Login</button>
 		</form>
 		<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
@@ -58,18 +50,6 @@ function handleLogin() {
 
 	.form-group {
 		margin-bottom: 15px;
-	}
-
-	label {
-		display: block;
-		margin-bottom: 5px;
-		font-weight: bold;
-	}
-
-	input {
-		width: 100%;
-		padding: 8px;
-		box-sizing: border-box;
 	}
 
 	button {

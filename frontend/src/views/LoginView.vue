@@ -10,5 +10,4 @@ import LoginItem from '../components/LoginItem.vue'
 
 <style scoped>
 
-
 </style>
