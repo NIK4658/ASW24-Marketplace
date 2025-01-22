@@ -115,7 +115,7 @@ exports.loginUser = async (req, res) => {
     }, jwtSettings.secret, {expiresIn: jwtSettings.expires});
 
     // Respond with the token
-    res.json({message: 'Authentication successful', token});
+    res.status(200).json({message: 'Authentication successful', token});
   } catch (error) {
     console.error(error);
     res.status(500).json({message: 'Authentication failed'});

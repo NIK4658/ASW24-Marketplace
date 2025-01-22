@@ -1,38 +1,32 @@
-<script>
-export default {
-	data() {
-		return {
-			username: '',
-			password: '',
-			errorMessage: '',
-		};
-	},
-	methods: {
-		handleLogin() {
-			if (this.username === 'admin' && this.password === 'password') {
-				alert('Login successful!');
-				this.errorMessage = '';
-			} else {
-				this.errorMessage = 'Invalid username or password.';
-			}
-		},
-	},
-};
+<script setup>
+import axios from 'axios'
+import { ref } from 'vue'
+import ImputField from '@/components/InputField.vue'
+
+const username = ref('')
+const password = ref('')
+
+function handleLogin() {
+	axios.get('http://localhost:3000/users/', {
+		username: username.value,
+		password: password.value
+	})
+	.then(response => {
+		localStorage.setItem('token', response.data.access)
+		localStorage.setItem('refreshToken', response.data.refresh)
+	})
+	.catch(error => {
+		console.error(error)
+	})
+}
+
 </script>
 
 <template>
 	<div class="login-container">
 		<h1>Login</h1>
 		<form @submit.prevent="handleLogin">
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input
-					type="text"
-					id="username"
-					v-model="username"
-					placeholder="Enter your username"
-				/>
-			</div>
+			<input-field placeholder="Enter your username" idField="Username" inputType="text" />
 			<div class="form-group">
 				<label for="password">Password</label>
 				<input
