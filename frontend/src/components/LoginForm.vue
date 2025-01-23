@@ -1,8 +1,8 @@
 <script setup>
 import axios from 'axios'
 import { ref, watch } from 'vue'
-import InputField from '@/components/login/InputField.vue'
-import SubmitButton from '@/components/login/SubmitButton.vue'
+import InputField from '@/components/form/InputField.vue'
+import SubmitButton from '@/components/form/SubmitButton.vue'
 
 const username = ref('')
 const password = ref('')
