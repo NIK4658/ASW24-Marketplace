@@ -69,7 +69,7 @@ function handleLogin() {
 	}
 
 	.register-container p {
-  	margin-bottom: 10px; /* Add margin to separate the text from the button */
+  	margin-bottom: 10px;
 	}
 
 	.error-message {
