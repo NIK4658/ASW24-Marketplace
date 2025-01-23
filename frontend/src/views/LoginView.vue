@@ -1,5 +1,5 @@
 <script setup>
-import LoginForm from '../components/LoginForm.vue'
+import LoginForm from '@/components/LoginForm.vue'
 </script>
 
 <template>
@@ -7,7 +7,3 @@ import LoginForm from '../components/LoginForm.vue'
     <LoginForm />
   </main>
 </template>
-
-<style scoped>
-
-</style>

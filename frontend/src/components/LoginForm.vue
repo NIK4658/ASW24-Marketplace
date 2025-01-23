@@ -1,10 +1,12 @@
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import InputField from '@/components/login/InputField.vue'
+import SubmitButton from '@/components/login/SubmitButton.vue'
 
 const username = ref('')
 const password = ref('')
+const errorMessage = ref('')
 
 function handleLogin() {
 	axios.get('http://localhost:3000/users/', {
@@ -19,16 +21,20 @@ function handleLogin() {
 		console.error(error)
 	})
 }
-
 </script>
 
 <template>
 	<div class="login-container">
 		<h1>Login</h1>
 		<form @submit.prevent="handleLogin">
-			<input-field placeholder="Enter your username" idField="Username" inputType="text" />
-			<input-field placeholder="Enter your password" idField="Password" inputType="password" />
-			<button type="submit">Login</button>
+			<input-field v-model="username" placeholder="Enter your username" idField="Username" inputType="text"/>
+			<input-field v-model="password" placeholder="Enter your password" idField="Password" inputType="password"/>
+			<submit-button textField="Login" buttonType="submit"/>
+			<hr class="divider" />
+			<div class="register-container">
+				<p>Don't have an account?</p>
+				<submit-button textField="Register" buttonType="submit"/>
+			</div>
 		</form>
 		<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
 	</div>
@@ -52,21 +58,27 @@ function handleLogin() {
 		margin-bottom: 15px;
 	}
 
-	button {
-		padding: 10px 15px;
-		background-color: #007bff;
-		color: white;
-		border: none;
-		border-radius: 5px;
-		cursor: pointer;
+	.register-container {
+		max-width: 400px;
+		margin: 10px auto;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
-	button:hover {
-		background-color: #0056b3;
+	.register-container p {
+  	margin-bottom: 10px; /* Add margin to separate the text from the button */
 	}
 
 	.error-message {
 		color: red;
 		margin-top: 15px;
+	}
+
+	.divider {
+		margin: 20px 0;
+		width: 100%;
 	}
 </style>
