@@ -13,14 +13,12 @@ defineProps({
     required: true
   }
 })
-
-
 </script>
 
 <template>
   <div class="form-group">
     <label :for="idField">{{ idField }}</label>
-    <input :type="inputType" :id="idField" v-model="username" :placeholder="placeholder" />
+    <input :type="inputType" :id="idField" :placeholder="placeholder" />
   </div>
 </template>
 

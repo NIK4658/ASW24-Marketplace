@@ -1,10 +1,10 @@
 <script setup>
-import LoginItem from '../components/LoginItem.vue'
+import LoginForm from '../components/LoginForm.vue'
 </script>
 
 <template>
   <main>
-    <LoginItem />
+    <LoginForm />
   </main>
 </template>
 
