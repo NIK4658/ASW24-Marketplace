@@ -4,8 +4,10 @@ const controller = require('../controllers/userController');
 
 router.route('/')
   // .get(controller.getAllUsers)
-  .get(controller.loginUser)
   .post(controller.createUser);
+
+router.route('/login')
+  .post(controller.loginUser);
 
 router.route('/:username')
   .get(controller.searchByUsername)
