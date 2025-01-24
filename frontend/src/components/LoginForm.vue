@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import InputField from '@/components/form/InputField.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
 
@@ -29,11 +29,11 @@ function handleLogin() {
 		<form @submit.prevent="handleLogin">
 			<input-field v-model="username" placeholder="Enter your username" idField="Username" inputType="text"/>
 			<input-field v-model="password" placeholder="Enter your password" idField="Password" inputType="password"/>
-			<submit-button textField="Login" buttonType="submit"/>
+			<submit-button textField="Log In" buttonType="submit"/>
 			<hr class="divider" />
-			<div class="register-container">
+			<div class="signup-container">
 				<p>Don't have an account?</p>
-				<submit-button textField="Register" buttonType="submit"/>
+				<submit-button textField="Sign Up" buttonType="submit"/>
 			</div>
 		</form>
 		<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
@@ -68,7 +68,7 @@ function handleLogin() {
 		align-items: center;
 	}
 
-	.register-container p {
+	.signup-container p {
   	margin-bottom: 10px;
 	}
 
