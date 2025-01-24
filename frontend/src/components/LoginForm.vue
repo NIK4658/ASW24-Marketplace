@@ -36,6 +36,7 @@ function navigateToSignup() {
 	router.push({ name: 'signup' });
 }
 </script>
+
 <template>
 	<div class="login-container">
 		<h1>Login</h1>
@@ -52,6 +53,7 @@ function navigateToSignup() {
 		</form>
 	</div>
 </template>
+
 <style scoped>
 	.login-container {
 		max-width: 400px;
