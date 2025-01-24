@@ -16,13 +16,31 @@ const profileImageUrl = ref(null);
 const errorMessage = ref('');
 
 function handleSignup() {
-  // TODO: Implement the signup logic
+	axios.post("http://localhost:3000/users/", {
+		params: {
+			username: username.value,
+			email: email.value,
+			password: password.value,
+			image: profileImage.value
+		}
+	})
+		.then(response => {
+			if (response.status !== 200) {
+				errorMessage.value = response.data.message;
+			} else {
+				console.log("Sign up successful:", response.data);
+				router.push({ name: 'login' });
+			}
+		}).catch(error => {
+			console.error("Error during sign up:", error);
+			errorMessage.value = error.response.data.message;
+		});
 }
 
 function handleImageChange(event) {
-  const file = event.target.files[0];
-  profileImage.value = file;
-  profileImageUrl.value = URL.createObjectURL(file);
+	const file = event.target.files[0];
+	profileImage.value = file;
+	profileImageUrl.value = URL.createObjectURL(file);
 }
 
 function navigateToLogin() {
@@ -31,63 +49,64 @@ function navigateToLogin() {
 </script>
 
 <template>
-  <div class="signup-container">
-    <h1>Sign Up</h1>
-    <form @submit.prevent="handleSignup">
-      <input-field v-model="username" placeholder="Enter your new username" idField="Username" inputType="text"/>
-      <input-field v-model="password" placeholder="Enter your new password" idField="Password" inputType="password"/>
-      <input-field v-model="email" placeholder="user@mail.com" idField="Email" inputType="text"/>
-      <input-image title="Profile Image (Optional)" :profileImage="profileImage" :profileImageUrl="profileImageUrl" @change="handleImageChange" />
-      <submit-button textField="Sign Up" buttonType="submit"/>
-      <hr class="divider" />
-      <div class="login-container">
-        <p>Already signed up?</p>
-        <submit-button textField="Log In" buttonType="submit" @click="navigateToLogin"/>
-      </div>
-    </form>
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-  </div>
+	<div class="signup-container">
+		<h1>Sign Up</h1>
+		<form @submit.prevent="handleSignup">
+			<input-field v-model="username" placeholder="Enter your new username" idField="Username" inputType="text" />
+			<input-field v-model="password" placeholder="Enter your new password" idField="Password" inputType="password" />
+			<input-field v-model="email" placeholder="user@mail.com" idField="Email" inputType="text" />
+			<input-image title="Profile Image (Optional)" :profileImage="profileImage" :profileImageUrl="profileImageUrl"
+				@change="handleImageChange" />
+			<submit-button textField="Sign Up" buttonType="submit" />
+			<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+			<hr class="divider" />
+			<div class="login-container">
+				<p>Already signed up?</p>
+				<submit-button textField="Log In" buttonType="submit" @click="navigateToLogin" />
+			</div>
+		</form>
+	</div>
 </template>
 
 <style scoped>
-  .signup-container {
-		max-width: 400px;
-		margin: 50px auto;
-		padding: 20px;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
+.signup-container {
+	max-width: 400px;
+	margin: 50px auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
 
-	.form-group {
-		margin-bottom: 15px;
-	}
+.form-group {
+	margin-bottom: 15px;
+}
 
-	.login-container {
-		max-width: 400px;
-		margin: 10px auto;
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
+.login-container {
+	max-width: 400px;
+	margin: 10px auto;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
 
-	.login-container p {
-  	margin-bottom: 10px;
-	}
+.login-container p {
+	margin-bottom: 10px;
+}
 
-	.error-message {
-		color: red;
-		margin-top: 15px;
-	}
+.error-message {
+	color: red;
+	margin-top: 15px;
+}
 
-	.divider {
-		margin: 20px 0;
-		width: 100%;
-	}
+.divider {
+	margin: 20px 0;
+	width: 100%;
+}
 </style>
