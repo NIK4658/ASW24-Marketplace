@@ -1,8 +1,11 @@
 <script setup>
 import axios from 'axios'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
 import InputField from '@/components/form/InputField.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
+
+const router = useRouter();
 
 const username = ref('')
 const password = ref('')
@@ -21,6 +24,10 @@ function handleLogin() {
 		console.error(error)
 	})
 }
+
+function navigateToSignup() {
+	router.push({ name: 'signup' });
+}
 </script>
 
 <template>
@@ -33,7 +40,7 @@ function handleLogin() {
 			<hr class="divider" />
 			<div class="signup-container">
 				<p>Don't have an account?</p>
-				<submit-button textField="Sign Up" buttonType="submit"/>
+				<submit-button textField="Sign Up" buttonType="submit" @click="navigateToSignup"/>
 			</div>
 		</form>
 		<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>

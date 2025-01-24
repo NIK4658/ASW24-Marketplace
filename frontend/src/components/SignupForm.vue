@@ -1,9 +1,12 @@
 <script setup>
 import axios from 'axios'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
 import InputField from '@/components/form/InputField.vue'
 import InputImage from '@/components/form/InputImage.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
+
+const router = useRouter();
 
 const username = ref('');
 const password = ref('');
@@ -21,6 +24,10 @@ function handleImageChange(event) {
   profileImage.value = file;
   profileImageUrl.value = URL.createObjectURL(file);
 }
+
+function navigateToLogin() {
+	router.push({ name: 'login' });
+}
 </script>
 
 <template>
@@ -30,14 +37,12 @@ function handleImageChange(event) {
       <input-field v-model="username" placeholder="Enter your new username" idField="Username" inputType="text"/>
       <input-field v-model="password" placeholder="Enter your new password" idField="Password" inputType="password"/>
       <input-field v-model="email" placeholder="user@mail.com" idField="Email" inputType="text"/>
-      
-      <input-image title="Profile Image" :profileImage="profileImage" :profileImageUrl="profileImageUrl" @change="handleImageChange" />
-
+      <input-image title="Profile Image (Optional)" :profileImage="profileImage" :profileImageUrl="profileImageUrl" @change="handleImageChange" />
       <submit-button textField="Sign Up" buttonType="submit"/>
       <hr class="divider" />
       <div class="login-container">
         <p>Already signed up?</p>
-        <submit-button textField="Log In" buttonType="submit"/>
+        <submit-button textField="Log In" buttonType="submit" @click="navigateToLogin"/>
       </div>
     </form>
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
