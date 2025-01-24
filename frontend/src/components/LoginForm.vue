@@ -19,7 +19,6 @@ function handleLogin() {
 		}
 	})
 		.then(response => {
-			console.log("A")
 			if (response.status !== 200) {
 				errorMessage.value = response.data.message;
 			} else {
