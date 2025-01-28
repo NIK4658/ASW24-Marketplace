@@ -1,9 +1,7 @@
 <script setup>
-import { defineProps } from 'vue'
-
 defineProps({
   image: {
-    type: Array,
+    type: Object,
     required: true
   },
   title: {

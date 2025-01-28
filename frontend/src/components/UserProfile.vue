@@ -7,7 +7,6 @@ const loadPosts = async () => {
   try {
     const response = await axios.get("http://localhost:3000/posts");
     posts.value = response.data;
-    console.log(posts)
   } catch (error) {
     console.error("Errore durante il recupero dei dati:", error);
   }
@@ -36,6 +35,7 @@ onMounted(() => {
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
   gap: 16px;
+  padding: 5%;
 }
 
 .grid-item {
