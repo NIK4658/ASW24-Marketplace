@@ -1,30 +1,26 @@
 <script setup>
-import SinglePost from "@/components/SinglePost.vue";
-import axios from "axios";
-import {onMounted, ref} from "vue";
-const posts = ref([]);
+import SinglePost from '@/components/SinglePost.vue'
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
+
+const posts = ref([])
 const loadPosts = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/posts");
-    posts.value = response.data;
+    const response = await axios.get('http://localhost:3000/posts')
+    posts.value = response.data
   } catch (error) {
-    console.error("Errore durante il recupero dei dati:", error);
+    console.error('Errore durante il recupero dei dati:', error)
   }
-};
+}
 onMounted(() => {
-  loadPosts();
-});
-
+  loadPosts()
+})
 </script>
 
 <template>
   <div class="grid-container">
     <div v-for="post in posts" :key="post.title" class="grid-item">
-      <single-post
-        :price="post.price"
-        :title="post.title"
-        :image="post.images[0]"
-      />
+      <single-post :price="post.price" :title="post.title" :image="post.images[0]" />
     </div>
   </div>
 </template>

@@ -18,7 +18,7 @@ function handleClick() {
 </script>
 
 <template>
-  <button :type="buttonType" @click="handleClick">{{ textField }}</button>
+  <button :type="props.buttonType" @click="handleClick">{{ props.textField }}</button>
 </template>
 
 <style scoped>
