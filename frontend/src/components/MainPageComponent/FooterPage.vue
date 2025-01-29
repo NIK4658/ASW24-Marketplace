@@ -1,15 +1,16 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
   <footer>
-    <div class="center-buttons">
-      <button>Button 1</button>
-      <button>Button 2</button>
-      <button>Button 3</button>
-    </div>
-    <button class="bottom-right-button">Separate Button</button>
+    <button class="icon-button">
+      <img src="/footer/chat.ico" alt="Chat" />
+    </button>
+    <button class="icon-button">
+      <img src="/footer/plus.ico" alt="Add post" />
+    </button>
+    <button class="icon-button">
+      <img src="/footer/profile.ico" alt="Profile" />
+    </button>
   </footer>
 </template>
 
@@ -18,7 +19,7 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 7%;
+  height: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,16 +27,31 @@ footer {
   transition: var(--transition-color);
 }
 
-.center-buttons {
-  display: flex;
-  justify-content: space-evenly;
-  width: 50%;
+.icon-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.bottom-right-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+button {
+  width: 4rem;
+  height: 4rem;
+  border: none;
+  margin: auto 10px;
+  background-color: var(--color-border-hover);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--color-border);
+}
+
+@media (max-width: 600px) {
+  button {
+    width: 3rem;
+    height: 3rem;
+  }
 }
 </style>

@@ -12,7 +12,7 @@ const loadPosts = async () => {
     const response = await axios.get('http://localhost:3000/posts')
     posts.value = response.data
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error)
+    console.error('Error fetching data: `', error)
   }
 }
 onMounted(() => {
@@ -44,8 +44,8 @@ main {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  row-gap: 3%;
-  column-gap: 1%;
+  row-gap: 30px;
+  column-gap: 30px;
   padding: 5%;
   width: 100%;
 }
@@ -55,5 +55,11 @@ main {
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
 }
 </style>
