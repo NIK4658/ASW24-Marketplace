@@ -114,8 +114,8 @@ button[type="submit"] img {
 
 @media (max-width: 600px) {
   header {
-    flex-direction: column;
     height: auto;
+    align-items: flex-start;
     padding: 10px;
   }
 
@@ -129,6 +129,7 @@ button[type="submit"] img {
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-right: 10px;
   }
 
   input[type="text"] {
@@ -136,8 +137,9 @@ button[type="submit"] img {
     margin-right: 10px;
   }
 
-  .theme-button {
-    width: 100%;
+  .theme-button img {
+    width: 20px;
+    height: 20px;
   }
 }
 </style>
