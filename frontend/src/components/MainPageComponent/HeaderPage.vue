@@ -47,7 +47,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 header {
   top: 0;
   position: fixed;
@@ -57,6 +56,6 @@ header {
   width: 100%;
   height: 7%;
   background: var(--color-background);
+  transition: var(--transition-color);
 }
-
 </style>

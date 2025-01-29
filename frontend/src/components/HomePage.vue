@@ -38,15 +38,22 @@ onMounted(() => {
 main {
   width: 100%;
   margin: 0;
-  padding: 5%;
+  padding: 1%;
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  row-gap: 1%;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  row-gap: 3%;
   column-gap: 1%;
   padding: 5%;
+  width: 100%;
+}
+
+.grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
 }
 </style>

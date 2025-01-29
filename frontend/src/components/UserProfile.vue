@@ -35,6 +35,14 @@ onMounted(() => {
 }
 
 .grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  transition: transform 0.2s;
+}
+
+.grid-item:hover {
+  transform: scale(1.03);
 }
 </style>

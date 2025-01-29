@@ -23,6 +23,7 @@ footer {
   justify-content: center;
   align-items: center;
   background: var(--color-background);
+  transition: var(--transition-color);
 }
 
 .center-buttons {
