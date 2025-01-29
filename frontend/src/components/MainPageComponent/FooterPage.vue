@@ -1,14 +1,18 @@
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+</script>
 
 <template>
   <footer>
-    <button class="icon-button">
+    <button class="icon-button" @click="router.push({ name: 'chat' })">
       <img src="/footer/chat.ico" alt="Chat" />
     </button>
-    <button class="icon-button">
+    <button class="icon-button" @click="router.push({ name: 'create-post' })">
       <img src="/footer/plus.ico" alt="Add post" />
     </button>
-    <button class="icon-button">
+    <button class="icon-button" @click="router.push({ name: 'profile' })">
       <img src="/footer/profile.ico" alt="Profile" />
     </button>
   </footer>
