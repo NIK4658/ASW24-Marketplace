@@ -7,6 +7,3 @@ import UserProfile from '../components/UserProfile.vue'
     <UserProfile />
   </main>
 </template>
-
-<style scoped>
-</style>

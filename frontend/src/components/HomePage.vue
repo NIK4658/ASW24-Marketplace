@@ -1,0 +1,52 @@
+<script setup>
+import HeaderPage from '@/components/MainPageComponent/HeaderPage.vue'
+import FooterPage from '@/components/MainPageComponent/FooterPage.vue'
+import SinglePost from '@/components/SinglePost.vue'
+
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
+
+const posts = ref([])
+const loadPosts = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/posts')
+    posts.value = response.data
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati:', error)
+  }
+}
+onMounted(() => {
+  loadPosts()
+})
+</script>
+
+<template>
+  <HeaderPage />
+
+  <main>
+    <div class="grid-container">
+      <div v-for="post in posts" :key="post.title" class="grid-item">
+        <SinglePost :price="post.price" :title="post.title" :image="post.images[0]" />
+      </div>
+    </div>
+  </main>
+
+  <FooterPage />
+</template>
+
+<style scoped>
+main {
+  width: 100%;
+  margin: 0;
+  padding: 5%;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  row-gap: 1%;
+  column-gap: 1%;
+  padding: 5%;
+  width: 100%;
+}
+</style>
