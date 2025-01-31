@@ -9,7 +9,7 @@ const loadPosts = async () => {
     const response = await axios.get('http://localhost:3000/posts')
     posts.value = response.data
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error)
+    console.error('Error fetching data:', error)
   }
 }
 onMounted(() => {
@@ -20,7 +20,7 @@ onMounted(() => {
 <template>
   <div class="grid-container">
     <div v-for="post in posts" :key="post.title" class="grid-item">
-      <single-post :price="post.price" :title="post.title" :image="post.images[0]" />
+      <single-post :postId="post.id" :price="post.price" :title="post.title" :image="post.images[0]" />
     </div>
   </div>
 </template>
