@@ -26,7 +26,7 @@ onMounted(() => {
   <main>
     <div class="grid-container">
       <div v-for="post in posts" :key="post.title" class="grid-item">
-        <SinglePost :price="post.price" :title="post.title" :image="post.images[0]" />
+        <SinglePost :postId="post._id" :price="post.price" :title="post.title" :image="post.images[0]" />
       </div>
     </div>
   </main>
