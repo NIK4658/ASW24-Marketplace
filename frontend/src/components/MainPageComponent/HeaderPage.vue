@@ -1,10 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useFavicon } from '@vueuse/core'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
+import { onMounted, defineEmits } from 'vue'
 
 const route = useRoute()
+const router = useRouter()
 const isDarkTheme = ref(false)
+const search = ref('')
+const emit = defineEmits(['searchResults'])
 
 const applyTheme = () => {
   const root = document.documentElement
@@ -23,6 +28,19 @@ const toggleTheme = () => {
   applyTheme()
 }
 
+const handleSearch = async (event) => {
+  event.preventDefault()
+  try {
+    const response =
+      search.value === ''
+        ? await axios.get('http://localhost:3000/posts')
+        : await axios.get(`http://localhost:3000/posts/search/${search.value}`)
+    emit('searchResults', response.data)
+  } catch (error) {
+    console.error('Error searching posts: ', error)
+  }
+}
+
 onMounted(() => {
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme) {
@@ -37,7 +55,7 @@ onMounted(() => {
 <template>
   <header v-if="route.name !== 'login' && route.name !== 'signup'">
     <div class="search-container">
-      <form>
+      <form @submit="handleSearch">
         <input type="text" v-model="search" placeholder="Search..." />
         <button type="submit">
           <img src="/header/search.ico" alt="Search" />
@@ -79,7 +97,7 @@ form {
   width: 30%;
 }
 
-input[type="text"] {
+input[type='text'] {
   padding: 0.5rem;
   width: 100%;
   margin-right: 10px;
@@ -87,7 +105,8 @@ input[type="text"] {
   border-radius: 4px;
 }
 
-button[type="submit"], .theme-button {
+button[type='submit'],
+.theme-button {
   padding: 0.5rem 10px;
   border: none;
   border-radius: 4px;
@@ -97,11 +116,12 @@ button[type="submit"], .theme-button {
   transition: background-color 0.3s;
 }
 
-button[type="submit"]:hover, .theme-button:hover {
+button[type='submit']:hover,
+.theme-button:hover {
   background-color: var(--color-border);
 }
 
-button[type="submit"] img {
+button[type='submit'] img {
   width: 20px;
   height: 20px;
 }
@@ -131,7 +151,7 @@ button[type="submit"] img {
     margin-right: 10px;
   }
 
-  input[type="text"] {
+  input[type='text'] {
     width: calc(100% - 20px);
     margin-right: 10px;
   }

@@ -14,4 +14,7 @@ router.route('/:id')
 router.route('/:username')
   .post(controller.getPostsMadeByUser)
 
+router.route('/search/:title')
+  .get(controller.searchPostByTitle);
+
 module.exports = router;

@@ -4,9 +4,16 @@ import FooterPage from '@/components/MainPageComponent/FooterPage.vue'
 import SinglePost from '@/components/SinglePost.vue'
 
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const props = defineProps({
+  somePost: Object
+})
 
 const posts = ref([])
+const route = useRoute()
+
 const loadPosts = async () => {
   try {
     const response = await axios.get('http://localhost:3000/posts')
@@ -15,16 +22,39 @@ const loadPosts = async () => {
     console.error('Error fetching data: ', error)
   }
 }
-onMounted(() => {
+
+const handleSearchResults = (searchResults) => {
+  if (searchResults.length === 0) {
+    posts.value = []
+    return
+  }
+  posts.value = searchResults
+}
+
+const handleResetSearch = () => {
   loadPosts()
+}
+
+onMounted(() => {
+  if (props.somePost) {
+    posts.value = props.somePost
+  } else {
+    loadPosts()
+  }
+})
+
+watch(route, () => {
+  if (route.name === 'home') {
+    loadPosts()
+  }
 })
 </script>
 
 <template>
-  <HeaderPage />
+  <HeaderPage @searchResults="handleSearchResults" />
 
   <main>
-    <div class="grid-container"  v-if="posts.length > 0">
+    <div class="grid-container" v-if="posts.length > 0">
       <div v-for="post in posts" :key="post.title" class="grid-item">
         <SinglePost
           :postId="post._id"
@@ -39,7 +69,7 @@ onMounted(() => {
     </div>
   </main>
 
-  <FooterPage />
+  <FooterPage @resetSearch="handleResetSearch"/>
 </template>
 
 <style scoped>

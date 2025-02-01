@@ -181,3 +181,24 @@ exports.getPostsMadeByUser = async (req, res) => {
     res.status(500).json({ message: 'Error fetching posts', error })
   }
 }
+
+exports.searchPostByTitle = async (req, res) => {
+  try {
+    const title = req.params.title;
+    const posts = await postModel.find({ title: new RegExp(title, 'i') });
+    const formattedPosts = posts.map(post => {
+      const formattedImages = post.images.map(image => ({
+        data: image.data.toString('base64'), // Convert Buffer to base64
+        contentType: image.contentType
+      }));
+      return {
+        ...post.toObject(),
+        images: formattedImages
+      };
+    });
+    res.status(200).json(formattedPosts);
+  } catch (error) {
+    console.error('Error searching posts by title: ', error);
+    res.status(500).json({ message: 'Error searching posts by title', error });
+  }
+};

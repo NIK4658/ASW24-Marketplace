@@ -1,12 +1,19 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { defineEmits } from 'vue'
 
 const router = useRouter()
+const emit = defineEmits(['resetSearch'])
+
+const returnToHome = () => {
+  emit('resetSearch')
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
   <footer>
-    <button class="icon-button" @click="router.push({ name: 'home' })">
+    <button class="icon-button" @click="returnToHome">
       <img src="/footer/home.ico" alt="Home" />
     </button>
     <button class="icon-button" @click="router.push({ name: 'chat' })">
