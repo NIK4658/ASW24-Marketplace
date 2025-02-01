@@ -138,9 +138,17 @@ exports.loginUser = async (req, res) => {
   }
 }
 
+exports.logoutUser = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error destroying session' })
+    }
+    res.status(200).json({ message: 'Session destroyed' })
+  })
+}
+
 exports.getSessionData = (req, res) => {
   req.session.user ?
     res.status(200).json(req.session.user) :
     res.status(404).json({ message: 'No session data found' })
-
 }

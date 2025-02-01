@@ -13,11 +13,9 @@ const loadPosts = async () => {
     const username = route.params.username
     const response = await axios.get('http://localhost:3000/users/' + username)
     userField.value = response.data
-    console.log(userField.value)
 
     const response2 = await axios.post('http://localhost:3000/posts/' + username)
     posts.value = response2.data
-    console.log(posts.value)
   } catch (error) {
     errorFlag.value = true
     console.error('Error fetching data:', error)

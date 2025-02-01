@@ -6,11 +6,14 @@ router.route('/')
   // .get(controller.getAllUsers)
   .post(controller.createUser);
 
-router.route('/login')
-  .post(controller.loginUser);
-
 router.route('/session')
   .get(controller.getSessionData);
+
+router.route('/session/login')
+  .post(controller.loginUser);
+
+router.route('/session/logout')
+  .post(controller.logoutUser);
 
 router.route('/:username')
   .get(controller.searchByUsername)

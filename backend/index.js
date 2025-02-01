@@ -36,12 +36,6 @@ app.use(express.static('public'));
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
-// Log all incoming requests
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
-
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/review', reviewRouter);
