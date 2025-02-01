@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
 const title = ref('')
@@ -54,6 +54,13 @@ const handleSender = () => {
       console.error('Error during post creation:', error)
     })
 }
+
+onMounted(async () => {
+  const response = await axios.get('http://localhost:3000/users/session', {
+    withCredentials: true,
+  })
+  seller.value = response.data.username
+})
 </script>
 
 <template>
@@ -75,9 +82,6 @@ const handleSender = () => {
 
       <label>Description:</label>
       <textarea v-model="description" required></textarea>
-
-      <label>Seller Username:</label>
-      <input v-model="seller" type="text" required />
 
       <label>Images:</label>
       <input type="file" multiple @change="handleImageUpload" accept="image/*" />

@@ -6,6 +6,8 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const product = ref(null)
 const errorFlag = ref(false)
+const userLogged = ref('')
+
 const loadProduct = async () => {
   try {
     const postId = route.params.id
@@ -16,8 +18,12 @@ const loadProduct = async () => {
     console.error('Error fetching data: ', error)
   }
 }
-onMounted(() => {
-  loadProduct()
+onMounted(async () => {
+  await loadProduct()
+  const response = await axios.get('http://localhost:3000/users/session', {
+    withCredentials: true,
+  })
+  userLogged.value = response.data.username
 })
 </script>
 
@@ -81,13 +87,15 @@ export default {
         </p>
 
         <div class="actions">
-          <button
-            :disabled="!(product.buyer === null || product.buyer === undefined)"
-            @click="buyNow"
-          >
-            Buy Now
-          </button>
-          <button @click="contactSeller">Send a message to the seller</button>
+          <div v-if="product.seller.username !== userLogged">
+            <button
+              :disabled="!(product.buyer === null || product.buyer === undefined)"
+              @click="buyNow"
+            >
+              Buy Now
+            </button>
+            <button @click="contactSeller">Send a message to the seller</button>
+          </div>
           <button @click="shareProduct">Share Link</button>
         </div>
 
@@ -103,7 +111,7 @@ export default {
 
         <button @click="readReviews">Read Product Review</button>
 
-        <div class="private-actions">
+        <div class="private-actions" v-if="product.seller.username === userLogged">
           <button v-if="true" @click="deletePost">Delete Post</button>
           <button v-if="true" @click="editPost">Edit Post</button>
         </div>
