@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const userField = ref([])
 const posts = ref([])
+const errorFlag = ref(false)
 const loadPosts = async () => {
   try {
     const username = route.params.username
@@ -18,6 +19,7 @@ const loadPosts = async () => {
     posts.value = response2.data
     console.log(posts.value)
   } catch (error) {
+    errorFlag.value = true
     console.error('Error fetching data:', error)
   }
 }
@@ -27,23 +29,28 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Username: {{ userField.username }}</h1>
-  <h2>Email: {{ userField.email }}</h2>
+  <div v-if="errorFlag">
+    <h1>User not found</h1>
+  </div>
+  <div v-else>
+    <h1>Username: {{ userField.username }}</h1>
+    <h2>Email: {{ userField.email }}</h2>
 
-  <img
-    v-if="userField.image"
-    :src="'data:' + userField.image.contentType + ';base64,' + userField.image.data"
-    alt="Profile Picture"
-  />
+    <img
+      v-if="userField.image"
+      :src="'data:' + userField.image.contentType + ';base64,' + userField.image.data"
+      alt="Profile Picture"
+    />
 
-  <div class="grid-container">
-    <div v-for="post in posts" :key="post.title" class="grid-item">
-      <single-post
-        :postId="post._id"
-        :price="post.price"
-        :title="post.title"
-        :image="post.images[0]"
-      />
+    <div class="grid-container">
+      <div v-for="post in posts" :key="post.title" class="grid-item">
+        <single-post
+          :postId="post._id"
+          :price="post.price"
+          :title="post.title"
+          :image="post.images[0]"
+        />
+      </div>
     </div>
   </div>
 </template>
