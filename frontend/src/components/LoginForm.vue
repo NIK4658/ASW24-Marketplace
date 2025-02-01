@@ -54,15 +54,15 @@ function handleLogin() {
       <submit-button textField="Log In" buttonType="submit" />
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <hr class="divider" />
-      <div class="signup-container">
-        <p>Don't have an account?</p>
-        <submit-button
-          textField="Sign Up"
-          buttonType="submit"
-          @click="router.push({ name: 'signup' })"
-        />
-      </div>
     </form>
+    <div class="signup-container">
+      <p>Don't have an account?</p>
+      <submit-button
+        textField="Sign Up"
+        buttonType="submit"
+        @click="router.push({ name: 'signup' })"
+      />
+    </div>
   </div>
 </template>
 

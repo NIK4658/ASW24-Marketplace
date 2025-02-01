@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-import FooterPage from '@/components/MainPageComponent/FooterPage.vue'
 
 const title = ref('')
 const price = ref(null)
