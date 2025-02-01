@@ -9,6 +9,9 @@ router.route('/')
 router.route('/login')
   .post(controller.loginUser);
 
+router.route('/session')
+  .get(controller.getSessionData);
+
 router.route('/:username')
   .get(controller.searchByUsername)
   .delete(controller.deleteUser);

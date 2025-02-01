@@ -13,15 +13,18 @@ const errorMessage = ref('')
 
 function handleLogin() {
   axios
-    .post('http://localhost:3000/users/login', {
-      username: username.value,
-      password: password.value,
-    })
+    .post(
+      'http://localhost:3000/users/login',
+      {
+        username: username.value,
+        password: password.value,
+      },
+      { withCredentials: true }
+    )
     .then((response) => {
       if (response.status !== 200) {
         errorMessage.value = response.data.message
       } else {
-        // TODO: Set session token
         router.push({ name: 'home' })
       }
     })
