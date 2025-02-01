@@ -1,9 +1,10 @@
 <script setup>
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const product = ref(null)
 const errorFlag = ref(false)
 const userLogged = ref('')
@@ -25,6 +26,15 @@ onMounted(async () => {
   })
   userLogged.value = response.data.username
 })
+
+const editPost = () => {
+  router.push({
+    name: 'create-post',
+    query: {
+      id: product.value._id,
+    },
+  })
+}
 </script>
 
 <script>

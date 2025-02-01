@@ -14,7 +14,7 @@ const loadPosts = async () => {
     const response = await axios.get('http://localhost:3000/users/' + username)
     userField.value = response.data
 
-    const response2 = await axios.post('http://localhost:3000/posts/' + username)
+    const response2 = await axios.post('http://localhost:3000/posts/user/' + username)
     posts.value = response2.data
   } catch (error) {
     errorFlag.value = true

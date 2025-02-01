@@ -1,7 +1,9 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 
+const route = useRoute()
 const title = ref('')
 const price = ref(null)
 const condition = ref('new')
@@ -9,13 +11,38 @@ const description = ref('')
 const seller = ref('')
 const images = ref([])
 
+const loadProduct = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/posts/${id}`)
+    const product = response.data
+    title.value = product.title
+    price.value = product.price
+    condition.value = product.condition
+    description.value = product.description
+    images.value = product.images.map((image) => image.data)
+  } catch (error) {
+    console.error('Error fetching product data: ', error)
+  }
+}
+
+onMounted(async () => {
+  const response = await axios.get('http://localhost:3000/users/session', {
+    withCredentials: true,
+  })
+  seller.value = response.data.username
+
+  if (route.query.id) {
+    await loadProduct(route.query.id)
+  }
+})
+
 const handleImageUpload = (event) => {
   const files = Array.from(event.target.files)
   files.forEach((file) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
-      const base64String = reader.result.split(',')[1] // Extract only the base64 part
+      const base64String = reader.result.split(',')[1]
       images.value = [...images.value, base64String]
     }
   })
@@ -39,7 +66,9 @@ const removeImage = (index) => {
 
 const handleSender = () => {
   axios
-    .post('http://localhost:3000/posts', {
+    .post(route.query.id
+      ? `http://localhost:3000/posts/${route.query.id}`
+      : 'http://localhost:3000/posts', {
       title: title.value,
       price: price.value,
       condition: condition.value,
@@ -54,13 +83,6 @@ const handleSender = () => {
       console.error('Error during post creation:', error)
     })
 }
-
-onMounted(async () => {
-  const response = await axios.get('http://localhost:3000/users/session', {
-    withCredentials: true,
-  })
-  seller.value = response.data.username
-})
 </script>
 
 <template>
@@ -88,6 +110,11 @@ onMounted(async () => {
 
       <div v-if="images.length" class="image-preview">
         <div v-for="(image, index) in images" :key="index" class="image-item">
+          <!--          <img-->
+          <!--            :src="'data:' + image.contentType + ';base64,' + image.data"-->
+          <!--            alt="Post Image"-->
+          <!--            class="post-image"-->
+          <!--          />-->
           <img :src="'data:image/jpeg;base64,' + image" alt="Uploaded image" />
           <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">️️⬅️</button>
           <button

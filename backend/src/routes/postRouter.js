@@ -8,10 +8,10 @@ router.route('/')
 
 router.route('/:id')
   .get(controller.searchPost)
-  .put(controller.updatePost)
+  .post(controller.updatePost)
   .delete(controller.deletePost);
 
-router.route('/:username')
+router.route('/user/:username')
   .post(controller.getPostsMadeByUser)
 
 router.route('/search/:title')

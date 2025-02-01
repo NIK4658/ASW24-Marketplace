@@ -100,6 +100,7 @@ exports.searchPost = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong while searching for the post.' })
   }
 }
+
 exports.updatePost = async (req, res) => {
   const postId = req.params.id
 
@@ -142,6 +143,13 @@ exports.updatePost = async (req, res) => {
 
     if (sellerId && buyerId && sellerId.toString() === buyerId.toString()) {
       return res.status(400).json({ message: 'Seller and buyer cannot be the same person' })
+    }
+
+    if (updates.images && updates.images.length > 0) {
+      updates.images = updates.images.map(image => ({
+        data: Buffer.from(image, 'base64'),
+        contentType: 'image/jpeg'
+      }))
     }
 
     const updatedPost = await postModel.findByIdAndUpdate(postId, updates, { new: true, runValidators: true })
