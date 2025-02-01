@@ -11,7 +11,6 @@ const loadProduct = async () => {
     const postId = route.params.id
     const response = await axios.get('http://localhost:3000/posts/' + postId)
     product.value = response.data
-    console.log(product.value)
   } catch (error) {
     errorFlag.value = true
     console.error('Error fetching data: ', error)
@@ -121,9 +120,5 @@ export default {
 
 .price {
   font-size: 1.5rem;
-}
-
-.sold-status {
-  color: red;
 }
 </style>

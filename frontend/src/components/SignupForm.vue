@@ -27,7 +27,6 @@ function handleSignup() {
       if (response.status !== 200) {
         errorMessage.value = response.data.message
       } else {
-        console.log('Sign up successful:', response.data)
         router.push({ name: 'login' })
       }
     })
@@ -98,10 +97,6 @@ function navigateToLogin() {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.form-group {
-  margin-bottom: 15px;
 }
 
 .login-container {
