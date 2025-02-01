@@ -37,8 +37,8 @@ onMounted(async () => {
       withCredentials: true,
     })
     username.value = response.data.username
-  } catch (error) {
-    console.error('Error fetching data:', error)
+  } catch {
+    router.push({ name: 'login' })
   }
 })
 </script>
