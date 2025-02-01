@@ -8,8 +8,10 @@ router.route('/')
 
 router.route('/:id')
   .get(controller.searchPost)
-  .post(controller.getPostsMadeByUser)
   .put(controller.updatePost)
   .delete(controller.deletePost);
+
+router.route('/:username')
+  .post(controller.getPostsMadeByUser)
 
 module.exports = router;

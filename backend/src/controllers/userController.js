@@ -6,17 +6,28 @@ const jwt = require('jsonwebtoken');
 const jwtSettings = require('../../settings.json').jwt;
 
 exports.searchByUsername = (req, res) => {
-  userModel.findOne({username: req.params.username})
+  userModel.findOne({ username: req.params.username })
     .then((result) => {
       if (!result) {
-        return res.status(404).json({message: 'User not found'})
+        return res.status(404).json({ message: 'User not found' });
       }
-      res.json(result)
+
+      const formattedImage = {
+        data: result.image.data.toString('base64'),
+        contentType: result.image.contentType
+      };
+
+      const formattedUser = {
+        ...result.toObject(),
+        image: formattedImage
+      };
+
+      res.json(formattedUser);
     })
     .catch((error) => {
-      res.status(500).json(error)
-    })
-}
+      res.status(500).json(error);
+    });
+};
 
 exports.createUser = (req, res) => {
   const {username, email, password, image} = req.body

@@ -21,6 +21,9 @@
     --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
     --transition-color: color 0.5s, background-color 0.5s;
+
+    --header-height: 7%;
+    --footer-height: 10%;
 }
 
 /* semantic color variables for this project */

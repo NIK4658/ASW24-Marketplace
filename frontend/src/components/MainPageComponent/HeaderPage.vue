@@ -59,10 +59,9 @@ header {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 7%;
+  height: var(--header-height);
   background: var(--color-background);
   transition: var(--transition-color);
-  padding: 0 20px;
   box-sizing: border-box;
 }
 

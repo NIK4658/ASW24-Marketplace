@@ -24,10 +24,18 @@ onMounted(() => {
   <HeaderPage />
 
   <main>
-    <div class="grid-container">
+    <div class="grid-container"  v-if="posts.length > 0">
       <div v-for="post in posts" :key="post.title" class="grid-item">
-        <SinglePost :postId="post._id" :price="post.price" :title="post.title" :image="post.images[0]" />
+        <SinglePost
+          :postId="post._id"
+          :price="post.price"
+          :title="post.title"
+          :image="post.images[0]"
+        />
       </div>
+    </div>
+    <div v-else class="error-container">
+      <p>No posts available</p>
     </div>
   </main>
 
@@ -55,6 +63,17 @@ main {
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.error-container > p {
+  font-size: 1.5rem;
 }
 
 @media (max-width: 600px) {

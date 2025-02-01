@@ -72,7 +72,7 @@ export default {
 
       <div class="seller-info">
         <p>Seller:</p>
-        <p><a :href="`users/${product.seller._id}`">{{ product.seller.username }}</a></p>
+        <p><a :href="`/profile/${product.seller.username}`">{{ product.seller.username }}</a></p>
       </div>
 
       <button @click="readReviews">Read Product Review</button>

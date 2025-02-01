@@ -157,7 +157,7 @@ exports.updatePost = async (req, res) => {
 }
 
 exports.getPostsMadeByUser = async (req, res) => {
-  const username = req.params.id
+  const username = req.params.username
   try {
     const user = await userModel.findOne({ username })
     if (!user) {
@@ -165,7 +165,17 @@ exports.getPostsMadeByUser = async (req, res) => {
     }
 
     const posts = await postModel.find({ seller: user._id }).populate('seller', 'username email')
-    res.status(200).json(posts)
+    const formattedPosts = posts.map(post => {
+      const formattedImages = post.images.map(image => ({
+        data: image.data.toString('base64'), // Convert Buffer to base64
+        contentType: image.contentType
+      }))
+      return {
+        ...post.toObject(),
+        images: formattedImages
+      }
+    })
+    res.status(200).json(formattedPosts)
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Error fetching posts', error })
