@@ -28,7 +28,9 @@ const toggleTheme = () => {
 
 const handleSearch = async (event) => {
   event.preventDefault()
-  router.push({ name: 'home', query: { search: search.value } })
+  search.value.trim() === ''
+    ? router.push({ name: 'home' })
+    : router.push({ name: 'home', query: { search: search.value } })
 }
 
 onMounted(() => {
