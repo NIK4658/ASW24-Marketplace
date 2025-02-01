@@ -1,6 +1,4 @@
 <script setup>
-import HeaderPage from '@/components/MainPageComponent/HeaderPage.vue'
-import FooterPage from '@/components/MainPageComponent/FooterPage.vue'
 import SinglePost from '@/components/SinglePost.vue'
 
 import axios from 'axios'
@@ -8,7 +6,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps({
-  somePost: Object
+  somePost: Object,
 })
 
 const posts = ref([])
@@ -21,18 +19,6 @@ const loadPosts = async () => {
   } catch (error) {
     console.error('Error fetching data: ', error)
   }
-}
-
-const handleSearchResults = (searchResults) => {
-  if (searchResults.length === 0) {
-    posts.value = []
-    return
-  }
-  posts.value = searchResults
-}
-
-const handleResetSearch = () => {
-  loadPosts()
 }
 
 onMounted(() => {
@@ -51,25 +37,19 @@ watch(route, () => {
 </script>
 
 <template>
-  <HeaderPage @searchResults="handleSearchResults" />
-
-  <main>
-    <div class="grid-container" v-if="posts.length > 0">
-      <div v-for="post in posts" :key="post.title" class="grid-item">
-        <SinglePost
-          :postId="post._id"
-          :price="post.price"
-          :title="post.title"
-          :image="post.images[0]"
-        />
-      </div>
+  <div class="grid-container" v-if="posts.length > 0">
+    <div v-for="post in posts" :key="post.title" class="grid-item">
+      <SinglePost
+        :postId="post._id"
+        :price="post.price"
+        :title="post.title"
+        :image="post.images[0]"
+      />
     </div>
-    <div v-else class="error-container">
-      <p>No posts available</p>
-    </div>
-  </main>
-
-  <FooterPage @resetSearch="handleResetSearch"/>
+  </div>
+  <div v-else class="error-container">
+    <p>No posts available</p>
+  </div>
 </template>
 
 <style scoped>

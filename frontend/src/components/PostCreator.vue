@@ -1,39 +1,42 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
+import { ref } from 'vue'
+import axios from 'axios'
 import FooterPage from '@/components/MainPageComponent/FooterPage.vue'
 
-const title = ref('');
-const price = ref(null);
-const condition = ref('new');
-const description = ref('');
-const seller = ref('');
-const images = ref([]);
+const title = ref('')
+const price = ref(null)
+const condition = ref('new')
+const description = ref('')
+const seller = ref('')
+const images = ref([])
 
 const handleImageUpload = (event) => {
-  const files = Array.from(event.target.files);
+  const files = Array.from(event.target.files)
   files.forEach((file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
     reader.onload = () => {
-      const base64String = reader.result.split(',')[1]; // Extract only the base64 part
-      images.value = [...images.value, base64String];
-    };
-  });
-};
+      const base64String = reader.result.split(',')[1] // Extract only the base64 part
+      images.value = [...images.value, base64String]
+    }
+  })
+}
 
 const moveImage = (index, direction) => {
-  const newIndex = index + direction;
+  const newIndex = index + direction
   if (newIndex >= 0 && newIndex < images.value.length) {
-    const updatedImages = [...images.value];
-    [updatedImages[index], updatedImages[newIndex]] = [updatedImages[newIndex], updatedImages[index]];
-    images.value = updatedImages;
+    const updatedImages = [...images.value]
+    ;[updatedImages[index], updatedImages[newIndex]] = [
+      updatedImages[newIndex],
+      updatedImages[index],
+    ]
+    images.value = updatedImages
   }
-};
+}
 
 const removeImage = (index) => {
-  images.value = images.value.filter((_, i) => i !== index);
-};
+  images.value = images.value.filter((_, i) => i !== index)
+}
 
 const handleSender = () => {
   axios
@@ -46,12 +49,12 @@ const handleSender = () => {
       images: images.value,
     })
     .then((response) => {
-      console.log('Post created:', response.data);
+      console.log('Post created:', response.data)
     })
     .catch((error) => {
-      console.error('Error during post creation:', error);
-    });
-};
+      console.error('Error during post creation:', error)
+    })
+}
 </script>
 
 <template>
@@ -84,7 +87,13 @@ const handleSender = () => {
         <div v-for="(image, index) in images" :key="index" class="image-item">
           <img :src="'data:image/jpeg;base64,' + image" alt="Uploaded image" />
           <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">️️⬅️</button>
-          <button type="button" @click="moveImage(index, 1)" :disabled="index === images.length - 1">➡️</button>
+          <button
+            type="button"
+            @click="moveImage(index, 1)"
+            :disabled="index === images.length - 1"
+          >
+            ➡️
+          </button>
           <button type="button" @click="removeImage(index)">❌</button>
         </div>
       </div>
@@ -92,12 +101,9 @@ const handleSender = () => {
       <button type="submit">Submit</button>
     </form>
   </div>
-
-  <footer-page />
 </template>
 
 <style scoped>
-
 form {
   display: flex;
   flex-direction: column;
