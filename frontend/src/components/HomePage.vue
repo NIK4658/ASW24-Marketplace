@@ -12,7 +12,7 @@ const loadPosts = async () => {
     const response = await axios.get('http://localhost:3000/posts')
     posts.value = response.data
   } catch (error) {
-    console.error('Error fetching data: `', error)
+    console.error('Error fetching data: ', error)
   }
 }
 onMounted(() => {

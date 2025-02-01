@@ -7,12 +7,12 @@ const route = useRoute();
 const product = ref(null);
 const loadProduct = async () => {
   try {
-    const postId = route.query.id;
+    const postId = route.params.id;
     const response = await axios.get('http://localhost:3000/posts/' + postId)
     product.value = response.data
     console.log(product.value)
   } catch (error) {
-    console.error('Error fetching data: `', error)
+    console.error('Error fetching data: ', error)
   }
 }
 onMounted(() => {

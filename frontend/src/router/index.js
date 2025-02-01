@@ -19,7 +19,7 @@ const router = createRouter({
       component: () => import('@/views/ProfileView.vue'),
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: () => import('@/views/HomeView.vue'),
     },
@@ -29,7 +29,7 @@ const router = createRouter({
       component: () => import('@/views/CreatePost.vue'),
     },
     {
-      path: '/post/singlepost',
+      path: '/post/:id',
       name: 'product page',
       component: () => import('@/views/ProductPageView.vue'),
     },

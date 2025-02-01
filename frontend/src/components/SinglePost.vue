@@ -20,7 +20,7 @@ defineProps({
 </script>
 
 <template>
-  <a :href="`/post/singlepost?id=${postId}`">
+  <a :href="`/post/${postId}`">
   <div class="post">
     <img :src="'data:' + image.contentType + ';base64,' + image.data" alt="Post Image"
          class="post-image" />

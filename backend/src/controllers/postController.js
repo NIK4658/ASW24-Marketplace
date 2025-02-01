@@ -84,6 +84,7 @@ exports.searchPost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found.' })
     }
+
     const formattedImages = post.images.map(image => ({
       data: image.data.toString('base64'), // Convert Buffer to base64
       contentType: image.contentType
@@ -99,7 +100,6 @@ exports.searchPost = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong while searching for the post.' })
   }
 }
-
 exports.updatePost = async (req, res) => {
   const postId = req.params.id
 
