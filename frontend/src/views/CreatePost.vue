@@ -6,4 +6,3 @@ import PostCreator from '@/components/PostCreator.vue'
   <PostCreator />
 </template>
 
-<style scoped></style>

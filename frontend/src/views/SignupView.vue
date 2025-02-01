@@ -3,7 +3,11 @@ import SignupForm from '@/components/SignupForm.vue'
 </script>
 
 <template>
-  <main>
-    <SignupForm />
-  </main>
+  <SignupForm />
 </template>
+
+<style scoped>
+main {
+  margin: 0 !important;
+}
+</style>
