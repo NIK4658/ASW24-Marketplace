@@ -6,6 +6,9 @@ const router = useRouter()
 
 <template>
   <footer>
+    <button class="icon-button" @click="router.push({ name: 'home' })">
+      <img src="/footer/home.ico" alt="Home" />
+    </button>
     <button class="icon-button" @click="router.push({ name: 'chat' })">
       <img src="/footer/chat.ico" alt="Chat" />
     </button>
