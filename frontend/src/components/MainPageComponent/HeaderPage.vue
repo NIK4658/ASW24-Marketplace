@@ -2,14 +2,12 @@
 import { ref } from 'vue'
 import { useFavicon } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
-import { onMounted, defineEmits } from 'vue'
+import { onMounted } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
 const isDarkTheme = ref(false)
 const search = ref('')
-const emit = defineEmits(['searchResults'])
 
 const applyTheme = () => {
   const root = document.documentElement
@@ -30,15 +28,7 @@ const toggleTheme = () => {
 
 const handleSearch = async (event) => {
   event.preventDefault()
-  try {
-    const response =
-      search.value === ''
-        ? await axios.get('http://localhost:3000/posts')
-        : await axios.get(`http://localhost:3000/posts/search/${search.value}`)
-    emit('searchResults', response.data)
-  } catch (error) {
-    console.error('Error searching posts: ', error)
-  }
+  router.push({ name: 'home', query: { search: search.value } })
 }
 
 onMounted(() => {

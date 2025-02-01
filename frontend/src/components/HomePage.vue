@@ -1,6 +1,5 @@
 <script setup>
 import SinglePost from '@/components/SinglePost.vue'
-
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -10,20 +9,30 @@ const props = defineProps({
 })
 
 const posts = ref([])
+const filteredPosts = ref([])
 const route = useRoute()
 
 const loadPosts = async () => {
   try {
     const response = await axios.get('http://localhost:3000/posts')
     posts.value = response.data
+    filterPosts()
   } catch (error) {
     console.error('Error fetching data: ', error)
   }
 }
 
+const filterPosts = () => {
+  const searchQuery = route.query.search?.toLowerCase() || ''
+  filteredPosts.value = posts.value.filter(post =>
+    post.title.toLowerCase().includes(searchQuery)
+  )
+}
+
 onMounted(() => {
   if (props.somePost) {
     posts.value = props.somePost
+    filterPosts()
   } else {
     loadPosts()
   }
@@ -37,8 +46,8 @@ watch(route, () => {
 </script>
 
 <template>
-  <div class="grid-container" v-if="posts.length > 0">
-    <div v-for="post in posts" :key="post.title" class="grid-item">
+  <div class="grid-container" v-if="filteredPosts.length > 0">
+    <div v-for="post in filteredPosts" :key="post.title" class="grid-item">
       <SinglePost
         :postId="post._id"
         :price="post.price"
@@ -51,6 +60,10 @@ watch(route, () => {
     <p>No posts available</p>
   </div>
 </template>
+
+<style scoped>
+/* Your existing styles */
+</style>
 
 <style scoped>
 main {
