@@ -5,9 +5,3 @@ import SignupForm from '@/components/SignupForm.vue'
 <template>
   <SignupForm />
 </template>
-
-<style scoped>
-main {
-  margin: 0 !important;
-}
-</style>

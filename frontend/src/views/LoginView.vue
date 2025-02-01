@@ -5,9 +5,3 @@ import LoginForm from '@/components/LoginForm.vue'
 <template>
   <LoginForm />
 </template>
-
-<!--<style scoped>-->
-<!--main {-->
-<!--  margin: 0 !important;-->
-<!--}-->
-<!--</style>-->
