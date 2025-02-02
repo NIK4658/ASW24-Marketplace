@@ -1,16 +1,10 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { defineEmits, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
 const router = useRouter()
 const username = ref('')
-const emit = defineEmits(['resetSearch'])
-
-const returnToHome = () => {
-  emit('resetSearch')
-  router.push({ name: 'home' })
-}
 
 const goToProfile = () => {
   if (username.value === '') {
@@ -18,6 +12,12 @@ const goToProfile = () => {
     return
   }
   router.push({ path: `/profile/${username.value}` })
+}
+
+const goToPostCreator = () => {
+  router.push({ name: 'create-post' }).then(() => {
+    window.location.reload()
+  })
 }
 
 const logout = async () => {
@@ -45,13 +45,13 @@ onMounted(async () => {
 
 <template>
   <footer>
-    <button class="icon-button" @click="returnToHome">
+    <button class="icon-button" @click="router.push({ name: 'home' })">
       <img src="/footer/home.ico" alt="Home" />
     </button>
     <button class="icon-button" @click="router.push({ name: 'chat' })">
       <img src="/footer/chat.ico" alt="Chat" />
     </button>
-    <button class="icon-button" @click="router.push({ name: 'create-post' })">
+    <button class="icon-button" @click="goToPostCreator">
       <img src="/footer/plus.ico" alt="Add post" />
     </button>
     <button class="icon-button" @click="goToProfile">
