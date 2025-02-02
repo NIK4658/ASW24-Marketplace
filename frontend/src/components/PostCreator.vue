@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+const router = useRouter()
 const route = useRoute()
 const title = ref('')
 const price = ref(null)
@@ -66,18 +67,22 @@ const removeImage = (index) => {
 
 const handleSender = () => {
   axios
-    .post(route.query.id
-      ? `http://localhost:3000/posts/${route.query.id}`
-      : 'http://localhost:3000/posts', {
-      title: title.value,
-      price: price.value,
-      condition: condition.value,
-      description: description.value,
-      sellerUsername: seller.value,
-      images: images.value,
-    })
+    .post(
+      route.query.id
+        ? `http://localhost:3000/posts/${route.query.id}`
+        : 'http://localhost:3000/posts',
+      {
+        title: title.value,
+        price: price.value,
+        condition: condition.value,
+        description: description.value,
+        sellerUsername: seller.value,
+        images: images.value,
+      },
+    )
     .then((response) => {
       console.log('Post created:', response.data)
+      router.push({ name: 'product page', params: { id: response.data._id } })
     })
     .catch((error) => {
       console.error('Error during post creation:', error)
@@ -110,11 +115,6 @@ const handleSender = () => {
 
       <div v-if="images.length" class="image-preview">
         <div v-for="(image, index) in images" :key="index" class="image-item">
-          <!--          <img-->
-          <!--            :src="'data:' + image.contentType + ';base64,' + image.data"-->
-          <!--            alt="Post Image"-->
-          <!--            class="post-image"-->
-          <!--          />-->
           <img :src="'data:image/jpeg;base64,' + image" alt="Uploaded image" />
           <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">️️⬅️</button>
           <button
