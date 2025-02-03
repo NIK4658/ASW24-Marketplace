@@ -8,6 +8,7 @@ const router = useRouter()
 const product = ref(null)
 const errorFlag = ref(false)
 const userLogged = ref('')
+let copied = ref(false)
 
 const loadProduct = async () => {
   try {
@@ -34,6 +35,16 @@ const editPost = () => {
       id: product.value._id,
     },
   })
+}
+
+const copyLink = async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 2000);
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
 }
 
 const buyNow = async () => {
@@ -95,7 +106,9 @@ const buyNow = async () => {
             </button>
             <button>Send a message to the seller</button>
           </div>
-          <button>Share Link</button>
+          <button @click="copyLink" class="copy-btn">
+            {{ copied ? "Copied!" : "Share Link" }}
+          </button>
         </div>
 
         <p>Product Description:</p>
