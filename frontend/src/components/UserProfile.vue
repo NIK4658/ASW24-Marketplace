@@ -2,9 +2,11 @@
 import SinglePost from '@/components/SinglePost.vue'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 
+const userLogged = ref('')
 const route = useRoute()
+const router = useRouter()
 const userField = ref([])
 const posts = ref([])
 const errorFlag = ref(false)
@@ -21,9 +23,24 @@ const loadPosts = async () => {
     console.error('Error fetching data:', error)
   }
 }
-onMounted(() => {
-  loadPosts()
+onMounted(async () => {
+  await loadPosts()
+  const response = await axios.get('http://localhost:3000/users/session', {
+    withCredentials: true,
+  })
+  userLogged.value = response.data.username
 })
+
+const logout = async () => {
+  try {
+    await axios.post('http://localhost:3000/users/session/logout', null, {
+      withCredentials: true,
+    })
+    await router.push({name: 'login'})
+  } catch (error) {
+    console.error('Error during logout:', error)
+  }
+}
 </script>
 
 <template>
@@ -31,14 +48,26 @@ onMounted(() => {
     <h1>User not found</h1>
   </div>
   <div v-else>
-    <h1>Username: {{ userField.username }}</h1>
-    <h2>Email: {{ userField.email }}</h2>
-
     <img
       v-if="userField.image"
       :src="'data:' + userField.image.contentType + ';base64,' + userField.image.data"
       alt="Profile Picture"
     />
+    <h1>@{{ userField.username }}</h1>
+    <div v-if="userField.username === userLogged">
+      <button class="icon-button" @click="logout">
+        <img src="/footer/logout.ico" alt="Logout" />
+      </button>
+    </div>
+
+    <div v-if="userField.username !== userLogged">
+      <button @click="contactSeller">Send a message to the seller</button>
+    </div>
+    <div v-if="userField.username === userLogged">
+      <button @click="router.push({ name: 'history' })">Order History</button>
+    </div>
+
+    <button>Reviews</button>
 
     <div class="grid-container">
       <div v-for="post in posts" :key="post.title" class="grid-item">
