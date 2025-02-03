@@ -60,10 +60,6 @@ watch(route, () => {
 </template>
 
 <style scoped>
-/* Your existing styles */
-</style>
-
-<style scoped>
 main {
   width: 100%;
   margin: 0;
