@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -11,6 +11,8 @@ const condition = ref('new')
 const description = ref('')
 const seller = ref('')
 const images = ref([])
+
+const formTitle = computed(() => (route.query.id ? 'Edit a Post' : 'Create a Post'))
 
 const loadProduct = async (id) => {
   try {
@@ -92,7 +94,7 @@ const handleSender = () => {
 
 <template>
   <div class="container">
-    <h2>Create a Post</h2>
+    <h2>{{ formTitle}}</h2>
     <form @submit.prevent="handleSender">
       <label>Title:</label>
       <input v-model="title" type="text" required />
