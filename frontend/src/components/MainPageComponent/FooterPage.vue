@@ -11,24 +11,15 @@ const goToProfile = () => {
     router.push({ name: 'login' })
     return
   }
-  router.push({ path: `/profile/${username.value}` })
+  router.push({ name: 'profile', params: { username: username.value } }).then(() => {
+    window.location.reload()
+  })
 }
 
 const goToPostCreator = () => {
   router.push({ name: 'create-post' }).then(() => {
     window.location.reload()
   })
-}
-
-const logout = async () => {
-  try {
-    await axios.post('http://localhost:3000/users/session/logout', null, {
-      withCredentials: true,
-    })
-    router.push({ name: 'login' })
-  } catch (error) {
-    console.error('Error during logout:', error)
-  }
 }
 
 onMounted(async () => {
@@ -56,9 +47,6 @@ onMounted(async () => {
     </button>
     <button class="icon-button" @click="goToProfile">
       <img src="/footer/profile.ico" alt="Profile" />
-    </button>
-    <button class="icon-button" @click="logout">
-      <img src="/footer/logout.ico" alt="Logout" />
     </button>
   </footer>
 </template>
