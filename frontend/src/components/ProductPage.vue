@@ -35,30 +35,19 @@ const editPost = () => {
     },
   })
 }
-</script>
 
-<script>
-export default {
-  methods: {
-    buyNow() {
-      /*TODO*/
-    },
-    contactSeller() {
-      /*TODO*/
-    },
-    shareProduct() {
-      /*TODO*/
-    },
-    deletePost() {
-      /*TODO*/
-    },
-    editPost() {
-      /*TODO*/
-    },
-    readReviews() {
-      /*TODO*/
-    },
-  },
+const buyNow = async () => {
+  try {
+    const postId = route.params.id;
+    const response = await axios.post(`http://localhost:3000/posts/` + postId, { buyer: userLogged.value });
+    product.value = response.data;
+    await router.push({name: 'product page', params: {id: postId}}).then(() => {
+      window.location.reload();
+    });
+  } catch (error) {
+    errorFlag.value = true;
+    console.error('Error buying product: ', error);
+  }
 }
 </script>
 
@@ -104,9 +93,9 @@ export default {
             >
               Buy Now
             </button>
-            <button @click="contactSeller">Send a message to the seller</button>
+            <button>Send a message to the seller</button>
           </div>
-          <button @click="shareProduct">Share Link</button>
+          <button>Share Link</button>
         </div>
 
         <p>Product Description:</p>
@@ -119,10 +108,10 @@ export default {
           </p>
         </div>
 
-        <button @click="readReviews">Read Product Review</button>
+        <button>Read Product Review</button>
 
         <div class="private-actions" v-if="product.seller.username === userLogged">
-          <button v-if="true" @click="deletePost">Delete Post</button>
+          <button v-if="true">Delete Post</button>
           <button v-if="true" @click="editPost">Edit Post</button>
         </div>
       </div>
