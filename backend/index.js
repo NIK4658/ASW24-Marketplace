@@ -5,6 +5,7 @@ const mongoCredentials = settings.mongo;
 const userRouter = require('./src/routes/userRouter');
 const postRouter = require('./src/routes/postRouter');
 const reviewRouter = require('./src/routes/reviewRouter');
+const chatRouter = require('./src/routes/chatRouter');
 const jwt = require('jsonwebtoken');
 const jwtSettings = settings.jwt;
 const cors = require('cors');
@@ -39,6 +40,7 @@ app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/review', reviewRouter);
+app.use('/chat', chatRouter);
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
