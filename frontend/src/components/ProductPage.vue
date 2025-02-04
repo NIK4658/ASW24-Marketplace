@@ -95,13 +95,15 @@ const nextImage = () => {
   <div v-else>
     <div v-if="product" class="product-page">
       <div class="product-image-section">
-        <button @click="prevImage" class="arrow left-arrow">&#10094;</button>
+        <button @click="prevImage"
+                :class="{'arrow left-arrow' : product.images.length > 1, 'arrow-disabled' : product.images.length === 1}">
+          &#10094;</button>
         <img
           :src="'data:' + product.images[currentImageIndex].contentType + ';base64,' + product.images[currentImageIndex].data"
           alt="Post Image"
           class="product-image"
         />
-        <button @click="nextImage" class="arrow right-arrow">&#10095;</button>
+        <button @click="nextImage" :class="{'arrow right-arrow' : product.images.length > 1, 'arrow-disabled' : product.images.length === 1}">&#10095;</button>
       </div>
 
       <div class="product-details">
@@ -191,6 +193,7 @@ const nextImage = () => {
   max-width: 80%;
   border-radius: 12px;
   object-fit: fill;
+  align-self: center;
 }
 
 .arrow {
@@ -213,6 +216,10 @@ const nextImage = () => {
 .product-details h2 {
   font-size: 2rem;
   margin-bottom: 10px;
+}
+
+.arrow-disabled{
+  visibility:hidden;
 }
 
 .price {
