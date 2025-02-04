@@ -96,32 +96,24 @@ const nextImage = () => {
     <div v-if="product" class="product-page">
       <div
         :class="{
-      'product-image-section': true,
-      'center-content': product.images.length === 1
-    }"
+          'product-image-section': true,
+          'center-content': product.images.length === 1,
+        }"
       >
-        <button
-          v-if="product.images.length > 1"
-          @click="prevImage"
-          class="arrow left-arrow"
-        >
+        <button v-if="product.images.length > 1" @click="prevImage" class="arrow left-arrow">
           &#10094;
         </button>
         <img
           :src="
-        'data:' +
-        product.images[currentImageIndex].contentType +
-        ';base64,' +
-        product.images[currentImageIndex].data
-      "
+            'data:' +
+            product.images[currentImageIndex].contentType +
+            ';base64,' +
+            product.images[currentImageIndex].data
+          "
           alt="Post Image"
           class="product-image"
         />
-        <button
-          v-if="product.images.length > 1"
-          @click="nextImage"
-          class="arrow right-arrow"
-        >
+        <button v-if="product.images.length > 1" @click="nextImage" class="arrow right-arrow">
           &#10095;
         </button>
       </div>
@@ -171,7 +163,9 @@ const nextImage = () => {
         <div class="seller-info">
           <p>Seller:</p>
           <p>
-            <a :href="`/profile/${product.seller.username}`">{{ product.seller.username }}</a>
+            <RouterLink :to="{ name: 'profile', params: { username: product.seller.username } }">
+              {{ product.seller.username }}
+            </RouterLink>
           </p>
         </div>
         <div class="review-section">
