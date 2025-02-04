@@ -61,7 +61,10 @@ const logout = async () => {
           Logout
         </button>
         <button v-if="userField.username === userLogged" @click="router.push({ name: 'history' })">
-          Order History
+          Purchase History
+        </button>
+        <button @click="router.push({ name: 'history' })">
+          Sales History
         </button>
         <button>Reviews</button>
       </div>
