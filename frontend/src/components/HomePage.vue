@@ -25,6 +25,7 @@ const loadPosts = async () => {
 const filterPosts = () => {
   const searchQuery = route.query.search?.toLowerCase() || ''
   filteredPosts.value = posts.value.filter((post) => post.title.toLowerCase().includes(searchQuery))
+  filteredPosts.value = filteredPosts.value.filter((post) => post.buyer === null)
 }
 
 onMounted(() => {
