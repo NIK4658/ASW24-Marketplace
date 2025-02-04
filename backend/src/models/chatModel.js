@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const chatSchema = new mongoose.Schema({
   sender: {
-    type: String, required: true
+    type: mongoose.Schema.Types.ObjectId, required: true
   }, receiver: {
-    type: String, required: true
+    type: mongoose.Schema.Types.ObjectId, required: true
   }, message: {
     type: String, required: true
   }, read: {
@@ -12,6 +12,6 @@ const chatSchema = new mongoose.Schema({
   }
 }, {timestamps: true})
 
-const chatModel = mongoose.model('User', chatSchema)
+const chatModel = mongoose.model('Chat', chatSchema)
 
 module.exports = {chatModel}
