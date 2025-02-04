@@ -7,3 +7,5 @@ router.route('/')
 
 router.route('/:userId')
   .get(controller.getChatsByUser);
+
+module.exports = router;
