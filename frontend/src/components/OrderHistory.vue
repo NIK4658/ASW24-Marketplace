@@ -1,8 +1,8 @@
 <script setup>
-import SinglePost from "@/components/SinglePost.vue";
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
+import GridPosts from '@/components/PostViewer/GridPosts.vue'
 const posts = ref([]);
 const route = useRoute()
 const userField = ref([])
@@ -29,16 +29,7 @@ onMounted(async () => {
   <div>
     <h1>Order History</h1>
   </div>
-  <div class="grid-container" v-if="posts.length > 0">
-    <div v-for="post in posts" :key="post.title" class="grid-item">
-      <SinglePost
-        :postId="post._id"
-        :price="post.price"
-        :title="post.title"
-        :image="post.images[0]"
-      />
-    </div>
-  </div>
+  <GridPosts :posts="posts" v-if="posts.length > 0"/>
   <div v-else class="error-container">
     <p>No posts available</p>
   </div>
@@ -51,23 +42,7 @@ main {
   padding: 1%;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  row-gap: 30px;
-  column-gap: 30px;
-  padding: 5%;
-  width: 100%;
-}
-
 h1{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.grid-item {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -83,11 +58,5 @@ h1{
 
 .error-container > p {
   font-size: 1.5rem;
-}
-
-@media (max-width: 600px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
 }
 </style>

@@ -1,8 +1,8 @@
 <script setup>
-import SinglePost from '@/components/SinglePost.vue'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import GridPosts from '@/components/PostViewer/GridPosts.vue'
 
 const userLogged = ref('')
 const route = useRoute()
@@ -36,7 +36,7 @@ const logout = async () => {
     await axios.post('http://localhost:3000/users/session/logout', null, {
       withCredentials: true,
     })
-    await router.push({name: 'login'})
+    await router.push({ name: 'login' })
   } catch (error) {
     console.error('Error during logout:', error)
   }
@@ -63,46 +63,15 @@ const logout = async () => {
         <button v-if="userField.username === userLogged" @click="router.push({ name: 'history' })">
           Purchase History
         </button>
-        <button @click="router.push({ name: 'history' })">
-          Sales History
-        </button>
+        <button @click="router.push({ name: 'history' })">Sales History</button>
         <button>Reviews</button>
       </div>
     </div>
-    <div class="grid-container">
-      <div v-for="post in posts" :key="post.title" class="grid-item">
-        <single-post
-          :postId="post._id"
-          :price="post.price"
-          :title="post.title"
-          :image="post.images[0]"
-        />
-      </div>
-    </div>
+    <GridPosts :posts="posts" />
   </div>
 </template>
 
 <style scoped>
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 16px;
-  padding: 5%;
-}
-
-.grid-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  transition: transform 0.2s;
-}
-
-.grid-item:hover {
-  transform: scale(1.03);
-}
-
 .user-info {
   display: flex;
   flex-direction: column;
@@ -130,7 +99,7 @@ const logout = async () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 button {
@@ -146,5 +115,4 @@ button {
 button:hover {
   background-color: #ededed;
 }
-
 </style>
