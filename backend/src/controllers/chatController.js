@@ -15,15 +15,14 @@ exports.createChat = async (req, res) => {
   }
 }
 
-exports.getChatByUser = async (req, res) => {
+exports.getChatsByUser = async (req, res) => {
   try {
-    const { user } = req.query
-    if (!user) {
-      return res.status(400).json({ error: 'User must be provided.' })
-    }
-    const chats = await chatModel.find({ $or: [{ sender: user }, { receiver: user }] })
+    const { userId } = req.params
+    const chats = await chatModel.find({ $or: [{ sender: userId }, { receiver: userId }] })
     res.status(200).json(chats)
   } catch (error) {
-    res.status(500).json({ error: 'Something went wrong while getting the chat. ' + error })
+    res.status(500).json({ error: 'Something went wrong while fetching the chats. ' + error })
   }
 }
+
+// TODO: mark chat as read
