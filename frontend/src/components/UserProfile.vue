@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import GridPosts from '@/components/PostViewer/GridPosts.vue'
 
@@ -13,11 +13,16 @@ const errorFlag = ref(false)
 const loadPosts = async () => {
   try {
     const username = route.params.username
-    const response = await axios.get('http://localhost:3000/users/' + username)
-    userField.value = response.data
+    const getUserField = await axios.get('http://localhost:3000/users/' + username)
+    userField.value = getUserField.data
 
-    const response2 = await axios.post('http://localhost:3000/posts/user/' + username)
-    posts.value = response2.data
+    const getUserPosts = await axios.post('http://localhost:3000/posts/user/' + username)
+    posts.value = getUserPosts.data
+
+    const getCurrentUserLogged = await axios.get('http://localhost:3000/users/session', {
+      withCredentials: true,
+    })
+    userLogged.value = getCurrentUserLogged.data.username
   } catch (error) {
     errorFlag.value = true
     console.error('Error fetching data:', error)
@@ -25,10 +30,10 @@ const loadPosts = async () => {
 }
 onMounted(async () => {
   await loadPosts()
-  const response = await axios.get('http://localhost:3000/users/session', {
-    withCredentials: true,
-  })
-  userLogged.value = response.data.username
+})
+
+watch(() => route.params.username, async () => {
+  await loadPosts()
 })
 
 const logout = async () => {

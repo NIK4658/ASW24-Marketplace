@@ -11,9 +11,7 @@ const goToProfile = () => {
     router.push({ name: 'login' })
     return
   }
-  router.push({ name: 'profile', params: { username: username.value } }).then(() => {
-    window.location.reload()
-  })
+  router.push({ name: 'profile', params: { username: username.value } })
 }
 
 const goToPostCreator = () => {
