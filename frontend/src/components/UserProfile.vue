@@ -48,27 +48,24 @@ const logout = async () => {
     <h1>User not found</h1>
   </div>
   <div v-else>
-    <img
-      v-if="userField.image"
-      :src="'data:' + userField.image.contentType + ';base64,' + userField.image.data"
-      alt="Profile Picture"
-    />
-    <h1>@{{ userField.username }}</h1>
-    <div v-if="userField.username === userLogged">
-      <button class="icon-button" @click="logout">
-        <img src="/footer/logout.ico" alt="Logout" />
-      </button>
+    <div class="user-info">
+      <img
+        v-if="userField.image"
+        :src="'data:' + userField.image.contentType + ';base64,' + userField.image.data"
+        alt="Profile Picture"
+        class="profile-image"
+      />
+      <h1>@{{ userField.username }}</h1>
+      <div class="user-buttons">
+        <button v-if="userField.username === userLogged" class="icon-button" @click="logout">
+          Logout
+        </button>
+        <button v-if="userField.username === userLogged" @click="router.push({ name: 'history' })">
+          Order History
+        </button>
+        <button>Reviews</button>
+      </div>
     </div>
-
-    <div v-if="userField.username !== userLogged">
-      <button @click="contactSeller">Send a message to the seller</button>
-    </div>
-    <div v-if="userField.username === userLogged">
-      <button @click="router.push({ name: 'history' })">Order History</button>
-    </div>
-
-    <button>Reviews</button>
-
     <div class="grid-container">
       <div v-for="post in posts" :key="post.title" class="grid-item">
         <single-post
@@ -95,11 +92,56 @@ const logout = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
   transition: transform 0.2s;
 }
 
 .grid-item:hover {
   transform: scale(1.03);
 }
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  text-align: center;
+  gap: 20px;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 0px;
+}
+
+button {
+  padding: 5px 30px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #ededed;
+}
+
 </style>
