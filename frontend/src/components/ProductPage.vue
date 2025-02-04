@@ -94,16 +94,36 @@ const nextImage = () => {
   </div>
   <div v-else>
     <div v-if="product" class="product-page">
-      <div class="product-image-section">
-        <button @click="prevImage"
-                :class="{'arrow left-arrow' : product.images.length > 1, 'arrow-disabled' : product.images.length === 1}">
-          &#10094;</button>
+      <div
+        :class="{
+      'product-image-section': true,
+      'center-content': product.images.length === 1
+    }"
+      >
+        <button
+          v-if="product.images.length > 1"
+          @click="prevImage"
+          class="arrow left-arrow"
+        >
+          &#10094;
+        </button>
         <img
-          :src="'data:' + product.images[currentImageIndex].contentType + ';base64,' + product.images[currentImageIndex].data"
+          :src="
+        'data:' +
+        product.images[currentImageIndex].contentType +
+        ';base64,' +
+        product.images[currentImageIndex].data
+      "
           alt="Post Image"
           class="product-image"
         />
-        <button @click="nextImage" :class="{'arrow right-arrow' : product.images.length > 1, 'arrow-disabled' : product.images.length === 1}">&#10095;</button>
+        <button
+          v-if="product.images.length > 1"
+          @click="nextImage"
+          class="arrow right-arrow"
+        >
+          &#10095;
+        </button>
       </div>
 
       <div class="product-details">
@@ -130,16 +150,18 @@ const nextImage = () => {
               :disabled="!(product.buyer === null || product.buyer === undefined)"
               @click="buyNow"
               :class="{
-                      'primary-btn': product.buyer === null || product.buyer === undefined,
-                      'disabled-btn': !(product.buyer === null || product.buyer === undefined)
-                    }"
-              >
+                'primary-btn': product.buyer === null || product.buyer === undefined,
+                'disabled-btn': !(product.buyer === null || product.buyer === undefined),
+              }"
+            >
               Buy Now
             </button>
           </div>
-          <button v-if="product.seller.username !== userLogged" class="secondary-btn">Send a message to the seller</button>
+          <button v-if="product.seller.username !== userLogged" class="secondary-btn">
+            Send a message to the seller
+          </button>
           <button @click="copyLink" class="secondary-btn">
-            {{ copied ? "Copied!" : "Share Link" }}
+            {{ copied ? 'Copied!' : 'Share Link' }}
           </button>
         </div>
 
@@ -156,14 +178,26 @@ const nextImage = () => {
           <button class="review-btn">Read Product Review</button>
         </div>
         <div class="private-actions" v-if="product.seller.username === userLogged">
-          <button :disabled="!(product.buyer === null || product.buyer === undefined)" :class="{
-                      'danger-btn': product.buyer === null || product.buyer === undefined,
-                      'disabled-btn': !(product.buyer === null || product.buyer === undefined)
-                    }"  @click="deletePost">Delete Post</button>
-          <button :disabled="!(product.buyer === null || product.buyer === undefined)" :class="{
-                      'edit-btn': product.buyer === null || product.buyer === undefined,
-                      'disabled-btn': !(product.buyer === null || product.buyer === undefined)
-                    }" @click="editPost">Edit Post</button>
+          <button
+            :disabled="!(product.buyer === null || product.buyer === undefined)"
+            :class="{
+              'danger-btn': product.buyer === null || product.buyer === undefined,
+              'disabled-btn': !(product.buyer === null || product.buyer === undefined),
+            }"
+            @click="deletePost"
+          >
+            Delete Post
+          </button>
+          <button
+            :disabled="!(product.buyer === null || product.buyer === undefined)"
+            :class="{
+              'edit-btn': product.buyer === null || product.buyer === undefined,
+              'disabled-btn': !(product.buyer === null || product.buyer === undefined),
+            }"
+            @click="editPost"
+          >
+            Edit Post
+          </button>
         </div>
       </div>
     </div>
@@ -187,6 +221,10 @@ const nextImage = () => {
   justify-content: space-between;
   width: 100%;
   margin-bottom: 20px;
+}
+
+.center-content {
+  justify-content: center;
 }
 
 .product-image {
@@ -216,10 +254,6 @@ const nextImage = () => {
 .product-details h2 {
   font-size: 2rem;
   margin-bottom: 10px;
-}
-
-.arrow-disabled{
-  visibility:hidden;
 }
 
 .price {
@@ -255,7 +289,7 @@ const nextImage = () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .primary-btn {
@@ -291,7 +325,9 @@ const nextImage = () => {
   background-color: transparent;
   color: #2196f3;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .secondary-btn:hover {
@@ -369,7 +405,9 @@ const nextImage = () => {
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .review-btn:hover {
