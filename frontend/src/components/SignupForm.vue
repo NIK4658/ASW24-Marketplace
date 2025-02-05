@@ -17,7 +17,7 @@ const errorMessage = ref('')
 
 function handleSignup() {
   axios
-    .post('http://localhost:3000/users/', {
+    .post('/backend/users/', {
       username: username.value,
       email: email.value,
       password: password.value,

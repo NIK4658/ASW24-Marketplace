@@ -14,7 +14,7 @@ const currentImageIndex = ref(0)
 const loadProduct = async () => {
   try {
     const postId = route.params.id
-    const response = await axios.get('http://localhost:3000/posts/' + postId)
+    const response = await axios.get('/backend/posts/' + postId)
     product.value = response.data
   } catch (error) {
     errorFlag.value = true
@@ -23,7 +23,7 @@ const loadProduct = async () => {
 }
 onMounted(async () => {
   await loadProduct()
-  const response = await axios.get('http://localhost:3000/users/session', {
+  const response = await axios.get('/backend/users/session', {
     withCredentials: true,
   })
   userLogged.value = response.data.username
@@ -41,7 +41,7 @@ const editPost = () => {
 const deletePost = async () => {
   try {
     const postId = route.params.id
-    const response = await axios.delete('http://localhost:3000/posts/' + postId)
+    const response = await axios.delete('/backend/posts/' + postId)
     product.value = response.data
     await router.push({ name: 'profile', params: { username: userLogged.value } }).then(() => {
       window.location.reload()
@@ -65,7 +65,7 @@ const copyLink = async () => {
 const buyNow = async () => {
   try {
     const postId = route.params.id
-    const response = await axios.post(`http://localhost:3000/posts/` + postId, {
+    const response = await axios.post(`/backend/posts/` + postId, {
       buyer: userLogged.value,
     })
     product.value = response.data

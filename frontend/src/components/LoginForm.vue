@@ -14,7 +14,7 @@ const errorMessage = ref('')
 function handleLogin() {
   axios
     .post(
-      'http://localhost:3000/users/session/login',
+      '/backend/users/session/login',
       {
         username: username.value,
         password: password.value,
@@ -73,20 +73,6 @@ function handleLogin() {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.register-container {
-  max-width: 400px;
-  margin: 10px auto;
   text-align: center;
   display: flex;
   flex-direction: column;

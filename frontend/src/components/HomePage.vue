@@ -14,7 +14,7 @@ const route = useRoute()
 
 const loadPosts = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/posts')
+    const response = await axios.get('/backend/posts')
     posts.value = response.data
     filterPosts()
   } catch (error) {
