@@ -22,20 +22,11 @@
 
     --transition-color: color 0.5s, background-color 0.5s;
 
-    --header-height: 7%;
-    --footer-height: 10%;
-}
+    /*--header-height: 5rem;
+    --footer-height: 5rem;*/
 
-@media (max-width: 690px) {
-    :root {
-        --header-height: 10%;
-        --footer-height: 10%;
-    }
-
-    main {
-        margin-top: calc(var(--header-height) + 20px);
-        margin-bottom: var(--footer-height);
-    }
+    --header-height: 80px;
+    --footer-height: 80px;
 }
 
 /* semantic color variables for this project */
@@ -79,10 +70,4 @@ body {
     font-size: 15px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-main {
-    flex: 1;
-    padding-top: var(--header-height);
-    padding-bottom: var(--footer-height);
 }
