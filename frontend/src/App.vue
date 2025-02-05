@@ -18,4 +18,8 @@ const showHeaderFooter = computed(() => !noHeaderFooterRoutesNames.includes(rout
   <FooterPage v-if="showHeaderFooter" />
 </template>
 
-<style></style>
+<style>
+main{
+  margin: 80px 0;
+}
+</style>
