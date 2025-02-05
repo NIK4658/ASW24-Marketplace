@@ -77,11 +77,4 @@ button {
 button:hover {
   background-color: var(--color-border);
 }
-
-@media (max-width: 600px) {
-  button {
-    width: 3rem;
-    height: 3rem;
-  }
-}
 </style>
