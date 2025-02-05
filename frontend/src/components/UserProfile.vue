@@ -30,10 +30,16 @@ const loadPosts = async () => {
 }
 onMounted(async () => {
   await loadPosts()
+  window.scrollTo({
+    top: 0,
+  });
 })
 
 watch(() => route.params.username, async () => {
   await loadPosts()
+  window.scrollTo({
+    top: 0,
+  });
 })
 
 const logout = async () => {
