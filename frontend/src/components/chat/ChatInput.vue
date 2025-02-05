@@ -1,24 +1,20 @@
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
   placeholder: {
     type: String,
     default: "Send a message..."
-  },
-  modelValue: {
-    type: String,
-    required: true
   }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['send-message']);
 
-const inputValue = ref(props.modelValue);
+const inputValue = ref('');
 
 const sendMessage = () => {
   if (inputValue.value.trim() !== '') {
-    emit('update:modelValue', inputValue.value);
+    emit('send-message', inputValue.value);
     inputValue.value = ''; 
   }
 };

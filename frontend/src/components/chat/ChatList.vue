@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { ref } from 'vue';
 import ChatPreview from '@/components/chat/ChatPreview.vue';
 
 const props = defineProps({
@@ -9,30 +9,25 @@ const props = defineProps({
   }
 });
 
-function handleChatClick(chatId) {
-  // TODO: Handle chat click
-}
+const selectedChatId = ref('');
+
+const emit = defineEmits(['select-preview']);
+
+const handleSelectPreview = (chatId) => {
+  emit('select-preview', chatId);
+  selectedChatId.value = chatId; 
+};
 </script>
 
 <template>
   <div class="container">
     <ul>
-      <chat-preview v-for="chat in chats" :id="chat._id" :image="chat.image" :username="chat.username"
-        :message="chat.message" :time="chat.time" :read="chat.read" @click="handleChatClick(chat.id)" />
+      <chat-preview v-for="chat in props.chats" :id="chat._id" :image="chat.image" :username="chat.username"
+        :message="chat.message" :time="chat.time" :read="chat.read" @click="handleSelectPreview" />
     </ul>
   </div>
 </template>
 
 <style scoped>
-.container {
-  width: 300px;
-  border-right: 1px solid #ccc;
-  overflow-y: auto;
-}
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
 </style>
