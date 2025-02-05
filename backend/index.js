@@ -6,10 +6,11 @@ const userRouter = require('./src/routes/userRouter')
 const postRouter = require('./src/routes/postRouter')
 const reviewRouter = require('./src/routes/reviewRouter')
 const chatRouter = require('./src/routes/chatRouter')
+const roomRouter = require('./src/routes/roomRouter')
 const cors = require('cors')
 const session = require('express-session')
 const http = require('http')
-const { Server } = require('socket.io')
+const socketServer = require('./socketServer')
 const app = express()
 const server = http.createServer(app)
 
@@ -42,29 +43,9 @@ app.use('/users', userRouter)
 app.use('/posts', postRouter)
 app.use('/review', reviewRouter)
 app.use('/chat', chatRouter)
+app.use('/room', roomRouter)
 
-const io = new Server(server, { cors: corsRule })
-io.engine.use(sessionMiddleware)
-
-io.on('connection', (socket) => {
-  const session = socket.request.session
-  console.log('User connected ')
-
-
-  socket.on('test', (data) => {
-    console.log(data)
-    socket.emit('test', 'Hello from server')
-  })
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected ' + session.user)
-    session.destroy()
-  })
-
-  socket.on('message', (data) => {
-    console.log(data)
-  })
-})
+socketServer(server, sessionMiddleware, corsRule)
 
 server.listen(3000, () => {
   console.log('Server listening on port 3000')
