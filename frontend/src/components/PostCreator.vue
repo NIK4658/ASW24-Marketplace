@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -28,6 +28,14 @@ const loadProduct = async (id) => {
   }
 }
 
+const resetForm = () => {
+  title.value = ''
+  price.value = null
+  condition.value = 'new'
+  description.value = ''
+  images.value = []
+}
+
 onMounted(async () => {
   const response = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
@@ -37,6 +45,10 @@ onMounted(async () => {
   if (route.query.id) {
     await loadProduct(route.query.id)
   }
+})
+
+watch(() => route.query.id, async (id) => {
+  id ? await loadProduct(id) : resetForm()
 })
 
 const handleImageUpload = (event) => {

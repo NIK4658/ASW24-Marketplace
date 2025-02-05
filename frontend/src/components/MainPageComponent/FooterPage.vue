@@ -14,12 +14,6 @@ const goToProfile = () => {
   router.push({ name: 'profile', params: { username: username.value } })
 }
 
-const goToPostCreator = () => {
-  router.push({ name: 'create-post' }).then(() => {
-    window.location.reload()
-  })
-}
-
 onMounted(async () => {
   try {
     const response = await axios.get('http://localhost:3000/users/session', {
@@ -40,7 +34,7 @@ onMounted(async () => {
     <button class="icon-button" @click="router.push({ name: 'chat' })">
       <img src="/footer/chat.ico" alt="Chat" />
     </button>
-    <button class="icon-button" @click="goToPostCreator">
+    <button class="icon-button" @click="router.push({ name: 'create-post' })">
       <img src="/footer/plus.ico" alt="Add post" />
     </button>
     <button class="icon-button" @click="goToProfile">
