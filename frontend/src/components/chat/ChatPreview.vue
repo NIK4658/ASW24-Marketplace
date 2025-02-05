@@ -47,43 +47,5 @@ const handleClick = () => {
 </template>
 
 <style scoped>
-.chat-preview {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-  cursor: pointer;
-}
 
-.profile-pic {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.chat-details {
-  flex: 1;
-}
-
-.chat-name {
-  margin: 0;
-  font-size: 1.2em;
-}
-
-.chat-message {
-  margin: 0;
-  color: #666;
-}
-
-.chat-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.chat-time {
-  font-size: 0.8em;
-  color: #999;
-}
 </style>
