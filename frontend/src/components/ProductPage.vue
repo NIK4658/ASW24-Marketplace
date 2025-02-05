@@ -169,7 +169,10 @@ const nextImage = () => {
           </p>
         </div>
         <div class="review-section">
-          <button class="review-btn">Read Product Review</button>
+          <button :class="{
+                'disabled-btn': product.buyer === null || product.buyer === undefined,
+                'review-btn': !(product.buyer === null || product.buyer === undefined),
+              }">Read Product Review</button>
         </div>
         <div class="private-actions" v-if="product.seller.username === userLogged">
           <button
