@@ -1,11 +1,19 @@
 const { chatModel } = require('../models/chatModel')
+const { userModel } = require('../models/userModel')
+const mongoose = require('mongoose')
 
 exports.logChat = async (req, res) => {
   try {
     const { sender, receiver, message } = req.body
+
+    if (!mongoose.Types.ObjectId.isValid(sender) || !mongoose.Types.ObjectId.isValid(receiver)) {
+      return res.status(400).json({ message: 'Invalid users ID' })
+    }
+
     if (!sender || !receiver || !message) {
       return res.status(400).json({ error: 'All required fields must be provided.' })
     }
+
     const newChat = new chatModel({ sender, receiver, message })
     const savedChat = await newChat.save()
     res.status(201).json(savedChat)
@@ -17,6 +25,11 @@ exports.logChat = async (req, res) => {
 exports.getPreviewsByUser = async (req, res) => {
   try {
     const userId = req.params.userId
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid user ID' })
+    }
+
     const chats = await chatModel.find({ $or: [{ sender: userId }, { receiver: userId }] }).sort({ createdAt: -1 })
     const previews = []
     const users = {}
@@ -24,7 +37,15 @@ exports.getPreviewsByUser = async (req, res) => {
       const otherUserId = chat.sender === userId ? chat.receiver : chat.sender
       if (!users[otherUserId]) {
         users[otherUserId] = true
-        previews.push(chat)
+        const user = await userModel.findById(otherUserId) 
+        previews.push({
+          _id: chat._id,
+          image: user.image, 
+          username: user.username, 
+          message: chat.message,
+          time: chat.createdAt,
+          read: chat.read
+        })
       }
     }
     res.status(200).json(previews)
@@ -37,6 +58,11 @@ exports.getChatsBetweenUsers = async (req, res) => {
   try {
     const userId1 = req.params.userId1
     const userId2 = req.params.userId2
+
+    if (!mongoose.Types.ObjectId.isValid(userId1) || !mongoose.Types.ObjectId.isValid(userId2)) {
+      return res.status(400).json({ message: 'Invalid users ID' })
+    }
+
     const chats = await chatModel.find({ $or: [{ sender: userId1, receiver: userId2 }, { sender: userId2, receiver: userId1 }] }).sort({ createdAt: 1 })
     res.status(200).json(chats)
   } catch (error) {
@@ -48,6 +74,11 @@ exports.readChatsBetweenUsers = async (req, res) => {
   try {
     const userId1 = req.params.userId1
     const userId2 = req.params.userId2
+
+    if (!mongoose.Types.ObjectId.isValid(userId1) || !mongoose.Types.ObjectId.isValid(userId2)) {
+      return res.status(400).json({ message: 'Invalid users ID' })
+    }
+
     await chatModel.updateMany({ sender: userId1, receiver: userId2 }, { read: true })
     res.status(200).json({ message: 'Chats marked as read.' })
   } catch (error) {
@@ -59,6 +90,11 @@ exports.deleteChatsBetweenUsers = async (req, res) => {
   try {
     const userId1 = req.params.userId1
     const userId2 = req.params.userId2
+
+    if (!mongoose.Types.ObjectId.isValid(userId1) || !mongoose.Types.ObjectId.isValid(userId2)) {
+      return res.status(400).json({ message: 'Invalid users ID' })
+    }
+
     await chatModel.deleteMany({ $or: [{ sender: userId1, receiver: userId2 }, { sender: userId2, receiver: userId1 }] })
     res.status(200).json({ message: 'Chats deleted.' })
   } catch (error) {
