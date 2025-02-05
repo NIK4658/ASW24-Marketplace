@@ -8,8 +8,8 @@ const reviewRouter = require('./src/routes/reviewRouter')
 const chatRouter = require('./src/routes/chatRouter')
 const cors = require('cors')
 const session = require('express-session')
-const initializeWebSocket = require('./websocket')
 const http = require('http')
+const { Server } = require('socket.io')
 const app = express()
 const server = http.createServer(app)
 
@@ -20,7 +20,7 @@ const sessionMiddleware = session({
   saveUninitialized: false,
   cookie: {
     maxAge: 60 * 60 * 24 * 1000, // 24 hours
-    httpOnly: true,
+    httpOnly: true
   }
 })
 
@@ -29,12 +29,9 @@ const corsRule = {
   credentials: true
 }
 
-mongoose.connect(
-  `${mongoCredentials.protocol}://${mongoCredentials.username}:${mongoCredentials.password}@${mongoCredentials.host}:${mongoCredentials.port}/${mongoCredentials.database}?authSource=${mongoCredentials.authSource}`
-)
+mongoose.connect(`${mongoCredentials.protocol}://${mongoCredentials.username}:${mongoCredentials.password}@${mongoCredentials.host}:${mongoCredentials.port}/${mongoCredentials.database}?authSource=${mongoCredentials.authSource}`)
 
 app.use(cors(corsRule))
-
 app.use(sessionMiddleware)
 
 app.use(express.static('public'))
@@ -46,12 +43,28 @@ app.use('/posts', postRouter)
 app.use('/review', reviewRouter)
 app.use('/chat', chatRouter)
 
-const io = initializeWebSocket(server, sessionMiddleware, corsRule)
-// app.get('/session-info', (req, res) => {
-//   console.log('Session ID:', req.session.id)
-//   console.log('Session data:', req.session)
-//   res.json(req.session)
-// })
+const io = new Server(server, { cors: corsRule })
+io.engine.use(sessionMiddleware)
+
+io.on('connection', (socket) => {
+  const session = socket.request.session
+  console.log('User connected ')
+
+
+  socket.on('test', (data) => {
+    console.log(data)
+    socket.emit('test', 'Hello from server')
+  })
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected ' + session.user)
+    session.destroy()
+  })
+
+  socket.on('message', (data) => {
+    console.log(data)
+  })
+})
 
 server.listen(3000, () => {
   console.log('Server listening on port 3000')
