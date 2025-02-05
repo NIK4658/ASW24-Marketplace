@@ -23,6 +23,7 @@ const loadPreviews = async (id) => {
   try {
     const response = await axios.get(`/backend/chat/${id}`)
     chatPreviews.value = response.data
+    console.log('Chat previews: ', chatPreviews.value)
   } catch (error) {
     console.error('Error fetching data: ', error)
   }
@@ -59,25 +60,16 @@ const handleSelectPreview = async (chatId) => {
 
 const handleSendMessage = async (currentMessage) => {
   try {
-    await axios.post('/backend/chat', {
+    const registeredChat = await axios.post('/backend/chat', {
       sender: senderId.value,
       receiver: receiverId.value,
       message: currentMessage
     })
-    chatMessages.value.push({
-      sender: { _id: senderId.value, username: senderUsername.value },
-      receiver: { _id: receiverId.value, username: receiverUsername.value },
-      message: currentMessage,
-      read: true
-    })
+    console.log('Registered chat: ', registeredChat.data)
+    chatMessages.value.push(registeredChat.data)
+    console.log("Succesfully sent message: ", currentMessage)
   } catch (error) {
     console.error('Error sending message: ', error)
-    chatMessages.value.push({
-      sender: { _id: senderId.value, username: senderUsername.value },
-      receiver: { _id: receiverId.value, username: receiverUsername.value },
-      message: "ERROR: Message not sent -> " + currentMessage,
-      read: false
-    })
   }
 }
 
@@ -86,57 +78,31 @@ const handleSendMessage = async (currentMessage) => {
 <template>
   <div class="container">
     <div class="layout">
-      <div v-if="chatPreviews.length === 0" class="no-chats-message">There are no chats</div>
-      <chat-list v-else :chats="chatPreviews" @select-preview="handleSelectPreview" />
-      <div class="divider"></div>
-      <div v-if="isChatSelected" class="chat-window-container">
-        <chat-window :chatTitle="receiverUsername" :chatLog="chatMessages" @send-message="handleSendMessage" />
-      </div>
-      <div v-else class="no-chat-selected-message">Select a chat</div>
+      <chat-list class="chat-list" :chats="chatPreviews" @select-preview="handleSelectPreview" />
+      <chat-window class="chat-window" :chatTitle="receiverUsername" :chatLog="chatMessages" @send-message="handleSendMessage" />
     </div>
   </div>
 </template>
 
 <style scoped>
 .container {
-  width: 100%;
-  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100vh;
 }
 
 .layout {
   display: flex;
   width: 100%;
-  height: 100%;
-}
-
-.divider {
-  width: 1px;
-  background-color: white;
-  margin: 0 10px;
-}
-
-.no-chats-message {
-  color: gray;
-  font-size: 16px;
-  margin: auto;
-}
-
-.no-chat-selected-message {
-  color: gray;
-  font-size: 16px;
-  margin: auto;
-}
-
-.chat-window-container {
-  width: 70%;
-  height: 100%;
 }
 
 .chat-list {
-  width: 30%;
-  height: 100%;
+  flex: 0 0 20%;
+  max-width: 20%;
+  border-right: 1px solid #ccc;
+}
+
+.chat-window {
+  flex: 1;
+  padding: 10px;
 }
 </style>

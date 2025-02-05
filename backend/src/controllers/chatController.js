@@ -15,7 +15,9 @@ exports.logChat = async (req, res) => {
     }
 
     const newChat = new chatModel({ sender, receiver, message })
-    const savedChat = await newChat.save()
+    const savedChat = await newChat.save();
+    await savedChat.populate('sender', 'username');
+    await savedChat.populate('receiver', 'username');
     res.status(201).json(savedChat)
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong while creating the chat. ' + error })
@@ -24,31 +26,54 @@ exports.logChat = async (req, res) => {
 
 exports.getPreviewsByUser = async (req, res) => {
   try {
-    const userId = req.params.userId
+    const userId = req.params.userId;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: 'Invalid user ID' })
+      return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    const chats = await chatModel.find({ $or: [{ sender: userId }, { receiver: userId }] }).sort({ createdAt: -1 })
-    const previews = []
-    const users = {}
-    for (const chat of chats) {
-      const otherUserId = chat.sender === userId ? chat.receiver : chat.sender
-      if (!users[otherUserId]) {
-        users[otherUserId] = true
-        const user = await userModel.findById(otherUserId) 
-        previews.push({
-          _id: chat._id,
-          image: user.image, 
-          username: user.username, 
-          message: chat.message,
-          time: chat.createdAt,
-          read: chat.read
-        })
+    const lastMessages = await chatModel.aggregate([
+      {
+        $match: { 
+          $or: [{ sender: new mongoose.Types.ObjectId(userId) }, { receiver: new mongoose.Types.ObjectId(userId) }]
+        }
+      },
+      {
+        $sort: { createdAt: -1 } // Sort by latest message first
+      },
+      {
+        $group: {
+          _id: {
+            user1: { $cond: [{ $gt: ['$sender', '$receiver'] }, '$sender', '$receiver'] },
+            user2: { $cond: [{ $gt: ['$sender', '$receiver'] }, '$receiver', '$sender'] }
+          },
+          lastMessage: { $first: '$$ROOT' } // Pick the latest message
+        }
       }
-    }
-    res.status(200).json(previews)
+    ]);
+
+    const previews = await Promise.all(
+      lastMessages.map(async ({ lastMessage }) => {
+        const otherUserId = lastMessage.sender.toString() === userId ? lastMessage.receiver : lastMessage.sender;
+        const user = await userModel.findById(otherUserId, 'username image'); // Fetch user data
+
+        const formattedImage = {
+          data: user.image.data.toString('base64'),
+          contentType: user.image.contentType
+        };
+
+        return {
+          _id: lastMessage._id,
+          image: formattedImage,
+          username: user?.username || 'Unknown',
+          message: lastMessage.message,
+          time: lastMessage.createdAt,
+          read: lastMessage.read
+        };
+      })
+    );
+
+    res.status(200).json(previews);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong while fetching the chats. ' + error })
   }

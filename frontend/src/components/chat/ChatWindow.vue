@@ -31,7 +31,7 @@ const handleSentMessage = (message) => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="chat-window">
     <chat-log :chatTitle="props.chatTitle" :chatLog="props.chatLog" />
     <chat-input :placeholder="props.placeholder" @send-message="handleSentMessage" />
   </div>

@@ -1,4 +1,8 @@
 <script setup>
+import { defineProps } from 'vue';
+import { computed } from 'vue';
+import { format, isToday } from 'date-fns';
+
 const props = defineProps({
   chatTitle: {
     type: String,
@@ -8,21 +12,63 @@ const props = defineProps({
     type: Array,
     required: true
   }
-})
+});
+
+const formatTime = (time) => {
+  const date = new Date(time);
+  if (isToday(date)) {
+    return format(date, 'HH:mm');
+  } else {
+    return format(date, 'yyyy-MM-dd');
+  }
+};
+
+const formattedChatLog = computed(() => {
+  return props.chatLog.map(chat => ({
+    ...chat,
+    formattedTime: formatTime(chat.createdAt)
+  }));
+});
 </script>
 
 <template>
   <div class="container">
     <h1>{{ props.chatTitle }}</h1>
     <div class="chat-log">
-      <div v-for="chat in props.chatLog" :key="chat._id">
+      <div v-for="chat in formattedChatLog" :key="chat._id">
         <h2>{{ chat.sender.username }} to {{ chat.receiver.username }}</h2>
         <p>{{ chat.message }}</p>
+        <span>{{ chat.formattedTime }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  padding: 20px;
+}
 
+.chat-log {
+  margin-top: 20px;
+}
+
+.chat-log > div {
+  margin-bottom: 10px;
+}
+
+.chat-log h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.chat-log p {
+  margin: 0;
+  color: gray;
+}
+
+.chat-log span {
+  font-size: 0.8rem;
+  color: gray;
+}
 </style>
