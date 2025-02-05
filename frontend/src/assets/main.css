@@ -14,15 +14,3 @@
     margin: 0;
     font-weight: normal;
 }
-
-@media (min-width: 1024px) {
-    body {
-        display: flex;
-        place-items: center;
-    }
-}
-
-main {
-    padding-top: var(--header-height);
-    padding-bottom: var(--footer-height);
-}

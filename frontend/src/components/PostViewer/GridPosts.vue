@@ -31,7 +31,7 @@ defineProps({
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   row-gap: 30px;
   column-gap: 30px;
-  padding: 5%;
+  padding: 0 5%;
   width: 100%;
 }
 
@@ -51,11 +51,5 @@ defineProps({
 
 .error-container > p {
   font-size: 1.5rem;
-}
-
-@media (max-width: 600px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
 }
 </style>

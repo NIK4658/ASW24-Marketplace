@@ -43,10 +43,52 @@ watch(route, () => {
   }
 })
 
-watch(() => route.query.search, () => {
-  filterPosts()
-})
+watch(
+  () => route.query.search,
+  () => {
+    filterPosts()
+  },
+)
+
+// import { io } from 'socket.io-client'
+// const socket = io('ws://localhost:3000', {
+//   withCredentials: true,
+// })
+// socket.on('connect', () => {
+//   console.log('Connected to the server!')
+// })
 </script>
+
+<!--<script setup>-->
+<!--import { io } from 'socket.io-client'-->
+
+<!--// To create connection to the server-->
+<!--const socket = io('http://localhost:3000', {-->
+<!--  withCredentials: true,-->
+<!--})-->
+
+
+<!--// To connect to the server-->
+<!--socket.on('connect', () => {-->
+<!--  console.log('Connected to the server!')-->
+<!--})-->
+
+<!--// To receive data from the server-->
+<!--socket.on('test', (data) => {-->
+<!--  console.log('Received data from the server:', data)-->
+<!--})-->
+
+<!--// To send data to the server-->
+<!--const sendMessage = () => {-->
+<!--  socket.emit('test', 'Hello from the client!')-->
+<!--}-->
+<!--</script>-->
+
+<!--<template>-->
+<!--  <button @click="sendMessage">-->
+<!--    Send a message to the server-->
+<!--  </button>-->
+<!--</template>-->
 
 <template>
   <GridPosts :posts="filteredPosts" />
