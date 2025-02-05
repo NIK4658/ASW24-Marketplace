@@ -88,7 +88,7 @@ const logout = async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 30vh;
+  height: 400px;
   text-align: center;
   gap: 20px;
 }
