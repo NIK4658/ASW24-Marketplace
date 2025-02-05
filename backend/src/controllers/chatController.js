@@ -70,13 +70,7 @@ exports.getChatData = async (req, res) => {
       return res.status(404).json({ message: 'Chat not found' });
     }
 
-    const chatData = {
-      ...chat.toObject(),
-      senderUsername: chat.sender.username,
-      receiverUsername: chat.receiver.username
-    };
-
-    res.status(200).json(chatData);
+    res.status(200).json(chat);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong while fetching the chat. ' + error });
   }
@@ -92,6 +86,9 @@ exports.getChatsBetweenUsers = async (req, res) => {
     }
 
     const chats = await chatModel.find({ $or: [{ sender: userId1, receiver: userId2 }, { sender: userId2, receiver: userId1 }] }).sort({ createdAt: 1 })
+      .populate('sender', 'username')
+      .populate('receiver', 'username');
+      
     res.status(200).json(chats)
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong while fetching the chats. ' + error })

@@ -16,7 +16,7 @@ const props = defineProps({
     <h1>{{ props.chatTitle }}</h1>
     <div class="chat-log">
       <div v-for="chat in props.chatLog" :key="chat._id">
-        <h2>{{ chat.sender }} to {{ chat.receiver }}</h2>
+        <h2>{{ chat.sender.username }} to {{ chat.receiver.username }}</h2>
         <p>{{ chat.message }}</p>
       </div>
     </div>

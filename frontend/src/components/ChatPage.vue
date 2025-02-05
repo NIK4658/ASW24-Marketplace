@@ -4,12 +4,20 @@ import axios from 'axios'
 import ChatList from '@/components/chat/ChatList.vue';
 import ChatWindow from '@/components/chat/ChatWindow.vue';
 
+// DEBUG ONLY
+const zettaiki = ref('67a0a82156a2067630e6e34f')
+const zettaiki2 = ref('67a38bb594dbd6b9fdd9dc37')
+const message1 = ref('Hello, how are you?')
+const message2 = ref('I am fine, thank you. How about you?')
+// DEBUG ONLY
+
 const senderId = ref('') // Reppresents the current user
+const senderUsername = ref('') // Reppresents the current user's username
 const receiverId = ref('') // Reppresents the user the current user is chatting with
+const receiverUsername = ref('') // Reppresents the user the current user is chatting with
 const chatPreviews = ref([])
 const chatMessages = ref([])
 const isChatSelected = ref(false)
-const chatTitle = ref('')
 
 const loadPreviews = async (id) => {
   try {
@@ -31,18 +39,18 @@ onMounted(async () => {
 const handleSelectPreview = async (chatId) => {
   try {
     const response = await axios.get(`/backend/chat/data/${chatId}`)
-    if (response.data.sender === senderId.value) {
-      receiverId.value = response.data.receiver
-      chatTitle.value = response.data.receiverUsername
-    } else if (response.data.receiver === senderId.value) {
-      receiverId.value = response.data.sender
-      chatTitle.value = response.data.senderUsername
+    if (response.data.sender._id === senderId.value) {
+      receiverId.value = response.data.receiver._id
+      receiverUsername.value = response.data.receiver.username
+    } else if (response.data.receiver._id === senderId.value) {
+      receiverId.value = response.data.sender._id
+      receiverUsername.value = response.data.sender.username
     } else {
       console.error('Error selecting chat: ', response.data)
     }
-
-    chatMessages.value = await axios.get(`/backend/chat/${senderId.value}/${receiverId.value}`)
-
+    const chatLogResponse = await axios.get(`/backend/chat/between/${senderId.value}/${receiverId.value}`)
+    chatMessages.value = chatLogResponse.data
+    console.log('Chat messages: ', chatMessages.value)
     isChatSelected.value = true
   } catch (error) {
     console.error('Error fetching chat: ', error)
@@ -57,16 +65,16 @@ const handleSendMessage = async (currentMessage) => {
       message: currentMessage
     })
     chatMessages.value.push({
-      sender: senderId.value,
-      receiver: receiverId.value,
+      sender: { _id: senderId.value, username: senderUsername.value },
+      receiver: { _id: receiverId.value, username: receiverUsername.value },
       message: currentMessage,
       read: true
     })
   } catch (error) {
     console.error('Error sending message: ', error)
     chatMessages.value.push({
-      sender: senderId.value,
-      receiver: receiverId.value,
+      sender: { _id: senderId.value, username: senderUsername.value },
+      receiver: { _id: receiverId.value, username: receiverUsername.value },
       message: "ERROR: Message not sent -> " + currentMessage,
       read: false
     })
@@ -78,12 +86,57 @@ const handleSendMessage = async (currentMessage) => {
 <template>
   <div class="container">
     <div class="layout">
-      <chat-list :chats="chatPreviews" @select-preview="handleSelectPreview" />
-      <chat-window v-if="isChatSelected" :chatTitle="chatTitle" :chatLog="chatMessages" @send-message="handleSendMessage"/>
+      <div v-if="chatPreviews.length === 0" class="no-chats-message">There are no chats</div>
+      <chat-list v-else :chats="chatPreviews" @select-preview="handleSelectPreview" />
+      <div class="divider"></div>
+      <div v-if="isChatSelected" class="chat-window-container">
+        <chat-window :chatTitle="receiverUsername" :chatLog="chatMessages" @send-message="handleSendMessage" />
+      </div>
+      <div v-else class="no-chat-selected-message">Select a chat</div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.divider {
+  width: 1px;
+  background-color: white;
+  margin: 0 10px;
+}
+
+.no-chats-message {
+  color: gray;
+  font-size: 16px;
+  margin: auto;
+}
+
+.no-chat-selected-message {
+  color: gray;
+  font-size: 16px;
+  margin: auto;
+}
+
+.chat-window-container {
+  width: 70%;
+  height: 100%;
+}
+
+.chat-list {
+  width: 30%;
+  height: 100%;
+}
 </style>

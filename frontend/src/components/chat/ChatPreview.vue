@@ -47,5 +47,21 @@ const handleClick = () => {
 </template>
 
 <style scoped>
+.chat-preview {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+}
 
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.chat-details {
+  flex: 1;
+}
 </style>
