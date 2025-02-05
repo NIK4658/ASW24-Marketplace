@@ -29,12 +29,5 @@ const handleSelectPreview = (chatId) => {
 </template>
 
 <style scoped>
-.chat-preview {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
-}
 
-.chat-preview:last-child {
-  border-bottom: none;
-}
 </style>

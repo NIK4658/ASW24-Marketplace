@@ -45,30 +45,5 @@ const formattedChatLog = computed(() => {
 </template>
 
 <style scoped>
-.container {
-  padding: 20px;
-}
 
-.chat-log {
-  margin-top: 20px;
-}
-
-.chat-log > div {
-  margin-bottom: 10px;
-}
-
-.chat-log h2 {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.chat-log p {
-  margin: 0;
-  color: gray;
-}
-
-.chat-log span {
-  font-size: 0.8rem;
-  color: gray;
-}
 </style>

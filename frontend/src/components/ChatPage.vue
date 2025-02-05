@@ -85,24 +85,5 @@ const handleSendMessage = async (currentMessage) => {
 </template>
 
 <style scoped>
-.container {
-  display: flex;
-  height: 100vh;
-}
 
-.layout {
-  display: flex;
-  width: 100%;
-}
-
-.chat-list {
-  flex: 0 0 20%;
-  max-width: 20%;
-  border-right: 1px solid #ccc;
-}
-
-.chat-window {
-  flex: 1;
-  padding: 10px;
-}
 </style>
