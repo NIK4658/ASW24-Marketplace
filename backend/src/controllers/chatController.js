@@ -65,5 +65,3 @@ exports.deleteChatsBetweenUsers = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong while deleting the chats. ' + error })
   }
 }
-
-// TODO: mark chat as read
