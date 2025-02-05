@@ -86,7 +86,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 75%;
 }
 
 input[type='text'] {
@@ -123,34 +123,10 @@ button[type='submit'] img {
   height: 20px;
 }
 
-@media (max-width: 600px) {
-  header {
-    height: auto;
-    align-items: flex-start;
-    padding: 10px;
-  }
-
-  .search-container {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
+@media (min-width: 700px) {
   form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-right: 10px;
-  }
-
-  input[type='text'] {
-    width: calc(100% - 20px);
-    margin-right: 10px;
-  }
-
-  .theme-button img {
-    width: 20px;
-    height: 20px;
+    width: 30%;
   }
 }
+
 </style>
