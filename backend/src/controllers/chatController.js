@@ -54,6 +54,34 @@ exports.getPreviewsByUser = async (req, res) => {
   }
 }
 
+exports.getChatData = async (req, res) => {
+  try {
+    const chatId = req.params.chatId;
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+      return res.status(400).json({ message: 'Invalid chat ID' });
+    }
+
+    const chat = await chatModel.findById(chatId)
+      .populate('sender', 'username')
+      .populate('receiver', 'username');
+
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+
+    const chatData = {
+      ...chat.toObject(),
+      senderUsername: chat.sender.username,
+      receiverUsername: chat.receiver.username
+    };
+
+    res.status(200).json(chatData);
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong while fetching the chat. ' + error });
+  }
+};
+
 exports.getChatsBetweenUsers = async (req, res) => {
   try {
     const userId1 = req.params.userId1

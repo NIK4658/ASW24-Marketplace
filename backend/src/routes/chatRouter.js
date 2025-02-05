@@ -8,6 +8,9 @@ router.route('/')
 router.route('/:userId')
   .get(controller.getPreviewsByUser);
 
+router.route('/data/:chatId')
+  .get(controller.getChatData);
+
 router.route('/between/:userId1/:userId2')
   .get(controller.getChatsBetweenUsers)
   .post(controller.readChatsBetweenUsers)
