@@ -32,6 +32,7 @@ onMounted(async () => {
   <div class="container">
     <div class="layout">
       <chat-list :chats="chatPreviews" />  
+      <chat-window />
     </div>
   </div>
 </template>
