@@ -17,7 +17,7 @@ const loadPosts = async () => {
     userField.value = getUserField.data
 
     const getUserPosts = await axios.post('/backend/posts/user/' + username)
-    posts.value = getUserPosts.data
+    posts.value = getUserPosts.data.filter((post) => post.buyer === null)
 
     const getCurrentUserLogged = await axios.get('/backend/users/session', {
       withCredentials: true,
