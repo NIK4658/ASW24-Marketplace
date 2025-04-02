@@ -14,8 +14,11 @@ router.route('/:id')
 router.route('/user/:username')
   .post(controller.getPostsMadeByUser)
 
-router.route('/user/history/:username')
-  .post(controller.userOrderHistory);
+router.route('/user/purchases/:username')
+  .post(controller.userPurchasesHistory);
+
+router.route('/user/sales/:username')
+  .post(controller.userSalesHistory);
 
 router.route('/search/:title')
   .get(controller.searchPostByTitle);
