@@ -211,7 +211,34 @@ exports.searchPostByTitle = async (req, res) => {
   }
 };
 
-exports.userOrderHistory = async (req, res) => {
+exports.userSalesHistory = async (req, res) => {
+  const username = req.params.username
+  try {
+    const user = await userModel.findOne({ username })
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const posts = await postModel.find({ seller: user._id })
+    const formattedPosts = posts.map(post => {
+      const formattedImages = post.images.map(image => ({
+        data: image.data.toString('base64'), // Convert Buffer to base64
+        contentType: image.contentType
+      }))
+      return {
+        ...post.toObject(),
+        images: formattedImages
+      }
+    })
+    res.status(200).json(formattedPosts)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Error fetching posts', error })
+  }
+};
+
+
+exports.userPurchasesHistory = async (req, res) => {
   const username = req.params.username
   try {
     const user = await userModel.findOne({ username })
