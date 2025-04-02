@@ -219,7 +219,7 @@ exports.userSalesHistory = async (req, res) => {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    const posts = await postModel.find({ seller: user._id })
+    const posts = await postModel.find({ seller: user._id, status: "sold" })
     const formattedPosts = posts.map(post => {
       const formattedImages = post.images.map(image => ({
         data: image.data.toString('base64'), // Convert Buffer to base64
