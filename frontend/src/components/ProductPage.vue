@@ -67,6 +67,7 @@ const buyNow = async () => {
     const postId = route.params.id
     const response = await axios.post(`/backend/posts/` + postId, {
       buyer: userLogged.value,
+      status: 'sold',
     })
     product.value = response.data
     await router.push({ name: 'product page', params: { id: postId } }).then(() => {
