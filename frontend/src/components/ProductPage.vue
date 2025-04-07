@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const product = ref(null)
+const review = ref(null)
 const errorFlag = ref(false)
 const userLogged = ref('')
 let copied = ref(false)
@@ -20,18 +21,53 @@ const loadProduct = async () => {
     errorFlag.value = true
     console.error('Error fetching data: ', error)
   }
+  //console.log(product.value.buyer.username);
 }
+
+const loadReview = async () => {
+  try {
+    const postId = route.params.id
+    const response = await axios.get('/backend/review/product/' + postId)
+    console.log(response.data)
+    if(response.data.length === 0) {
+      review.value = null
+    }
+    else {
+      review.value = response.data[0]
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      review.value = null
+    } else {
+      console.error('Error fetching review data: ', error)
+    }
+    console.error('Error fetching review data: ', error)
+  }
+}
+
+
 onMounted(async () => {
   await loadProduct()
+  await loadReview()
   const response = await axios.get('/backend/users/session', {
     withCredentials: true,
   })
   userLogged.value = response.data.username
+  console.log(userLogged.value)
 })
 
 const editPost = () => {
   router.push({
     name: 'create-post',
+    query: {
+      id: product.value._id,
+    },
+  })
+}
+
+const createReview = () => {
+  router.push({
+    name: 'create-review',
     query: {
       id: product.value._id,
     },
@@ -132,8 +168,7 @@ const nextImage = () => {
         >
           {{
             product.buyer === null || product.buyer === undefined
-              ? 'This item is available'
-              : 'This item is not available'
+              ? 'This item is available' : product.buyer.username === userLogged ? 'You bought this item' :  'This item is not available'
           }}
         </p>
 
@@ -171,9 +206,13 @@ const nextImage = () => {
         </div>
         <div class="review-section">
           <button :class="{
-                'disabled-btn': product.buyer === null || product.buyer === undefined,
-                'review-btn': !(product.buyer === null || product.buyer === undefined),
+                'disabled-btn': product.buyer === null || product.buyer === undefined || review === null,
+                'review-btn': !(product.buyer === null || product.buyer === undefined || review === null),
               }">Read Product Review</button>
+          <button v-if="product.buyer !== null && product.buyer.username === userLogged" :class="{
+                'disabled-btn': review !== null,
+                'review-btn': review === null,
+              }" @click="createReview">Write Product Review</button>
         </div>
         <div class="private-actions" v-if="product.seller.username === userLogged">
           <button
