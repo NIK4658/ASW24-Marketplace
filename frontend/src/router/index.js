@@ -34,6 +34,11 @@ const router = createRouter({
       component: () => import('@/views/CreatePost.vue'),
     },
     {
+      path: '/create-review',
+      name: 'create-review',
+      component: () => import('@/views/CreateReview.vue'),
+    },
+    {
       path: '/post/:id',
       name: 'product page',
       component: () => import('@/views/ProductPageView.vue'),
