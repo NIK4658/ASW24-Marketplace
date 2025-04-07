@@ -5,8 +5,11 @@ const controller = require('../controllers/reviewController');
 router.route('/')
   .post(controller.createReview);
 
-router.route('/:id')
-  .get(controller.getAllUserReview)
+router.route('/product/:id')
+  .get(controller.getReviewByProductId)
   .delete(controller.deleteReview);
+
+router.route('/user/:id')
+  .get(controller.getAllUserReview)
 
 module.exports = router;
