@@ -5,14 +5,15 @@ const mongoose = require('mongoose')
 
 exports.createReview = async (req, res) => {
   const {buyer, seller, post, score, title, description} = req.body;
+  console.log(buyer, seller, post, score, title, description)
 
   try {
-    const userBuyer = await userModel.findOne({username: buyer});
+    const userBuyer = await userModel.findOne({username: buyer.username});
     if (!userBuyer) {
       return res.status(404).json({message: 'Buyer not found'});
     }
 
-    const userSeller = await userModel.findOne({username: seller});
+    const userSeller = await userModel.findOne({username: seller.username});
     if (!userSeller) {
       return res.status(404).json({message: 'Seller not found'});
     }
@@ -73,6 +74,22 @@ exports.getAllUserReview = (req, res) => {
     })
     .catch(() => {
       res.status(500).json({message: 'Error searching user reviews'});
+    });
+};
+
+exports.getReviewByProductId = (req, res) => {
+  const productId = req.params.id;
+  reviewModel.find({post: productId})
+    .exec()
+    .then(reviews => {
+      if (reviews.length > 0) {
+        res.status(200).json(reviews);
+      } else {
+        res.status(404).json({message: 'No reviews found for this product'});
+      }
+    })
+    .catch(() => {
+      res.status(500).json({message: 'Error searching product reviews'});
     });
 };
 
