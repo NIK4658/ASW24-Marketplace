@@ -9,7 +9,7 @@ router.route('/product/:id')
   .get(controller.getReviewByProductId)
   .delete(controller.deleteReview);
 
-router.route('/user/:id')
-  .get(controller.getAllUserReview)
+router.route('/user/:username')
+  .get(controller.getAllUserPostsWithReview)
 
 module.exports = router;
