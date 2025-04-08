@@ -9,31 +9,30 @@ const product = ref(null)
 const review = ref(null)
 const errorFlag = ref(false)
 const userLogged = ref('')
+const userReview = ref('')
 let copied = ref(false)
 const currentImageIndex = ref(0)
 
 const loadProduct = async () => {
   try {
-    const postId = route.params.id
-    const response = await axios.get('/backend/posts/' + postId)
+    const response = await axios.get('/backend/posts/' + route.params.id)
     product.value = response.data
   } catch (error) {
     errorFlag.value = true
     console.error('Error fetching data: ', error)
   }
-  //console.log(product.value.buyer.username);
 }
 
 const loadReview = async () => {
   try {
-    const postId = route.params.id
-    const response = await axios.get('/backend/review/product/' + postId)
-    console.log(response.data)
-    if(response.data.length === 0) {
-      review.value = null
+    const response = await axios.get('/backend/review/product/' + route.params.id)
+    if(response.data.length !== 0) {
+      review.value = response.data[0]
+      const responseUserReview = await axios.get('/backend/users/id/' + review.value.buyer)
+      userReview.value = responseUserReview.data
     }
     else {
-      review.value = response.data[0]
+      review.value = null
     }
   } catch (error) {
     if (error.response && error.response.status === 404) {
@@ -41,10 +40,8 @@ const loadReview = async () => {
     } else {
       console.error('Error fetching review data: ', error)
     }
-    console.error('Error fetching review data: ', error)
   }
 }
-
 
 onMounted(async () => {
   await loadProduct()
@@ -53,7 +50,6 @@ onMounted(async () => {
     withCredentials: true,
   })
   userLogged.value = response.data.username
-  console.log(userLogged.value)
 })
 
 const editPost = () => {
@@ -100,13 +96,11 @@ const copyLink = async () => {
 
 const buyNow = async () => {
   try {
-    const postId = route.params.id
-    const response = await axios.post(`/backend/posts/` + postId, {
+    await axios.post(`/backend/posts/` + route.params.id, {
       buyer: userLogged.value,
       status: 'sold',
     })
-    product.value = response.data
-    await router.push({ name: 'product page', params: { id: postId } }).then(() => {
+    await router.push({ name: 'product page', params: { id: route.params.id } }).then(() => {
       window.location.reload()
     })
   } catch (error) {
@@ -123,6 +117,7 @@ const prevImage = () => {
 const nextImage = () => {
   currentImageIndex.value = (currentImageIndex.value + 1) % product.value.images.length
 }
+
 </script>
 
 <template>
@@ -205,14 +200,22 @@ const nextImage = () => {
           </p>
         </div>
         <div class="review-section">
-          <button :class="{
-                'disabled-btn': product.buyer === null || product.buyer === undefined || review === null,
-                'review-btn': !(product.buyer === null || product.buyer === undefined || review === null),
-              }">Read Product Review</button>
+          <div v-if="review !== null">
+            <p>Product Review:</p>
+            <p>{{ review.title }}</p>
+            <p>{{ review.description }}</p>
+            <p>Rating: {{ review.score }}/5</p>
+            <p>Review by: {{ userReview.username }}</p>
+          </div>
+          <div v-if="review === null">
+            <p>No review available for this product.</p>
+          </div>
+
           <button v-if="product.buyer !== null && product.buyer.username === userLogged" :class="{
                 'disabled-btn': review !== null,
                 'review-btn': review === null,
-              }" @click="createReview">Write Product Review</button>
+              }" @click="createReview">Write Product Review
+          </button>
         </div>
         <div class="private-actions" v-if="product.seller.username === userLogged">
           <button
