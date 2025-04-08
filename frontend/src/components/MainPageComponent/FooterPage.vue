@@ -21,7 +21,7 @@ onMounted(async () => {
     })
     username.value = response.data.username
   } catch {
-    router.push({ name: 'login' })
+    await router.push({name: 'login'})
   }
 })
 </script>
