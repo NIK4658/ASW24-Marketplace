@@ -2,15 +2,17 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import ShareButton from "@/components/ProductPageComponents/ShareButton.vue";
+import BuyButton from "@/components/ProductPageComponents/BuyButton.vue";
+import SendMessagesButton from "@/components/ProductPageComponents/SendMessagesButton.vue";
+import ReviewSection from "@/components/ProductPageComponents/ReviewSection.vue";
+import PrivateActionsProduct from "@/components/ProductPageComponents/PrivateActionsProduct.vue";
 
 const route = useRoute()
 const router = useRouter()
 const product = ref(null)
-const review = ref(null)
 const errorFlag = ref(false)
 const userLogged = ref('')
-const userReview = ref('')
-let copied = ref(false)
 const currentImageIndex = ref(0)
 
 const loadProduct = async () => {
@@ -23,29 +25,8 @@ const loadProduct = async () => {
   }
 }
 
-const loadReview = async () => {
-  try {
-    const response = await axios.get('/backend/review/product/' + route.params.id)
-    if(response.data.length !== 0) {
-      review.value = response.data[0]
-      const responseUserReview = await axios.get('/backend/users/id/' + review.value.buyer)
-      userReview.value = responseUserReview.data
-    }
-    else {
-      review.value = null
-    }
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      review.value = null
-    } else {
-      console.error('Error fetching review data: ', error)
-    }
-  }
-}
-
 onMounted(async () => {
   await loadProduct()
-  await loadReview()
   const response = await axios.get('/backend/users/session', {
     withCredentials: true,
   })
@@ -61,14 +42,6 @@ const editPost = () => {
   })
 }
 
-const createReview = () => {
-  router.push({
-    name: 'create-review',
-    query: {
-      id: product.value._id,
-    },
-  })
-}
 
 const deletePost = async () => {
   try {
@@ -81,31 +54,6 @@ const deletePost = async () => {
   } catch (error) {
     errorFlag.value = true
     console.error('Error deleting the post: ', error)
-  }
-}
-
-const copyLink = async () => {
-  try {
-    await navigator.clipboard.writeText(window.location.href)
-    copied.value = true
-    setTimeout(() => (copied.value = false), 2000)
-  } catch (err) {
-    console.error('Failed to copy: ', err)
-  }
-}
-
-const buyNow = async () => {
-  try {
-    await axios.post(`/backend/posts/` + route.params.id, {
-      buyer: userLogged.value,
-      status: 'sold',
-    })
-    await router.push({ name: 'product page', params: { id: route.params.id } }).then(() => {
-      window.location.reload()
-    })
-  } catch (error) {
-    errorFlag.value = true
-    console.error('Error buying product: ', error)
   }
 }
 
@@ -168,24 +116,9 @@ const nextImage = () => {
         </p>
 
         <div class="actions">
-          <div class="buy-action" v-if="product.seller.username !== userLogged">
-            <button
-              :disabled="!(product.buyer === null || product.buyer === undefined)"
-              @click="buyNow"
-              :class="{
-                'primary-btn': product.buyer === null || product.buyer === undefined,
-                'disabled-btn': !(product.buyer === null || product.buyer === undefined),
-              }"
-            >
-              Buy Now
-            </button>
-          </div>
-          <button v-if="product.seller.username !== userLogged" class="secondary-btn">
-            Send a message to the seller
-          </button>
-          <button @click="copyLink" class="secondary-btn">
-            {{ copied ? 'Copied!' : 'Share Link' }}
-          </button>
+          <BuyButton :product="product" :userLogged="userLogged"></BuyButton>
+          <SendMessagesButton :product="product" :userLogged="userLogged"></SendMessagesButton>
+          <ShareButton></ShareButton>
         </div>
 
         <p class="product-description-title">Product Description:</p>
@@ -199,46 +132,10 @@ const nextImage = () => {
             </RouterLink>
           </p>
         </div>
-        <div class="review-section">
-          <div v-if="review !== null">
-            <p>Product Review:</p>
-            <p>{{ review.title }}</p>
-            <p>{{ review.description }}</p>
-            <p>Rating: {{ review.score }}/5</p>
-            <p>Review by: {{ userReview.username }}</p>
-          </div>
-          <div v-if="review === null">
-            <p>No review available for this product.</p>
-          </div>
 
-          <button v-if="product.buyer !== null && product.buyer.username === userLogged" :class="{
-                'disabled-btn': review !== null,
-                'review-btn': review === null,
-              }" @click="createReview">Write Product Review
-          </button>
-        </div>
-        <div class="private-actions" v-if="product.seller.username === userLogged">
-          <button
-            :disabled="!(product.buyer === null || product.buyer === undefined)"
-            :class="{
-              'danger-btn': product.buyer === null || product.buyer === undefined,
-              'disabled-btn': !(product.buyer === null || product.buyer === undefined),
-            }"
-            @click="deletePost"
-          >
-            Delete Post
-          </button>
-          <button
-            :disabled="!(product.buyer === null || product.buyer === undefined)"
-            :class="{
-              'edit-btn': product.buyer === null || product.buyer === undefined,
-              'disabled-btn': !(product.buyer === null || product.buyer === undefined),
-            }"
-            @click="editPost"
-          >
-            Edit Post
-          </button>
-        </div>
+        <ReviewSection :product="product" :userLogged="userLogged"></ReviewSection>
+        <PrivateActionsProduct :product="product" :userLogged="userLogged"></PrivateActionsProduct>
+
       </div>
     </div>
   </div>
@@ -325,56 +222,6 @@ const nextImage = () => {
   margin-bottom: 20px;
 }
 
-.buy-action {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 0;
-}
-
-.primary-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #2196f3;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.primary-btn:hover {
-  background-color: #1976d2;
-}
-
-.disabled-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.secondary-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: 1px solid #2196f3;
-  border-radius: 4px;
-  background-color: transparent;
-  color: #2196f3;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-}
-
-.secondary-btn:hover {
-  background-color: #2196f3;
-  color: #fff;
-}
-
 .product-description-title {
   font-weight: bold;
   margin-bottom: 10px;
@@ -397,61 +244,4 @@ const nextImage = () => {
   text-decoration: underline;
 }
 
-.private-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.review-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.danger-btn {
-  background-color: #ff5722;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.danger-btn:hover {
-  background-color: #e64a19;
-}
-
-.edit-btn {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.edit-btn:hover {
-  background-color: #388e3c;
-}
-
-.review-btn {
-  background-color: #eca200;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: 1px solid #eca200;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-}
-
-.review-btn:hover {
-  background-color: #fff;
-  color: #eca200;
-}
 </style>
