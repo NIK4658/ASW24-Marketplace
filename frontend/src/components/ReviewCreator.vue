@@ -70,13 +70,6 @@ watch(() => route.query.id, async (id) => {
 
 const handleSender = () => {
   submitted.value = true
-  console.log(buyer.value)
-  console.log(seller.value)
-  console.log(route.query.id)
-  console.log(score.value)
-  console.log(reviewTitle.value)
-  console.log(reviewDescription.value)
-
   if (isValidForm.value) {
     axios
       .post('/backend/review',
@@ -94,7 +87,7 @@ const handleSender = () => {
       )
       .then((response) => {
         console.log('Review created:', response.data)
-        router.push({name: 'product page', params: {id: response.data._id}})
+        router.push({name: 'product page', params: {id: response.data.post}})
       })
       .catch((error) => {
         console.error('Error during review creation:', error)
