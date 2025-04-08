@@ -19,4 +19,7 @@ router.route('/:username')
   .get(controller.searchByUsername)
   .delete(controller.deleteUser);
 
+router.route('/id/:id')
+  .get(controller.searchById)
+
 module.exports = router;
