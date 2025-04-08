@@ -29,6 +29,31 @@ exports.searchByUsername = (req, res) => {
     })
 }
 
+exports.searchById = (req, res) => {
+
+  userModel.findOne({ _id: req.params.id })
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({ message: 'User not found' })
+      }
+
+      const formattedImage = {
+        data: result.image.data.toString('base64'),
+        contentType: result.image.contentType
+      }
+
+      const formattedUser = {
+        ...result.toObject(),
+        image: formattedImage
+      }
+
+      res.json(formattedUser)
+    })
+    .catch((error) => {
+      res.status(500).json(error)
+    })
+}
+
 exports.createUser = (req, res) => {
   const { username, email, password, image } = req.body
 
