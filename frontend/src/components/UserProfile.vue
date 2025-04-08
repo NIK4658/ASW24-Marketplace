@@ -75,7 +75,7 @@ const logout = async () => {
           Purchases History
         </button>
         <button @click="router.push({ name: 'sales' })">Sales History</button>
-        <button>Reviews</button>
+        <button @click="router.push({ name: 'user-reviews' })">Reviews</button>
       </div>
     </div>
     <GridPosts :posts="posts" />
