@@ -5,8 +5,6 @@ const mongoose = require('mongoose')
 
 exports.createReview = async (req, res) => {
   const {buyer, seller, post, score, title, description} = req.body;
-  console.log(buyer, seller, post, score, title, description)
-
   try {
     const userBuyer = await userModel.findOne({username: buyer.username});
     if (!userBuyer) {
@@ -61,35 +59,68 @@ exports.createReview = async (req, res) => {
   }
 };
 
-exports.getAllUserReview = (req, res) => {
-  const userId = req.params.id;
-  reviewModel.find({seller: userId})
+exports.getAllUserPostsWithReview = (req, res) => {
+  const username = req.params.username;
+  userModel.find({ username: username })
     .exec()
-    .then(reviews => {
-      if (reviews.length > 0) {
-        res.status(200).json(reviews);
+    .then(user => {
+      if (user.length > 0) {
+        const userId = user[0]._id;
+        return reviewModel.find({ seller: userId }).exec();
       } else {
-        res.status(404).json({message: 'No reviews found for this seller'});
+        res.status(404).json({ message: 'No user found' });
+        throw new Error('No user'); // per interrompere la catena
       }
     })
-    .catch(() => {
-      res.status(500).json({message: 'Error searching user reviews'});
+    .then(reviews => {
+      if (reviews && reviews.length > 0) {
+        return postModel.find({ _id: { $in: reviews.map(review => review.post) } }).exec();
+      } else {
+        res.status(404).json({ message: 'No reviews found for this seller' });
+        throw new Error('No reviews');
+      }
+    })
+    .then(posts => {
+      const formattedPosts = posts.map(post => {
+        const formattedImages = post.images.map(image => ({
+          data: image.data.toString('base64'),
+          contentType: image.contentType
+        }));
+        return {
+          ...post.toObject(),
+          images: formattedImages
+        };
+      });
+      res.status(200).json(formattedPosts);
+    })
+    .catch(err => {
+      if (!res.headersSent) {
+        res.status(500).json({ message: 'Error searching user reviews or posts' });
+      }
+      console.error(err);
     });
 };
 
+
 exports.getReviewByProductId = (req, res) => {
-  const productId = req.params.id;
-  reviewModel.find({post: productId})
+  let productId;
+  try {
+    productId = new mongoose.Types.ObjectId(req.params.id);
+  } catch (err) {
+    return res.status(400).json({ message: 'Invalid product ID' });
+  }
+
+  reviewModel.find({ post: productId })
     .exec()
     .then(reviews => {
       if (reviews.length > 0) {
         res.status(200).json(reviews);
       } else {
-        res.status(404).json({message: 'No reviews found for this product'});
+        res.status(404).json({ message: 'No reviews found for this product' });
       }
     })
-    .catch(() => {
-      res.status(500).json({message: 'Error searching product reviews'});
+    .catch(err => {
+      res.status(500).json({ message: 'Error searching product reviews' });
     });
 };
 
