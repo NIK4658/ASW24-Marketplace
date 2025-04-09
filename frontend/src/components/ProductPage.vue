@@ -7,6 +7,7 @@ import BuyButton from "@/components/ProductPageComponents/BuyButton.vue";
 import SendMessagesButton from "@/components/ProductPageComponents/SendMessagesButton.vue";
 import ReviewSection from "@/components/ProductPageComponents/ReviewSection.vue";
 import PrivateActionsProduct from "@/components/ProductPageComponents/PrivateActionsProduct.vue";
+import NotificationComponent from "@/components/ProductPageComponents/NotificationComponent.vue";
 
 const route = useRoute()
 const product = ref(null)
@@ -95,6 +96,9 @@ const nextImage = () => {
           <SendMessagesButton :product="product" :userLogged="userLogged"></SendMessagesButton>
           <ShareButton></ShareButton>
         </div>
+
+        <!-- TEST -->
+        <NotificationComponent :product="product"></NotificationComponent>
 
         <p class="product-description-title">Product Description:</p>
         <p class="product-description">{{ product.description }}</p>
