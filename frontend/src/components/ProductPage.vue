@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import ShareButton from "@/components/ProductPageComponents/ShareButton.vue";
 import BuyButton from "@/components/ProductPageComponents/BuyButton.vue";
 import SendMessagesButton from "@/components/ProductPageComponents/SendMessagesButton.vue";
@@ -9,7 +9,6 @@ import ReviewSection from "@/components/ProductPageComponents/ReviewSection.vue"
 import PrivateActionsProduct from "@/components/ProductPageComponents/PrivateActionsProduct.vue";
 
 const route = useRoute()
-const router = useRouter()
 const product = ref(null)
 const errorFlag = ref(false)
 const userLogged = ref('')
@@ -32,30 +31,6 @@ onMounted(async () => {
   })
   userLogged.value = response.data.username
 })
-
-const editPost = () => {
-  router.push({
-    name: 'create-post',
-    query: {
-      id: product.value._id,
-    },
-  })
-}
-
-
-const deletePost = async () => {
-  try {
-    const postId = route.params.id
-    const response = await axios.delete('/backend/posts/' + postId)
-    product.value = response.data
-    await router.push({ name: 'profile', params: { username: userLogged.value } }).then(() => {
-      window.location.reload()
-    })
-  } catch (error) {
-    errorFlag.value = true
-    console.error('Error deleting the post: ', error)
-  }
-}
 
 const prevImage = () => {
   currentImageIndex.value =
