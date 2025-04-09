@@ -18,7 +18,7 @@ const sessionMiddleware = session({
   secret: settings.sessionSecret,
   credentials: true,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
     maxAge: 60 * 60 * 24 * 1000, // 24 hours
     httpOnly: true
