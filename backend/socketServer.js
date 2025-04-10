@@ -35,11 +35,13 @@ module.exports = (server, sessionMiddleware, corsRule) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('User disconnected ' + session.username);
-      if (session.username && userSocketMap[session.username] === socket.id) {
-        delete userSocketMap[session.username];
+      if (session !== undefined){
+        console.log('User disconnected ' + session.username);
+        if (session.username && userSocketMap[session.username] === socket.id) {
+          delete userSocketMap[session.username];
+        }
+        //session.destroy();
       }
-      session.destroy();
     });
   });
 };
