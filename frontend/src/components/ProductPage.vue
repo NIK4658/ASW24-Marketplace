@@ -42,6 +42,15 @@ const nextImage = () => {
   currentImageIndex.value = (currentImageIndex.value + 1) % product.value.images.length
 }
 
+const popupRef = ref(null)
+
+
+const sendNotification = () => {
+  if (popupRef.value) {
+    popupRef.value.sendNotification()
+  }
+}
+
 </script>
 
 <template>
@@ -97,8 +106,13 @@ const nextImage = () => {
           <ShareButton></ShareButton>
         </div>
 
-        <!-- TEST -->
-        <NotificationComponent :product="product"></NotificationComponent>
+        <!-- TEST
+        <NotificationComponent ref="popupRef" :product="product"></NotificationComponent>
+        -->
+
+        <button @click="sendNotification" class="notification-button" >
+          Send Notificationnnn
+        </button>
 
         <p class="product-description-title">Product Description:</p>
         <p class="product-description">{{ product.description }}</p>
