@@ -1,54 +1,55 @@
 <script setup>
-import { ref, onBeforeUnmount, onMounted } from 'vue';
-import io from 'socket.io-client';
+import { ref } from 'vue'
 
-const { product } = defineProps({
-  product: Object,
-  userLogged: String,
-});
+const visible = ref(false)
+const message = ref('')
 
-const socket = ref(null);
-const notifications = ref([]);
+function show(msg, duration = 3000) {
+  message.value = msg
+  visible.value = true
+  setTimeout(() => {
+    visible.value = false
+  }, duration)
+}
 
-const connectSocket = () => {
-  socket.value = io('http://localhost:3000', {
-    withCredentials: true,
-  });
+// TEST NOTIFICATION
+setTimeout(() => {
+  show('Hai ricevuto una nuova notifica!')
+  setTimeout(() => {
+    show('Hai ricevuto una nuova notifica 2!')
+  }, 3000)
+}, 3000)
 
-  socket.value.on('buyNotificationClient', () => {
-    console.log('Buy Notification received:');
-  });
-};
 
-const sendNotification = () => {
-  socket.value.emit('buyNotificationServer', { targetUser: product.seller.username });
-};
-
-onMounted(() => {
-  connectSocket();
-});
-
-//onBeforeUnmount(() => {
-//  if (socket.value) {
-    //socket.value.disconnect();
-//  }
-//});
+defineExpose({ show })
 </script>
 
 <template>
-  <div>
-    <h2>Notifiche</h2>
-    <ul>
-      <li v-for="(notification, index) in notifications" :key="index">
-        {{ notification }}
-      </li>
-    </ul>
-    <button @click="sendNotification">
-      Send Notifications
-    </button>
-  </div>
+  <transition name="fade">
+    <div v-if="visible" class="popup">
+      <p>{{ message }}</p>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
-
+.popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #323232;
+  color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
