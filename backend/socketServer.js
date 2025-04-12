@@ -7,27 +7,47 @@ module.exports = (server, sessionMiddleware, corsRule) => {
   io.engine.use(sessionMiddleware);
 
   io.on('connection', (socket) => {
-    const session = socket.request.session.user;
+
+    const session = socket.request.session?.user;
 
     if (session !== undefined && session.username) {
       userSocketMap[session.username] = socket.id;
       console.log(`User ${session.username} connected with socket ${socket.id}`);
     }
 
+    //Remove this if not needed
     socket.on("joinRoom", async ({ roomId }) => {
       socket.join(roomId);
       console.log('User ' + session.user + ' joined room ' + roomId);
     });
 
-    socket.on("sendMessage", async ({ chat, roomId }) => {
-      io.to(roomId).emit("receiveMessage", chat);
-    });
-
-    //Receive event from client
+    //Receive Buy event from client
     socket.on('buyNotificationServer', async ({ targetUser }) => {
       const targetSocketId = userSocketMap[targetUser];
       if (targetSocketId) {
         io.to(targetSocketId).emit('buyNotificationClient');
+        console.log(`Utente ${targetUser} notificato correttamente`);
+      } else {
+        console.log(`Utente ${targetUser} non notificato`);
+      }
+    });
+
+    //Receive Review event from client
+    socket.on('reviewNotificationServer', async ({ targetUser }) => {
+      const targetSocketId = userSocketMap[targetUser];
+      if (targetSocketId) {
+        io.to(targetSocketId).emit('reviewNotificationClient');
+        console.log(`Utente ${targetUser} notificato correttamente`);
+      } else {
+        console.log(`Utente ${targetUser} non notificato`);
+      }
+    });
+
+    //Receive Message event from client
+    socket.on('sendMessageNotificationServer', async ({ targetUser }) => {
+      const targetSocketId = userSocketMap[targetUser];
+      if (targetSocketId) {
+        io.to(targetSocketId).emit('sendMessageNotificationClient');
         console.log(`Utente ${targetUser} notificato correttamente`);
       } else {
         console.log(`Utente ${targetUser} non notificato`);
@@ -40,7 +60,6 @@ module.exports = (server, sessionMiddleware, corsRule) => {
         if (session.username && userSocketMap[session.username] === socket.id) {
           delete userSocketMap[session.username];
         }
-        //session.destroy();
       }
     });
   });
