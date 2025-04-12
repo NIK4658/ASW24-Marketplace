@@ -4,6 +4,9 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import InputField from '@/components/form/InputField.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
+import {initialConnection} from '@/socket'
+import { popupRef } from '@/composables/usePopupRef'
+
 
 const router = useRouter()
 
@@ -25,6 +28,7 @@ function handleLogin() {
       if (response.status !== 200) {
         errorMessage.value = response.data.message
       } else {
+        initialConnection(popupRef)
         router.push({ name: 'home' })
       }
     })
