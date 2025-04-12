@@ -3,6 +3,7 @@ import {ref, onMounted, watch, computed} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import '@fortawesome/fontawesome-free/css/all.css'
 import axios from 'axios'
+import {socket} from "@/socket.js";
 
 const submitted = ref(false)  // Flag per sapere se il form è stato inviato
 const router = useRouter()
@@ -86,6 +87,9 @@ const handleSender = () => {
         }
       )
       .then((response) => {
+        socket.value.emit("reviewNotificationServer", {
+          targetUser: seller.value.username
+        })
         console.log('Review created:', response.data)
         router.push({name: 'product page', params: {id: response.data.post}})
       })
