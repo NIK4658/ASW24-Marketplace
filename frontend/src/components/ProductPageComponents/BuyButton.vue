@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
+import {socket} from "@/socket.js";
 
 const { product, userLogged } = defineProps({
   product: Object,
@@ -16,6 +17,10 @@ const buyNow = async () => {
       buyer: userLogged,
       status: 'sold',
     });
+    socket.value.emit("buyNotificationServer", {
+      targetUser: product.seller.username
+    })
+
     await router.push({ name: 'product page', params: { id: route.params.id } });
     window.location.reload();
   } catch (error) {
