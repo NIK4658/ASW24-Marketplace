@@ -12,15 +12,6 @@ function show(msg, duration = 3000) {
   }, duration)
 }
 
-// TEST NOTIFICATION
-setTimeout(() => {
-  show('Hai ricevuto una nuova notifica!')
-  setTimeout(() => {
-    show('Hai ricevuto una nuova notifica 2!')
-  }, 3000)
-}, 3000)
-
-
 defineExpose({ show })
 </script>
 
