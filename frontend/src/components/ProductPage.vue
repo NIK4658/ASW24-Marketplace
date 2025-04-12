@@ -106,14 +106,6 @@ const sendNotification = () => {
           <ShareButton></ShareButton>
         </div>
 
-        <!-- TEST
-        <NotificationComponent ref="popupRef" :product="product"></NotificationComponent>
-        -->
-
-        <button @click="sendNotification" class="notification-button" >
-          Send Notificationnnn
-        </button>
-
         <p class="product-description-title">Product Description:</p>
         <p class="product-description">{{ product.description }}</p>
 
@@ -135,6 +127,7 @@ const sendNotification = () => {
 </template>
 
 <style scoped>
+
 .product-page {
   display: flex;
   flex-direction: column;
