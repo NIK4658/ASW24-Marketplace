@@ -61,7 +61,6 @@ const createReview = () => {
     <div v-if="review === null">
       <p>No review available for this product.</p>
     </div>
-
     <button v-if="product.buyer !== null && product.buyer.username === userLogged" :class="{
                 'disabled-btn': review !== null,
                 'review-btn': review === null,
@@ -71,6 +70,14 @@ const createReview = () => {
 </template>
 
 <style scoped>
+
+.review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 .review-btn {
   background-color: #eca200;
   padding: 10px 20px;
