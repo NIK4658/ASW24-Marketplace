@@ -55,7 +55,7 @@ function handleLogin() {
         idField="Password"
         inputType="password"
       />
-      <submit-button textField="Log In" buttonType="submit" />
+      <submit-button class="submit" textField="Log In" buttonType="submit" />
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <hr class="divider" />
     </form>
@@ -96,5 +96,9 @@ function handleLogin() {
 .divider {
   margin: 20px 0;
   width: 100%;
+}
+
+.submit {
+  margin-top: 10px;
 }
 </style>

@@ -74,7 +74,7 @@ function navigateToLogin() {
         :profileImageUrl="profileImageUrl"
         @change="handleImageChange"
       />
-      <submit-button textField="Sign Up" buttonType="submit" />
+      <submit-button textField="Sign Up" buttonType="submit" class="submit"/>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <hr class="divider" />
       <div class="login-container">
@@ -121,5 +121,9 @@ function navigateToLogin() {
 .divider {
   margin: 20px 0;
   width: 100%;
+}
+
+.submit {
+  margin-top: 10px;
 }
 </style>
