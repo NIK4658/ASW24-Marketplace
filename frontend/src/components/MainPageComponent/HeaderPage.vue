@@ -108,6 +108,8 @@ button[type='submit'],
   transition: background-color 0.3s;
 }
 
+
+
 button[type='submit']:hover,
 .theme-button:hover {
   background-color: var(--color-border);
@@ -116,6 +118,10 @@ button[type='submit']:hover,
 button[type='submit'] img {
   width: 20px;
   height: 20px;
+}
+
+.theme-button {
+  margin-right: 7.5vw;
 }
 
 .theme-button img {

@@ -135,7 +135,7 @@ const sendNotification = () => {
   padding: 100px 20px 20px;
   margin: 0 auto 100px;
   max-width: 800px;
-  background-color: #fff;
+  background-color: var(--color-background);
 }
 
 .product-image-section {
@@ -181,7 +181,7 @@ const sendNotification = () => {
 
 .price {
   font-size: 2rem;
-  color: #000;
+  color: var(--color-text);
   margin-bottom: 20px;
 }
 

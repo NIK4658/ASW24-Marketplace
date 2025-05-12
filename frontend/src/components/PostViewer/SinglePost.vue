@@ -51,7 +51,6 @@ a {
 }
 
 .post-image {
-  border: 1px solid #ddd;
   border-radius: 8px;
   width: 250px;
   height: 250px;
@@ -65,12 +64,12 @@ a {
 .post-title {
   text-decoration: none;
   font-size: 15px;
-  color: #333;
+  color: var(--color-text);
 }
 
 .post-price {
   font-size: 18px;
-  color: #000;
+  color: var(--color-text);
   font-weight: bold;
 }
 </style>
