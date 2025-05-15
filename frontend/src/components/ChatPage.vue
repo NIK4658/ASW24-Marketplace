@@ -96,12 +96,58 @@ socket.on('receiveMessage', (message) => {
 <template>
   <div class="container">
     <div class="layout">
-      <chat-list :chats="chatPreviews" @select-preview="handleSelectPreview" />
-      <chat-window :chatTitle="chatTitle" :chatLog="chatMessages" @send-message="handleSendMessage" />
+      <chat-list
+        class="sidebar"
+        :chats="chatPreviews"
+        @select-preview="handleSelectPreview"
+      />
+      <div class="chat-content">
+        <chat-window
+          v-if="chatTitle"
+          :chatTitle="chatTitle"
+          :chatLog="chatMessages"
+          @send-message="handleSendMessage"
+        />
+        <div v-else class="placeholder">
+          Seleziona una chat per iniziare a conversare.
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 20%;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #999;
+}
 </style>
