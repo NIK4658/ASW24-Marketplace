@@ -45,12 +45,7 @@ const formattedChatLog = computed(() => {
 </template>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 0 0 8px 0;
-}
+
 
 h1 {
   font-size: 2.5rem;
@@ -60,7 +55,7 @@ h1 {
 
 .chat-log {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 0 16px 8px 16px;
   display: flex;
   flex-direction: column;

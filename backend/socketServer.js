@@ -15,12 +15,6 @@ module.exports = (server, sessionMiddleware, corsRule) => {
       console.log(`User ${session.username} connected with socket ${socket.id}`);
     }
 
-    //Remove this if not needed
-    socket.on("joinRoom", async ({ roomId }) => {
-      socket.join(roomId);
-      console.log('User ' + session.user + ' joined room ' + roomId);
-    });
-
     //Receive Buy event from client
     socket.on('buyNotificationServer', async ({ targetUser }) => {
       const targetSocketId = userSocketMap[targetUser];
@@ -47,15 +41,35 @@ module.exports = (server, sessionMiddleware, corsRule) => {
     socket.on('sendMessageNotificationServer', async ({ targetUser }) => {
       const targetSocketId = userSocketMap[targetUser];
       if (targetSocketId) {
-        io.to(targetSocketId).emit('sendMessageNotificationClient');
+        io.to(targetSocketId).emit('newMessageNotificationClient');
         console.log(`Utente ${targetUser} notificato correttamente`);
       } else {
         console.log(`Utente ${targetUser} non notificato`);
       }
     });
 
+    //Join user to room
+    socket.on("joinRoom", async ({ roomId, username }) => {
+      socket.join(roomId);
+      console.log('User ' + username + ' joined room ' + roomId);
+    });
+
+    //Discconnect user from room
+    socket.on('leaveRoom', async ({ roomId, username }) => {
+      socket.leave(roomId);
+      console.log('User ' + username + ' left room ' + roomId);
+    });
+
+    // Handle chat message sending in a room
+    socket.on('sendMessage', ({ message, roomId }) => {
+      console.log('Message sent to destinatary: ' + roomId + ': ' + message);
+      socket.to(roomId).emit('receiveMessage', message);
+      console.log('Message sent to origin: ' + roomId + ': ' + message);
+      socket.emit('receiveMessage', message);
+    });
+
     socket.on('disconnect', () => {
-      if (session !== undefined){
+      if (session !== undefined) {
         console.log('User disconnected ' + session.username);
         if (session.username && userSocketMap[session.username] === socket.id) {
           delete userSocketMap[session.username];

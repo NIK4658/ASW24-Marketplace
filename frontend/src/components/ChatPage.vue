@@ -1,82 +1,55 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 import io from 'socket.io-client'
-import ChatList from '@/components/chat/ChatList.vue';
 import ChatWindow from '@/components/chat/ChatWindow.vue';
+import { socket } from "@/socket.js";
 
-// User data
-const sessionUserID = ref('') // The username ID of the current user logged in
-const otherUserID = ref('') // The username ID of the user selected to chat with
-const chatTitle = ref('') // The username of the user selected to chat with
-
-// Chat data
-const chatPreviews = ref([])
+const route = useRoute()
+const sessionID = ref('')
+const sessionData = ref([])
+const endpointSessionID = ref('')
+const endpointUserData = ref({})
 const chatMessages = ref([])
-
-// Socket
-const socket = io('http://localhost:3000');
 const room = ref("");
 
-const handleSelectPreview = async (chatId) => {
-  try {
-    // Set other user ID and chat title
-    const selectedChatData = await axios.get(`/backend/chat/data/${chatId}`)
-    if (selectedChatData.data.sender._id === sessionUserID.value) {
-      otherUserID.value = selectedChatData.data.receiver._id
-      chatTitle.value = selectedChatData.data.receiver.username
-    } else {
-      otherUserID.value = selectedChatData.data.sender._id
-      chatTitle.value = selectedChatData.data.sender.username
-    }
-  } catch (error) {
-    console.error('Error fetching user data: ', error)
-  }
+const chatTitle = ref('The game')
 
+// Load chat logs between users
+const loadChat = async () => {
   try {
-    // Load chat messages
-    const selectedChatMessages = await axios.get(`/backend/chat/between/${sessionUserID.value}/${otherUserID.value}`)
-    chatMessages.value = selectedChatMessages.data
+    const response = await axios.get(`/backend/chat/between/${sessionID.value}/${endpointSessionID.value}`)
+    chatMessages.value = response.data
   } catch (error) {
-    console.error('Error fetching chat data: ', error)
-  }
-
-  try {
-    // Join chat room
-    if (room.value !== "") {
-      socket.emit('disconnect')
-      await axios.delete(`/backend/room/${room.value._id}`)
-      room.value = ""
-    }
-    const chatRoom = await axios.post(`/backend/room`, {
-      user1: sessionUserID.value,
-      user2: otherUserID.value
-    })
-    socket.emit('joinRoom', chatRoom.data._id)
-  } catch (error) {
-    console.error('Error joining room: ', error)
+    console.error('Error fetching chat log between users: ', error)
   }
 }
 
+// Setup socket connection with room
+const setupSocketRoom = async () => {
+  const response = await axios.post('/backend/room', {
+    user1: sessionID.value,
+    user2: endpointSessionID.value
+  });
+  room.value = response.data;
+  socket.value.emit('joinRoom', { roomId: room.value._id, username: sessionData.value.data.username });
+}
+
+// Handle chat sending
 const handleSendMessage = async (currentMessage) => {
   try {
     const loggedChat = await axios.post(`/backend/chat`, {
-      sender: sessionUserID.value,
-      receiver: otherUserID.value,
+      sender: sessionID.value,
+      receiver: endpointSessionID.value,
       message: currentMessage
     })
-    socket.emit('sendMessage', {chat: loggedChat.data, roomId: room.value._id})
+    socket.value.emit('sendMessage', { message: loggedChat.data, roomId: room.value._id })
+    socket.value.emit("sendMessageNotificationServer", {
+      targetUser: route.params.username
+    })
   } catch (error) {
     console.error('Error sending message: ', error)
-  }
-}
-
-const loadPreviews = async (id) => {
-  try {
-    const response = await axios.get(`/backend/chat/${id}`)
-    chatPreviews.value = response.data
-  } catch (error) {
-    console.error('Error fetching data: ', error)
   }
 }
 
@@ -84,70 +57,72 @@ onMounted(async () => {
   const response = await axios.get('/backend/users/session', {
     withCredentials: true,
   })
-  sessionUserID.value = response.data.userId
-  await loadPreviews(sessionUserID.value)
+
+  sessionID.value = response.data.userId
+  sessionData.value = await axios.get(`/backend/users/id/${sessionID.value}`);
+  endpointUserData.value = await axios.get(`/backend/users/${route.params.username}`);
+  endpointSessionID.value = endpointUserData.value.data._id;
+
+  await setupSocketRoom()
+  await loadChat()
 })
 
-socket.on('receiveMessage', (message) => {
+onUnmounted(() => {
+  try {
+    socket.emit('leaveRoom', { roomId: room.value._id, username: sessionData.value.data.username })
+  } catch (error) {
+    console.error('Error sending message: ', error)
+  }
+})
+
+socket.value.on('receiveMessage', (message) => {
   chatMessages.value.push(message)
 })
 </script>
 
 <template>
-  <div class="container">
-    <div class="layout">
-      <chat-list
-        class="sidebar"
-        :chats="chatPreviews"
-        @select-preview="handleSelectPreview"
-      />
-      <div class="chat-content">
-        <chat-window
-          v-if="chatTitle"
-          :chatTitle="chatTitle"
-          :chatLog="chatMessages"
-          @send-message="handleSendMessage"
-        />
-        <div v-else class="placeholder">
-          Seleziona una chat per iniziare a conversare.
-        </div>
-      </div>
-    </div>
-  </div>
+  <chat-window :chatTitle="chatTitle" :chatLog="chatMessages" @send-message="handleSendMessage" />
 </template>
 
 <style scoped>
 .container {
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .layout {
   display: flex;
   flex: 1;
-  overflow: hidden;
 }
 
 .sidebar {
-  width: 20%;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
+  width: 300px;
+  background-color: #f0f0f0;
+  border-right: 1px solid #ccc;
 }
 
 .chat-content {
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.back-btn {
+  margin: 16px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  align-self: flex-start;
+  cursor: pointer;
 }
 
 .placeholder {
-  flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 18px;
-  color: #999;
+  align-items: center;
+  height: 100%;
+  font-size: 1.5rem;
+  color: #888;
 }
 </style>
