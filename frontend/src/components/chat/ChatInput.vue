@@ -36,7 +36,7 @@ const sendMessage = () => {
 .chat-input {
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 8px;
   border-top: 1px solid #e0e0e0;
 }
 
