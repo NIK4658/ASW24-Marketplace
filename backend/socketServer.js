@@ -41,7 +41,7 @@ module.exports = (server, sessionMiddleware, corsRule) => {
     socket.on('sendMessageNotificationServer', async ({ targetUser }) => {
       const targetSocketId = userSocketMap[targetUser];
       if (targetSocketId) {
-        io.to(targetSocketId).emit('sendMessageNotificationClient');
+        io.to(targetSocketId).emit('newMessageNotificationClient');
         console.log(`Utente ${targetUser} notificato correttamente`);
       } else {
         console.log(`Utente ${targetUser} non notificato`);
