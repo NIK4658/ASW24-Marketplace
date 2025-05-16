@@ -31,8 +31,8 @@ onMounted(async () => {
     <button class="icon-button" @click="router.push({ name: 'home' })">
       <img src="/footer/home.ico" alt="Home" />
     </button>
-    <button class="icon-button" @click="router.push({ name: 'chat' })">
-      <img src="/footer/chat.ico" alt="Chat" />
+    <button class="icon-button" @click="router.push({ name: 'inbox' })">
+      <img src="/footer/chat.ico" alt="Inbox" />
     </button>
     <button class="icon-button" @click="router.push({ name: 'create-post' })">
       <img src="/footer/plus.ico" alt="Add post" />
