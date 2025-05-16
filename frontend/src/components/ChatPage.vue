@@ -2,7 +2,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import io from 'socket.io-client'
 import ChatWindow from '@/components/chat/ChatWindow.vue';
 import { socket } from "@/socket.js";
 
