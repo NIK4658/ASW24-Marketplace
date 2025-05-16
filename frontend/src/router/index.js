@@ -24,7 +24,7 @@ const router = createRouter({
       component: () => import('@/views/InboxView.vue'),
     },
     {
-      path: '/chat/:id',
+      path: '/chat/:username',
       name: 'chat',
       component: () => import('@/views/ChatView.vue'),
     },
