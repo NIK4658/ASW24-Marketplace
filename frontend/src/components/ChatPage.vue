@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 import io from 'socket.io-client'
 import ChatWindow from '@/components/chat/ChatWindow.vue';
+import { socket } from "@/socket.js";
 
 const route = useRoute()
 const sessionID = ref('')
@@ -11,12 +12,9 @@ const sessionData = ref([])
 const endpointSessionID = ref('')
 const endpointUserData = ref({})
 const chatMessages = ref([])
+const room = ref("");
 
 const chatTitle = ref('The game')
-
-// Socket
-const socket = io('http://localhost:3000');
-const room = ref("");
 
 // Load chat logs between users
 const loadChat = async () => {
@@ -35,7 +33,7 @@ const setupSocketRoom = async () => {
     user2: endpointSessionID.value
   });
   room.value = response.data;
-  socket.emit('joinRoom', { roomId: room.value._id, username: sessionData.value.data.username });
+  socket.value.emit('joinRoom', { roomId: room.value._id, username: sessionData.value.data.username });
 }
 
 // Handle chat sending
@@ -46,7 +44,10 @@ const handleSendMessage = async (currentMessage) => {
       receiver: endpointSessionID.value,
       message: currentMessage
     })
-    socket.emit('sendMessage', { message: loggedChat.data, roomId: room.value._id })
+    socket.value.emit('sendMessage', { message: loggedChat.data, roomId: room.value._id })
+    socket.value.emit("sendMessageNotificationServer", {
+      targetUser: route.params.username
+    })
   } catch (error) {
     console.error('Error sending message: ', error)
   }
@@ -74,7 +75,7 @@ onUnmounted(() => {
   }
 })
 
-socket.on('receiveMessage', (message) => {
+socket.value.on('receiveMessage', (message) => {
   chatMessages.value.push(message)
 })
 </script>
