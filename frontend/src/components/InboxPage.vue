@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import ChatList from '@/components/chat/ChatList.vue';
+import { socket } from "@/socket.js";
 
 const router = useRouter()
 const sessionID = ref('')
@@ -48,6 +49,10 @@ onUnmounted(() => {
   chatPreviews.value = []
   sessionID.value = ''
   endpointUsername.value = ''
+})
+
+socket.value.on('newMessageNotificationClient', () => {
+  loadPreviews()
 })
 </script>
 
