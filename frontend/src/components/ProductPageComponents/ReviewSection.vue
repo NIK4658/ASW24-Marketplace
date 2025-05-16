@@ -52,11 +52,11 @@ const createReview = () => {
 <template>
   <div class="review-section">
     <div v-if="review !== null">
-      <p>Product Review:</p>
-      <p>{{ review.title }}</p>
-      <p>{{ review.description }}</p>
-      <p>Rating: {{ review.score }}/5</p>
-      <p>Review by: {{ userReview.username }}</p>
+      <h2 class="section-title">Product Review:</h2>
+      <p class="review-rating">⭐ {{ review.score }}/5</p>
+      <h3 class="review-title">{{ review.title }}</h3>
+      <p class="review-description">"{{ review.description }}"</p>
+      <p class="review-author">Reviewed by: <strong>{{ userReview.username }}</strong></p>
     </div>
     <div v-if="review === null">
       <p>No review available for this product.</p>
@@ -105,4 +105,41 @@ const createReview = () => {
   color: #666;
   cursor: not-allowed;
 }
+
+.section-title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 700;
+}
+
+.review-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.review-description {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.review-rating {
+  font-weight: 500;
+  color: #f39c12;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.review-author {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+
 </style>
