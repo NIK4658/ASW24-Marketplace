@@ -58,7 +58,7 @@ socket.value.on('newMessageNotificationClient', () => {
 
 <template>
   <div class="container">
-    <chat-list v-if="chatPreviews.length > 0" class="sidebar" :chats="chatPreviews"
+    <chat-list v-if="chatPreviews.length > 0" :chats="chatPreviews"
       @select-preview="handleSelectPreview" />
     <div class="placeholder" v-else>
       No chats yet. Find an item and start a conversation!
@@ -67,24 +67,6 @@ socket.value.on('newMessageNotificationClient', () => {
 </template>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 400px;
-  padding: 30px 0;
-  border-radius: 12px;
-}
-
-.sidebar {
-  min-width: 320px;
-  max-width: 400px;
-  margin-right: 32px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
 .placeholder {
   font-size: 5vh;
   color: #666;
