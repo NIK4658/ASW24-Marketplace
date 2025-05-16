@@ -4,10 +4,6 @@ import { computed } from 'vue';
 import { format, isToday } from 'date-fns';
 
 const props = defineProps({
-  chatTitle: {
-    type: String,
-    required: true
-  },
   chatLog: {
     type: Array,
     required: true
@@ -32,21 +28,16 @@ const formattedChatLog = computed(() => {
 </script>
 
 <template>
-  <div class="container">
-    <h1>{{ props.chatTitle }}</h1>
-    <div class="chat-log">
-      <div v-for="chat in formattedChatLog" :key="chat._id">
-        <h2>{{ chat.sender.username }}</h2>
-        <p>{{ chat.message }}</p>
-        <span>{{ chat.formattedTime }}</span>
-      </div>
+  <div class="chat-log">
+    <div v-for="chat in formattedChatLog" :key="chat._id">
+      <h2>{{ chat.sender.username }}</h2>
+      <p>{{ chat.message }}</p>
+      <span>{{ chat.formattedTime }}</span>
     </div>
   </div>
 </template>
 
 <style scoped>
-
-
 h1 {
   font-size: 2.5rem;
   font-weight: 600;
@@ -55,25 +46,24 @@ h1 {
 
 .chat-log {
   flex: 1;
-  overflow-y: scroll;
   padding: 0 16px 8px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.chat-log > h2 {
+.chat-log>h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
 }
 
-.chat-log > p {
+.chat-log>p {
   font-size: 1.2rem;
   margin: 0;
 }
 
-.chat-log > span {
+.chat-log>span {
   font-size: 1rem;
   color: #888;
 }
