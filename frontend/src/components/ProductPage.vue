@@ -152,8 +152,10 @@ const sendNotification = () => {
 
 .product-image {
   max-width: 80%;
+  max-height: 500px;
   border-radius: 12px;
-  object-fit: fill;
+  object-fit: contain;
+  background-color: black;
   align-self: center;
 }
 
@@ -229,5 +231,10 @@ const sendNotification = () => {
 .seller-info a:hover {
   text-decoration: underline;
 }
-
+@media (max-width: 768px) {
+  .product-image {
+    max-width: 100%;
+    max-height: 200px;
+  }
+}
 </style>
