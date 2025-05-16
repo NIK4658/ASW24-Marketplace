@@ -1,12 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 import ChatList from '@/components/chat/ChatList.vue';
 
-const route = useRoute()
+const router = useRouter()
 const sessionID = ref('')
 const chatPreviews = ref([])
+const endpointUsername = ref('')
 
 // Load chat previews
 const loadPreviews = async () => {
@@ -23,16 +24,16 @@ const handleSelectPreview = async (chatId) => {
   const response = await axios.get(`/backend/chat/data/${chatId}`)
   try {
     if (response.data.sender._id === sessionID.value) {
-      endpointUsername = response.data.receiver.username
+      endpointUsername.value = response.data.receiver.username
     } else if (response.data.receiver._id === sessionID.value) {
-      endpointUsername = response.data.sender.username
+      endpointUsername.value = response.data.sender.username
     } else {
       throw new Error('Accessing non user related chat.')
     }
   } catch (error) {
     console.error('Error selecting chat: ', error)
   }
-  await route.push({ name: 'chat', params: { username: endpointUsername } })
+  await router.push({ name: 'chat', params: { username: endpointUsername.value } })
 }
 
 onMounted(async () => {
@@ -41,6 +42,12 @@ onMounted(async () => {
   })
   sessionID.value = sessionData.data.userId
   await loadPreviews()
+})
+
+onUnmounted(() => {
+  chatPreviews.value = []
+  sessionID.value = ''
+  endpointUsername.value = ''
 })
 </script>
 
@@ -63,16 +70,13 @@ onMounted(async () => {
   min-height: 400px;
   padding: 30px 0;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .sidebar {
   min-width: 320px;
   max-width: 400px;
   margin-right: 32px;
-  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 

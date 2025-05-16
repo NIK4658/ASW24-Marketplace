@@ -1,15 +1,18 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 import io from 'socket.io-client'
 import ChatWindow from '@/components/chat/ChatWindow.vue';
 
 const route = useRoute()
 const sessionID = ref('')
-const sessionData = ref({})
+const sessionData = ref([])
 const endpointSessionID = ref('')
 const endpointUserData = ref({})
 const chatMessages = ref([])
+
+const chatTitle = ref('The game')
 
 // Socket
 const socket = io('http://localhost:3000');
@@ -27,8 +30,12 @@ const loadChat = async () => {
 
 // Setup socket connection with room
 const setupSocketRoom = async () => {
-  room.value = await axios.get(`/backend/chat/room/${sessionID.value}/${endpointSessionID.value}`)
-  socket.emit('joinRoom', { roomId: room.value, username: sessionData.value.username })
+  const response = await axios.post('/backend/room', {
+    user1: sessionID.value,
+    user2: endpointSessionID.value
+  });
+  room.value = response.data;
+  socket.emit('joinRoom', { roomId: room.value._id, username: sessionData.value.data.username });
 }
 
 // Handle chat sending
@@ -39,7 +46,7 @@ const handleSendMessage = async (currentMessage) => {
       receiver: endpointSessionID.value,
       message: currentMessage
     })
-    socket.emit('sendMessage', { chat: loggedChat.data, roomId: room.value._id })
+    socket.emit('sendMessage', { message: loggedChat.data, roomId: room.value._id })
   } catch (error) {
     console.error('Error sending message: ', error)
   }
@@ -51,9 +58,9 @@ onMounted(async () => {
   })
 
   sessionID.value = response.data.userId
-  sessionData = await axios.get(`/backend/users/${sessionID.value}`);
-  endpointUserData = await axios.get(`/backend/users/${route.params.username}`);
-  endpointSessionID = endpointUserData.data._id;
+  sessionData.value = await axios.get(`/backend/users/id/${sessionID.value}`);
+  endpointUserData.value = await axios.get(`/backend/users/${route.params.username}`);
+  endpointSessionID.value = endpointUserData.value.data._id;
 
   await setupSocketRoom()
   await loadChat()
@@ -61,7 +68,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   try {
-    socket.emit('leaveRoom', { roomId: room.value, username: sessionData.value.username })
+    socket.emit('leaveRoom', { roomId: room.value._id, username: sessionData.value.data.username })
   } catch (error) {
     console.error('Error sending message: ', error)
   }
