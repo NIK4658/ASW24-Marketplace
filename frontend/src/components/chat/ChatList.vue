@@ -29,5 +29,17 @@ const handleSelectPreview = (chatId) => {
 </template>
 
 <style scoped>
+.container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
 
+.container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 </style>
