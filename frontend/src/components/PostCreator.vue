@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 import axios from 'axios'
 
 const router = useRouter()
@@ -47,9 +49,12 @@ onMounted(async () => {
   }
 })
 
-watch(() => route.query.id, async (id) => {
-  id ? await loadProduct(id) : resetForm()
-})
+watch(
+  () => route.query.id,
+  async (id) => {
+    id ? await loadProduct(id) : resetForm()
+  },
+)
 
 const handleImageUpload = (event) => {
   const files = Array.from(event.target.files)
@@ -81,19 +86,14 @@ const removeImage = (index) => {
 
 const handleSender = () => {
   axios
-    .post(
-      route.query.id
-        ? `/backend/posts/${route.query.id}`
-        : '/backend/posts',
-      {
-        title: title.value,
-        price: price.value,
-        condition: condition.value,
-        description: description.value,
-        sellerUsername: seller.value,
-        images: images.value,
-      },
-    )
+    .post(route.query.id ? `/backend/posts/${route.query.id}` : '/backend/posts', {
+      title: title.value,
+      price: price.value,
+      condition: condition.value,
+      description: description.value,
+      sellerUsername: seller.value,
+      images: images.value,
+    })
     .then((response) => {
       console.log('Post created:', response.data)
       router.push({ name: 'product page', params: { id: response.data._id } })
@@ -106,7 +106,7 @@ const handleSender = () => {
 
 <template>
   <div class="container">
-    <h2>{{ formTitle}}</h2>
+    <h2>{{ formTitle }} </h2>
     <form @submit.prevent="handleSender">
       <label>Title:</label>
       <input v-model="title" type="text" required />
@@ -130,15 +130,22 @@ const handleSender = () => {
       <div v-if="images.length" class="image-preview">
         <div v-for="(image, index) in images" :key="index" class="image-item">
           <img :src="'data:image/jpeg;base64,' + image" alt="Uploaded image" />
-          <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">️️⬅️</button>
+          <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">️️
+<!--            ⬅️-->
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <button
             type="button"
             @click="moveImage(index, 1)"
             :disabled="index === images.length - 1"
           >
-            ➡️
+<!--            ➡️-->
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
-          <button type="button" @click="removeImage(index)">❌</button>
+          <button type="button" @click="removeImage(index)">
+<!--            ❌-->
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
       </div>
 
@@ -148,17 +155,58 @@ const handleSender = () => {
 </template>
 
 <style scoped>
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--color-background-soft);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 
-.container {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
+label {
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+input[type='text'],
+input[type='number'],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+input[type='file'] {
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .image-preview {
@@ -172,6 +220,7 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
 }
 
 .image-item img {
@@ -182,7 +231,49 @@ form {
   border-radius: 5px;
 }
 
+.image-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 button {
   margin-top: 10px;
 }
+
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  form {
+    gap: 10px;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  textarea,
+  select {
+    font-size: 12px;
+  }
+
+  .image-item img {
+    width: 80px;
+    height: 80px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+
+
 </style>
+
+
