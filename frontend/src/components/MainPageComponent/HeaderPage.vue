@@ -52,7 +52,6 @@ onMounted(() => {
       <form @submit="handleSearch">
         <input type="text" v-model="search" placeholder="Search..." />
         <button type="submit">
-          <!--          <img src="/header/search.ico" alt="Search" />-->
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
       </form>
