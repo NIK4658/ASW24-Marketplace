@@ -2,6 +2,8 @@
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 const router = useRouter()
 const username = ref('')
@@ -21,7 +23,7 @@ onMounted(async () => {
     })
     username.value = response.data.username
   } catch {
-    await router.push({name: 'login'})
+    await router.push({ name: 'login' })
   }
 })
 </script>
@@ -29,16 +31,16 @@ onMounted(async () => {
 <template>
   <footer>
     <button class="icon-button" @click="router.push({ name: 'home' })">
-      <img src="/footer/home.ico" alt="Home" />
+      <i class="fa-solid fa-house"></i>
     </button>
     <button class="icon-button" @click="router.push({ name: 'inbox' })">
-      <img src="/footer/chat.ico" alt="Inbox" />
+      <i class="fa-solid fa-comment"></i>
     </button>
     <button class="icon-button" @click="router.push({ name: 'create-post' })">
-      <img src="/footer/plus.ico" alt="Add post" />
+      <i class="fa-solid fa-plus"></i>
     </button>
     <button class="icon-button" @click="goToProfile">
-      <img src="/footer/profile.ico" alt="Profile" />
+      <i class="fa-solid fa-user"></i>
     </button>
   </footer>
 </template>
@@ -56,12 +58,6 @@ footer {
   transition: var(--transition-color);
 }
 
-.icon-button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
 button {
   width: 4rem;
   height: 4rem;
@@ -72,9 +68,17 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
   border-radius: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 button:hover {
   background-color: var(--color-border);
+}
+
+.icon-button svg {
+  font-size: 2rem;
+  color: var(--un-ring-color);
 }
 </style>

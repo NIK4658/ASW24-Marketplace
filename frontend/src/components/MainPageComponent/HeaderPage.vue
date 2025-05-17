@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { useFavicon } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -50,13 +52,16 @@ onMounted(() => {
       <form @submit="handleSearch">
         <input type="text" v-model="search" placeholder="Search..." />
         <button type="submit">
-          <img src="/header/search.ico" alt="Search" />
+          <!--          <img src="/header/search.ico" alt="Search" />-->
+          <i class="fa-solid fa-magnifying-glass"></i>
         </button>
       </form>
     </div>
-    <button @click="toggleTheme" class="theme-button">
-      <img v-if="isDarkTheme" src="/header/moon.ico" alt="Dark Mode" />
-      <img v-else src="/header/sun.ico" alt="Light Mode" />
+    <button @click="toggleTheme" class="theme-button" v-if="isDarkTheme">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+    <button @click="toggleTheme" class="theme-button" v-else>
+      <i class="fa-solid fa-sun"></i>
     </button>
   </header>
 </template>
@@ -105,28 +110,21 @@ button[type='submit'],
   background-color: var(--color-border-hover);
   color: var(--color-text);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: backgrosund-color 0.3s;
 }
 
-
+svg {
+  font-size: 1.1rem;
+  color: var(--un-ring-color);
+}
 
 button[type='submit']:hover,
 .theme-button:hover {
   background-color: var(--color-border);
 }
 
-button[type='submit'] img {
-  width: 20px;
-  height: 20px;
-}
-
 .theme-button {
   margin-right: 7.5vw;
-}
-
-.theme-button img {
-  width: 20px;
-  height: 20px;
 }
 
 @media (min-width: 700px) {
@@ -134,5 +132,4 @@ button[type='submit'] img {
     width: 30%;
   }
 }
-
 </style>
