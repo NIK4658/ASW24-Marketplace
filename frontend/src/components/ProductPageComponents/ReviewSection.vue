@@ -53,10 +53,12 @@ const createReview = () => {
   <div class="review-section">
     <div v-if="review !== null">
       <h2 class="section-title">Product Review:</h2>
+      <div class="writtenReview-section">
       <p class="review-rating">⭐ {{ review.score }}/5</p>
       <h3 class="review-title">{{ review.title }}</h3>
       <p class="review-description">"{{ review.description }}"</p>
       <p class="review-author">Reviewed by: <strong>{{ userReview.username }}</strong></p>
+      </div>
     </div>
     <div v-if="review === null">
       <p>No review available for this product.</p>
@@ -76,6 +78,11 @@ const createReview = () => {
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
+}
+
+.writtenReview-section{
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .review-btn {
