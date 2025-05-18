@@ -1,12 +1,7 @@
 <script setup>
-<<<<<<< Updated upstream
-import { computed } from 'vue'
-import { format, isToday } from 'date-fns'
-=======
 import axios from 'axios'
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { format, isToday } from 'date-fns';
->>>>>>> Stashed changes
 
 const sessionID = ref('')
 const readForUser = ref(false)
@@ -55,9 +50,6 @@ const formattedTime = computed(() => {
   } else {
     return format(date, 'yyyy-MM-dd')
   }
-<<<<<<< Updated upstream
-})
-=======
 });
 
 const updateReadForUser = async () => {
@@ -84,23 +76,14 @@ watch(
     updateReadForUser();
   }
 );
->>>>>>> Stashed changes
 </script>
 
 <template>
   <div class="chat-preview" @click="handleClick">
     <div class="chat-info">
-<<<<<<< Updated upstream
-      <img
-        :src="'data:' + props.image.contentType + ';base64,' + props.image.data"
-        alt="User Image"
-        class="chat-image"
-      />
-=======
       <span v-if="!readForUser" class="chat-read-emoji">✉</span>
       <img :src="'data:' + props.image.contentType + ';base64,' + props.image.data" alt="User Image"
         class="chat-image" />
->>>>>>> Stashed changes
       <div class="chat-details">
         <p class="chat-username">{{ username }}</p>
         <p class="chat-message">
@@ -162,13 +145,9 @@ watch(
 .chat-time {
   color: var(--color-text);
 }
-<<<<<<< Updated upstream
-</style>
-=======
 
 .chat-read-emoji {
   font-size: 20px;
   margin-right: 8px;
 }
 </style>
->>>>>>> Stashed changes
