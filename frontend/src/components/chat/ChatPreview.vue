@@ -1,6 +1,15 @@
 <script setup>
+<<<<<<< Updated upstream
 import { computed } from 'vue'
 import { format, isToday } from 'date-fns'
+=======
+import axios from 'axios'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
+import { format, isToday } from 'date-fns';
+>>>>>>> Stashed changes
+
+const sessionID = ref('')
+const readForUser = ref(false)
 
 const props = defineProps({
   id: {
@@ -14,6 +23,10 @@ const props = defineProps({
   username: {
     type: String,
     required: true,
+  },
+  sender: {
+    type: String,
+    required: true
   },
   message: {
     type: String,
@@ -42,20 +55,57 @@ const formattedTime = computed(() => {
   } else {
     return format(date, 'yyyy-MM-dd')
   }
+<<<<<<< Updated upstream
 })
+=======
+});
+
+const updateReadForUser = async () => {
+  if (sessionID.value === props.sender) {
+    readForUser.value = true;
+  } else if (sessionID.value !== props.sender && props.read === false) {
+    readForUser.value = false;
+  } else if (sessionID.value !== props.sender && props.read === true) {
+    readForUser.value = true;
+  }
+};
+
+onMounted(async () => {
+  const sessionData = await axios.get('/backend/users/session', {
+    withCredentials: true,
+  });
+  sessionID.value = sessionData.data.userId;
+  updateReadForUser();
+});
+
+watch(
+  () => [props.read, props.sender, sessionID.value],
+  () => {
+    updateReadForUser();
+  }
+);
+>>>>>>> Stashed changes
 </script>
 
 <template>
   <div class="chat-preview" @click="handleClick">
     <div class="chat-info">
+<<<<<<< Updated upstream
       <img
         :src="'data:' + props.image.contentType + ';base64,' + props.image.data"
         alt="User Image"
         class="chat-image"
       />
+=======
+      <span v-if="!readForUser" class="chat-read-emoji">✉</span>
+      <img :src="'data:' + props.image.contentType + ';base64,' + props.image.data" alt="User Image"
+        class="chat-image" />
+>>>>>>> Stashed changes
       <div class="chat-details">
         <p class="chat-username">{{ username }}</p>
-        <p class="chat-message">{{ message }}</p>
+        <p class="chat-message">
+          <span v-if="sessionID === props.sender">⤴ </span>{{ message }}
+        </p>
       </div>
     </div>
     <div class="chat-meta">
@@ -112,4 +162,13 @@ const formattedTime = computed(() => {
 .chat-time {
   color: var(--color-text);
 }
+<<<<<<< Updated upstream
 </style>
+=======
+
+.chat-read-emoji {
+  font-size: 20px;
+  margin-right: 8px;
+}
+</style>
+>>>>>>> Stashed changes
