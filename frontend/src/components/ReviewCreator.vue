@@ -109,6 +109,34 @@ const isValidForm = computed(() => {
   return score.value && reviewTitle.value && reviewDescription.value
 })
 
+const handleStarClick = (event) => {
+  let el = event.target
+  while (el && !el.dataset.value) {
+    el = el.parentElement
+  }
+  if (el && el.dataset.value) {
+    const val = Number(el.dataset.value)
+    if (!isNaN(val)) {
+      score.value = val
+      console.log('Clicked star:', score.value)
+    }
+  }
+}
+
+const handleStarHover = (event) => {
+  let el = event.target
+  while (el && !el.dataset.value) {
+    el = el.parentElement
+  }
+  if (el && el.dataset.value) {
+    const val = Number(el.dataset.value)
+    if (!isNaN(val)) {
+      hoverValue.value = val
+      console.log('Hovered star:', hoverValue.value)
+    }
+  }
+}
+
 
 </script>
 
@@ -121,20 +149,17 @@ const isValidForm = computed(() => {
     <form @submit.prevent="handleSender">
       <!-- Rating -->
       <label>Rating:</label>
-      <div class="star-rating">
+      <div class="star-rating" @click="handleStarClick" @mouseover="handleStarHover" @mouseleave="hoverValue = null">
         <i
           v-for="n in maxScore"
           :key="n"
-          class="fa-star"
           :class="{
-            fas: n <= (hoverValue ?? score),
-            far: n > (hoverValue ?? score),
+            'fa-regular fa-star': n <= (hoverValue ?? score),
+            'fa-solid fa-star': n > (hoverValue ?? score),
             filled: n <= (hoverValue ?? score)
           }"
-          @mouseover="hoverValue = n"
-          @mouseleave="hoverValue = null"
-          @click="score = n"
-        />
+          :data-value="n"
+        ></i>
       </div>
       <!-- Condizione per obbligare la selezione -->
       <span v-if="submitted && !score" style="color: red;">Rating is required.</span>
@@ -157,61 +182,90 @@ const isValidForm = computed(() => {
 </template>
 
 <style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.container {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.image-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.image-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.image-item img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  margin-top: 10px;
-}
 
 .star-rating {
   display: flex;
   gap: 4px;
   font-size: 2rem;
-  cursor: pointer;
-}
-
-i {
-  font-size: 2rem;
-  color: #ccc;
-  cursor: pointer;
-  transition: color 0.2s;
 }
 
 .filled {
   color: gold;
 }
 
-</style>
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--color-background-soft);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
+h2 {
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+input[type='text'],
+input[type='number'],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  form {
+    gap: 10px;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  textarea,
+  select {
+    font-size: 12px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+</style>
