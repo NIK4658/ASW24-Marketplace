@@ -34,6 +34,15 @@ const setupSocketRoom = async () => {
   socket.value.emit('joinRoom', { roomId: room.value._id, username: sessionData.value.data.username });
 }
 
+// Set sender as read
+const setSenderRead = async () => {
+  try {
+    const response = await axios.post(`/backend/chat/between/${endpointSessionID.value}/${sessionID.value}`)
+  } catch (error) {
+    console.error('Error setting sender as read: ', error)
+  }
+}
+
 // Handle chat sending
 const handleSendMessage = async (currentMessage) => {
   try {
@@ -64,6 +73,7 @@ onMounted(async () => {
   
   await setupSocketRoom()
   await loadChat()
+  await setSenderRead()
 })
 
 onUnmounted(() => {
