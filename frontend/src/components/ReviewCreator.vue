@@ -109,33 +109,6 @@ const isValidForm = computed(() => {
   return score.value && reviewTitle.value && reviewDescription.value
 })
 
-const handleStarClick = (event) => {
-  let el = event.target
-  while (el && !el.dataset.value) {
-    el = el.parentElement
-  }
-  if (el && el.dataset.value) {
-    const val = Number(el.dataset.value)
-    if (!isNaN(val)) {
-      score.value = val
-      console.log('Clicked star:', score.value)
-    }
-  }
-}
-
-const handleStarHover = (event) => {
-  let el = event.target
-  while (el && !el.dataset.value) {
-    el = el.parentElement
-  }
-  if (el && el.dataset.value) {
-    const val = Number(el.dataset.value)
-    if (!isNaN(val)) {
-      hoverValue.value = val
-      console.log('Hovered star:', hoverValue.value)
-    }
-  }
-}
 </script>
 
 <template>
@@ -149,12 +122,11 @@ const handleStarHover = (event) => {
       <label>Rating:</label>
       <div
         class="star-rating"
-        @click="handleStarClick"
-        @mouseover="handleStarHover"
-        @mouseleave="hoverValue = null"
       >
         <font-awesome-icon
-          @click = "console.log('ciao')"
+          @click = "score = n"
+          @mouseover = "hoverValue = n"
+          @mouseleave = "hoverValue = null"
           v-for="n in maxScore"
           :key="n"
           :icon="['fas', n <= (hoverValue ?? score) ? 'star' : 'star']"
@@ -168,14 +140,10 @@ const handleStarHover = (event) => {
       <!-- Review Title -->
       <label>Review Title:</label>
       <input type="text" v-model="reviewTitle" required />
-      <span v-if="submitted && !reviewTitle" style="color: red">Title is required.</span>
 
       <!-- Review Description -->
       <label>Review Description:</label>
       <textarea v-model="reviewDescription" required></textarea>
-      <span v-if="submitted && !reviewDescription" style="color: red"
-        >Description is required.</span
-      >
 
       <!-- Submit Button -->
       <!-- <button type="submit" :disabled="!isValidForm">Submit</button> -->
