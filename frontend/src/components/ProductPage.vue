@@ -7,7 +7,6 @@ import BuyButton from "@/components/ProductPageComponents/BuyButton.vue";
 import SendMessagesButton from "@/components/ProductPageComponents/SendMessagesButton.vue";
 import ReviewSection from "@/components/ProductPageComponents/ReviewSection.vue";
 import PrivateActionsProduct from "@/components/ProductPageComponents/PrivateActionsProduct.vue";
-import NotificationComponent from "@/components/ProductPageComponents/NotificationComponent.vue";
 
 const route = useRoute()
 const product = ref(null)
@@ -42,14 +41,6 @@ const nextImage = () => {
   currentImageIndex.value = (currentImageIndex.value + 1) % product.value.images.length
 }
 
-const popupRef = ref(null)
-
-
-const sendNotification = () => {
-  if (popupRef.value) {
-    popupRef.value.sendNotification()
-  }
-}
 
 </script>
 
@@ -102,7 +93,7 @@ const sendNotification = () => {
 
         <div class="actions">
           <BuyButton :product="product" :userLogged="userLogged"></BuyButton>
-          <SendMessagesButton :product="product" :userLogged="userLogged"></SendMessagesButton>
+          <SendMessagesButton :seller="product.seller.username" :userLogged="userLogged"></SendMessagesButton>
           <ShareButton></ShareButton>
         </div>
 
