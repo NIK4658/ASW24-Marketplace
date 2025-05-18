@@ -3,8 +3,8 @@ import { ref } from 'vue'
 import { useFavicon } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted } from 'vue'
-import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/fontawesome-free/js/all.js'
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faMoon} from "@fortawesome/free-solid-svg-icons";
 
 const route = useRoute()
 const router = useRouter()
@@ -57,10 +57,10 @@ onMounted(() => {
       </form>
     </div>
     <button @click="toggleTheme" class="theme-button" v-if="isDarkTheme">
-      <i class="fa-solid fa-moon"></i>
+      <font-awesome-icon :icon="['fas', 'sun']" />
     </button>
     <button @click="toggleTheme" class="theme-button" v-else>
-      <i class="fa-solid fa-sun"></i>
+      <font-awesome-icon :icon="['fas', 'house']" />
     </button>
   </header>
 </template>
