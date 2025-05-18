@@ -3,8 +3,6 @@ import { ref } from 'vue'
 import { useFavicon } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted } from 'vue'
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faMoon} from "@fortawesome/free-solid-svg-icons";
 
 const route = useRoute()
 const router = useRouter()
@@ -52,7 +50,7 @@ onMounted(() => {
       <form @submit="handleSearch">
         <input type="text" v-model="search" placeholder="Search..." />
         <button type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
         </button>
       </form>
     </div>
@@ -60,7 +58,7 @@ onMounted(() => {
       <font-awesome-icon :icon="['fas', 'sun']" />
     </button>
     <button @click="toggleTheme" class="theme-button" v-else>
-      <font-awesome-icon :icon="['fas', 'house']" />
+      <font-awesome-icon :icon="['fas', 'moon']" />
     </button>
   </header>
 </template>

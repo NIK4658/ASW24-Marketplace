@@ -1,8 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/fontawesome-free/js/all.js'
 import axios from 'axios'
 
 const router = useRouter()
@@ -106,7 +104,7 @@ const handleSender = () => {
 
 <template>
   <div class="container">
-    <h2>{{ formTitle }} </h2>
+    <h2>{{ formTitle }}</h2>
     <form @submit.prevent="handleSender">
       <label>Title:</label>
       <input v-model="title" type="text" required />
@@ -130,21 +128,22 @@ const handleSender = () => {
       <div v-if="images.length" class="image-preview">
         <div v-for="(image, index) in images" :key="index" class="image-item">
           <img :src="'data:image/jpeg;base64,' + image" alt="Uploaded image" />
-          <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">️️
-<!--            ⬅️-->
-            <i class="fa-solid fa-arrow-left"></i>
+          <button type="button" @click="moveImage(index, -1)" :disabled="index === 0">
+            ️️
+            <!--            ⬅️-->
+            <font-awesome-icon :icon="['fas', 'arrow-left']" />
           </button>
           <button
             type="button"
             @click="moveImage(index, 1)"
             :disabled="index === images.length - 1"
           >
-<!--            ➡️-->
-            <i class="fa-solid fa-arrow-right"></i>
+            <!--            ➡️-->
+            <font-awesome-icon :icon="['fas', 'arrow-right']" />
           </button>
           <button type="button" @click="removeImage(index)">
-<!--            ❌-->
-            <i class="fa-solid fa-xmark"></i>
+            <!--            ❌-->
+            <font-awesome-icon :icon="['fas', 'xmark']" />
           </button>
         </div>
       </div>
@@ -240,7 +239,6 @@ button {
   margin-top: 10px;
 }
 
-
 @media (max-width: 768px) {
   .container {
     padding: 10px;
@@ -271,8 +269,4 @@ button {
     padding: 8px 10px;
   }
 }
-
-
 </style>
-
-

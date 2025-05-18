@@ -3,7 +3,6 @@ import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
-
 const router = useRouter()
 const username = ref('')
 
@@ -30,16 +29,16 @@ onMounted(async () => {
 <template>
   <footer>
     <button class="icon-button" @click="router.push({ name: 'home' })">
-      <i class="fa-solid fa-house"></i>
+      <font-awesome-icon :icon="['fas', 'home']" />
     </button>
     <button class="icon-button" @click="router.push({ name: 'inbox' })">
-      <i class="fa-solid fa-comment"></i>
+      <font-awesome-icon :icon="['fas', 'comment']" />
     </button>
     <button class="icon-button" @click="router.push({ name: 'create-post' })">
-      <i class="fa-solid fa-plus"></i>
+      <font-awesome-icon :icon="['fas', 'plus']" />
     </button>
     <button class="icon-button" @click="goToProfile">
-      <i class="fa-solid fa-user"></i>
+      <font-awesome-icon :icon="['fas', 'user']" />
     </button>
   </footer>
 </template>

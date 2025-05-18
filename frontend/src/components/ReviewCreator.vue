@@ -1,11 +1,10 @@
 <script setup>
-import {ref, onMounted, watch, computed} from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import '@fortawesome/fontawesome-free/css/all.css'
 import axios from 'axios'
-import {socket} from "@/socket.js";
+import { socket } from '@/socket.js'
 
-const submitted = ref(false)  // Flag per sapere se il form è stato inviato
+const submitted = ref(false) // Flag per sapere se il form è stato inviato
 const router = useRouter()
 const route = useRoute()
 const title = ref('')
@@ -22,7 +21,7 @@ const loadProduct = async (id) => {
     const response = await axios.get(`/backend/posts/${id}`)
     const product = response.data
 
-    try{
+    try {
       const responseReview = await axios.get(`/backend/review/product/${id}`)
       review.value = responseReview.data
     } catch (error) {
@@ -43,7 +42,6 @@ const loadProduct = async (id) => {
     buyer.value = product.buyer
     images.value = product.images.map((image) => image.data)
     seller.value = product.seller
-
   } catch (error) {
     console.error('Error fetching product data: ', error)
   }
@@ -59,21 +57,23 @@ onMounted(async () => {
   const response = await axios.get('/backend/users/session', {
     withCredentials: true,
   })
-  response.data
-    ? (buyer.value = response.data.username)
-    : (buyer.value = null)
+  response.data ? (buyer.value = response.data.username) : (buyer.value = null)
   await loadProduct(route.query.id)
 })
 
-watch(() => route.query.id, async (id) => {
-  id ? await loadProduct(id) : resetForm()
-})
+watch(
+  () => route.query.id,
+  async (id) => {
+    id ? await loadProduct(id) : resetForm()
+  },
+)
 
 const handleSender = () => {
   submitted.value = true
   if (isValidForm.value) {
     axios
-      .post('/backend/review',
+      .post(
+        '/backend/review',
         {
           buyer: buyer.value,
           seller: seller.value,
@@ -84,14 +84,14 @@ const handleSender = () => {
         },
         {
           withCredentials: true, // Aggiungi questa opzione per inviare i cookie di sessione
-        }
+        },
       )
       .then((response) => {
-        socket.value.emit("reviewNotificationServer", {
-          targetUser: seller.value.username
+        socket.value.emit('reviewNotificationServer', {
+          targetUser: seller.value.username,
         })
         console.log('Review created:', response.data)
-        router.push({name: 'product page', params: {id: response.data.post}})
+        router.push({ name: 'product page', params: { id: response.data.post } })
       })
       .catch((error) => {
         console.error('Error during review creation:', error)
@@ -136,43 +136,49 @@ const handleStarHover = (event) => {
     }
   }
 }
-
-
 </script>
 
 <template>
   <div class="container">
-    <h2> Post a review about: {{title}} </h2>
-    <h3> Seller:  </h3>
-    <h3> Condition: {{condition}} </h3>
-    <h3> paid: €{{price}} </h3>
+    <h2>Post a review about: {{ title }}</h2>
+    <h3>Seller:</h3>
+    <h3>Condition: {{ condition }}</h3>
+    <h3>paid: €{{ price }}</h3>
     <form @submit.prevent="handleSender">
       <!-- Rating -->
       <label>Rating:</label>
-      <div class="star-rating" @click="handleStarClick" @mouseover="handleStarHover" @mouseleave="hoverValue = null">
-        <i
-          v-for="n in maxScore"
-          :key="n"
-          :class="{
-            'fa-regular fa-star': n <= (hoverValue ?? score),
-            'fa-solid fa-star': n > (hoverValue ?? score),
-            filled: n <= (hoverValue ?? score)
-          }"
-          :data-value="n"
-        ></i>
+      <div
+        class="star-rating"
+        @click="handleStarClick"
+        @mouseover="handleStarHover"
+        @mouseleave="hoverValue = null"
+      >
+<!--        <i-->
+<!--          v-for="n in maxScore"-->
+<!--          :key="n"-->
+<!--          :class="{-->
+<!--            'fa-regular fa-star': n <= (hoverValue ?? score),-->
+<!--            'fa-solid fa-star': n > (hoverValue ?? score),-->
+<!--            filled: n <= (hoverValue ?? score),-->
+<!--          }"-->
+<!--          :data-value="n"-->
+<!--        ></i>-->
+        <font-awesome-icon :icon="['fat', 'star']" />
       </div>
       <!-- Condizione per obbligare la selezione -->
-      <span v-if="submitted && !score" style="color: red;">Rating is required.</span>
+      <span v-if="submitted && !score" style="color: red">Rating is required.</span>
 
       <!-- Review Title -->
       <label>Review Title:</label>
       <input type="text" v-model="reviewTitle" required />
-      <span v-if="submitted && !reviewTitle" style="color: red;">Title is required.</span>
+      <span v-if="submitted && !reviewTitle" style="color: red">Title is required.</span>
 
       <!-- Review Description -->
       <label>Review Description:</label>
       <textarea v-model="reviewDescription" required></textarea>
-      <span v-if="submitted && !reviewDescription" style="color: red;">Description is required.</span>
+      <span v-if="submitted && !reviewDescription" style="color: red"
+        >Description is required.</span
+      >
 
       <!-- Submit Button -->
       <!-- <button type="submit" :disabled="!isValidForm">Submit</button> -->
@@ -182,7 +188,6 @@ const handleStarHover = (event) => {
 </template>
 
 <style scoped>
-
 .star-rating {
   display: flex;
   gap: 4px;
