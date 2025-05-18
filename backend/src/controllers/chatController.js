@@ -66,12 +66,16 @@ exports.getPreviewsByUser = async (req, res) => {
           _id: lastMessage._id,
           image: formattedImage,
           username: user?.username || 'Unknown',
+          sender: lastMessage.sender,
           message: lastMessage.message,
           time: lastMessage.createdAt,
           read: lastMessage.read
         };
       })
     );
+
+    // Sort previews by time descending (most recent first)
+    previews.sort((a, b) => new Date(b.time) - new Date(a.time));
 
     res.status(200).json(previews);
   } catch (error) {
@@ -128,8 +132,12 @@ exports.readChatsBetweenUsers = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(userId1) || !mongoose.Types.ObjectId.isValid(userId2)) {
       return res.status(400).json({ message: 'Invalid users ID' })
     }
+    
+    await chatModel.updateMany(
+      { sender: userId1, receiver: userId2 },
+      { $set: { read: true } }
+    );
 
-    await chatModel.updateMany({ sender: userId1, receiver: userId2 }, { read: true })
     res.status(200).json({ message: 'Chats marked as read.' })
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong while marking the chats as read. ' + error })
