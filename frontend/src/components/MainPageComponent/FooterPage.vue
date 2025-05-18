@@ -2,8 +2,7 @@
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/fontawesome-free/js/all.js'
+
 
 const router = useRouter()
 const username = ref('')
