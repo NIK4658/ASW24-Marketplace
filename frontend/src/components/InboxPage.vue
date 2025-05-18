@@ -49,6 +49,7 @@ onUnmounted(() => {
   chatPreviews.value = []
   sessionID.value = ''
   endpointUsername.value = ''
+  socket.value.off('newMessageNotificationClient')
 })
 
 socket.value.on('newMessageNotificationClient', () => {
