@@ -10,8 +10,12 @@ import ChatPage from '@/components/ChatPage.vue'
 
 <style scoped>
 .chatview-wrapper {
-  padding-top: var(--header-height);
-  padding-bottom: var(--footer-height);
   box-sizing: border-box;
+  max-width: 600px;
+  margin: auto;
+  min-height: 60vh;
+  background-color: var(--color-background-soft);
+  border-radius: 8px;
+  padding: 30px;
 }
 </style>

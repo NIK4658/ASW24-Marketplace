@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
 import { computed } from 'vue';
 import { format, isToday } from 'date-fns';
 

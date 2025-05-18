@@ -73,6 +73,15 @@ socket.value.on('newMessageNotificationClient', () => {
   text-align: center;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
+.container {
+  max-width: 600px;
+  min-height: 60vh;
+  margin: auto;
+  padding: 20px;
+  background-color: var(--color-background-soft);
+  border-radius: 8px;
+}
+
 </style>
