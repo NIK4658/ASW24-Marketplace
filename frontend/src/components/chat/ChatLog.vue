@@ -1,6 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { format, isToday } from 'date-fns';
+import axios from 'axios';
+
+const sessionUsername = ref("");
 
 const props = defineProps({
   chatLog: {
@@ -30,7 +33,7 @@ const formattedChatLog = computed(() => {
   <div class="chat-log">
     <div v-for="chat in formattedChatLog" :key="chat._id">
       <h2>{{ chat.sender.username }}</h2>
-      <p>{{ chat.message }}</p>
+      <p>▪ {{ chat.message }}</p>
       <span>{{ chat.formattedTime }}</span>
     </div>
   </div>
@@ -51,19 +54,21 @@ h1 {
   gap: 10px;
 }
 
-.chat-log>h2 {
+.chat-log h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
+  color:#8b8b8b
 }
 
-.chat-log>p {
+.chat-log p {
   font-size: 1.2rem;
   margin: 0;
+  color: var(--chat-message-color);
 }
 
-.chat-log>span {
-  font-size: 1rem;
-  color: #888;
+.chat-log span {
+  font-size: 0.9rem;
+  color: #5e5e5e;
 }
 </style>
