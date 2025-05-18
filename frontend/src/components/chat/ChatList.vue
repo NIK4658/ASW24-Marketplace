@@ -17,13 +17,14 @@ const handleSelectPreview = (chatId) => {
   emit('select-preview', chatId);
   selectedChatId.value = chatId; 
 };
+
 </script>
 
 <template>
   <div class="container">
     <ul>
       <chat-preview v-for="chat in props.chats" :id="chat._id" :image="chat.image" :username="chat.username"
-        :message="chat.message" :time="chat.time" :read="chat.read" @click="handleSelectPreview" />
+        :sender="chat.sender" :message="chat.message" :time="chat.time" :read="chat.read" @click="handleSelectPreview" />
     </ul>
   </div>
 </template>
