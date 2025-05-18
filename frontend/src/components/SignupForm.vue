@@ -31,8 +31,12 @@ function handleSignup() {
       }
     })
     .catch((error) => {
-      console.error('Error during sign up:', error)
-      errorMessage.value = error.response.data.message
+      console.error(error.response.data.message,"->", error.response.data.error)
+      if(error.response.data.error.code === 11000) {
+        errorMessage.value = 'Username or email already exists'
+      } else {
+        errorMessage.value = 'Internal server error'
+      }
     })
 }
 
