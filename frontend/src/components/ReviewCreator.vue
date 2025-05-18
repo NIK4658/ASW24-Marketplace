@@ -153,17 +153,14 @@ const handleStarHover = (event) => {
         @mouseover="handleStarHover"
         @mouseleave="hoverValue = null"
       >
-<!--        <i-->
-<!--          v-for="n in maxScore"-->
-<!--          :key="n"-->
-<!--          :class="{-->
-<!--            'fa-regular fa-star': n <= (hoverValue ?? score),-->
-<!--            'fa-solid fa-star': n > (hoverValue ?? score),-->
-<!--            filled: n <= (hoverValue ?? score),-->
-<!--          }"-->
-<!--          :data-value="n"-->
-<!--        ></i>-->
-        <font-awesome-icon :icon="['fat', 'star']" />
+        <font-awesome-icon
+          @click = "console.log('ciao')"
+          v-for="n in maxScore"
+          :key="n"
+          :icon="['fas', n <= (hoverValue ?? score) ? 'star' : 'star']"
+          :data-value="n"
+          :class="{ filled: n <= (hoverValue ?? score) }"
+        />
       </div>
       <!-- Condizione per obbligare la selezione -->
       <span v-if="submitted && !score" style="color: red">Rating is required.</span>
