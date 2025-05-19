@@ -5,35 +5,10 @@ const cors = require('cors')
 const session = require('express-session')
 const http = require('http')
 const socketServer = require('./socketServer')
+const settings = require('./settings.json')
 
 const app = express()
 const server = http.createServer(app)
-
-let settings = {
-  mongo: {
-    protocol: 'mongodb',
-    username: '',
-    password: '',
-    host: 'localhost',
-    port: 27017,
-    database: 'webProject',
-    authSource: 'admin'
-  },
-  sessionSecret: 'sessionSecret123',
-  jwt: {
-    secret: 'jwtSecret123',
-    expires: '1d'
-  }
-}
-
-try {
-  const rawSettings = fs.readFileSync('./settings.json')
-  const parsed = JSON.parse(rawSettings)
-  settings = { ...settings, ...parsed }
-  console.log('Loaded settings.json')
-} catch (error) {
-  console.warn('⚠️ settings.json not found or invalid, using default settings.')
-}
 
 const sessionMiddleware = session({
   secret: settings.sessionSecret,
