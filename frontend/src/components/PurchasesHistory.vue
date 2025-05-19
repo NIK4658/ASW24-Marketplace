@@ -11,9 +11,9 @@ const errorFlag = ref(false)
 const loadPosts = async () => {
   try {
     const username = route.params.username
-    const response = await axios.get('/backend/users/' + username)
+    const response = await axios.get('http://localhost:3000/users/' + username)
     userField.value = response.data
-    const response2 = await axios.post('/backend/posts/user/purchases/' + username)
+    const response2 = await axios.post('http://localhost:3000/posts/user/purchases/' + username)
     posts.value = response2.data
   } catch (error) {
     errorFlag.value = true

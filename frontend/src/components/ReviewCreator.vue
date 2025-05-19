@@ -18,11 +18,11 @@ const review = ref(null)
 
 const loadProduct = async (id) => {
   try {
-    const response = await axios.get(`/backend/posts/${id}`)
+    const response = await axios.get(`http://localhost:3000/posts/${id}`)
     const product = response.data
 
     try {
-      const responseReview = await axios.get(`/backend/review/product/${id}`)
+      const responseReview = await axios.get(`http://localhost:3000/review/product/${id}`)
       review.value = responseReview.data
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -54,7 +54,7 @@ const resetForm = () => {
 }
 
 onMounted(async () => {
-  const response = await axios.get('/backend/users/session', {
+  const response = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
   })
   response.data ? (buyer.value = response.data.username) : (buyer.value = null)
@@ -73,7 +73,7 @@ const handleSender = () => {
   if (isValidForm.value) {
     axios
       .post(
-        '/backend/review',
+        'http://localhost:3000/review',
         {
           buyer: buyer.value,
           seller: seller.value,

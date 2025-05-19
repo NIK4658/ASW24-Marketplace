@@ -17,7 +17,7 @@ const chatTitle = ref('')
 // Load chat logs between users
 const loadChat = async () => {
   try {
-    const response = await axios.get(`/backend/chat/between/${sessionID.value}/${endpointSessionID.value}`)
+    const response = await axios.get(`http://localhost:3000/chat/between/${sessionID.value}/${endpointSessionID.value}`)
     chatMessages.value = response.data
   } catch (error) {
     console.error('Error fetching chat log between users: ', error)
@@ -26,7 +26,7 @@ const loadChat = async () => {
 
 // Setup socket connection with room
 const setupSocketRoom = async () => {
-  const response = await axios.post('/backend/room', {
+  const response = await axios.post('http://localhost:3000/room', {
     user1: sessionID.value,
     user2: endpointSessionID.value
   });
@@ -37,7 +37,7 @@ const setupSocketRoom = async () => {
 // Set sender as read
 const setSenderRead = async () => {
   try {
-    const response = await axios.post(`/backend/chat/between/${endpointSessionID.value}/${sessionID.value}`)
+    const response = await axios.post(`http://localhost:3000/chat/between/${endpointSessionID.value}/${sessionID.value}`)
   } catch (error) {
     console.error('Error setting sender as read: ', error)
   }
@@ -46,7 +46,7 @@ const setSenderRead = async () => {
 // Handle chat sending
 const handleSendMessage = async (currentMessage) => {
   try {
-    const loggedChat = await axios.post(`/backend/chat`, {
+    const loggedChat = await axios.post(`http://localhost:3000/chat`, {
       sender: sessionID.value,
       receiver: endpointSessionID.value,
       message: currentMessage
@@ -61,16 +61,16 @@ const handleSendMessage = async (currentMessage) => {
 }
 
 onMounted(async () => {
-  const response = await axios.get('/backend/users/session', {
+  const response = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
   })
 
   sessionID.value = response.data.userId
-  sessionData.value = await axios.get(`/backend/users/id/${sessionID.value}`);
-  endpointUserData.value = await axios.get(`/backend/users/${route.params.username}`);
+  sessionData.value = await axios.get(`http://localhost:3000/users/id/${sessionID.value}`);
+  endpointUserData.value = await axios.get(`http://localhost:3000/users/${route.params.username}`);
   endpointSessionID.value = endpointUserData.value.data._id;
   chatTitle.value = endpointUserData.value.data.username;
-  
+
   await setupSocketRoom()
   await loadChat()
   await setSenderRead()

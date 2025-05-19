@@ -6,7 +6,7 @@ import axios from "axios";
 const socket = ref(null)
 
 const connectSocket = async () => {
-  const res = await axios.get('/backend/users/session', {withCredentials: true})
+  const res = await axios.get('http://localhost:3000/users/session', {withCredentials: true})
   if ((!socket.value || !socket.value.connected) && res.status === 200) {
     socket.value = io('http://localhost:3000', {withCredentials: true})
   }

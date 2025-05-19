@@ -63,7 +63,7 @@ const updateReadForUser = async () => {
 };
 
 onMounted(async () => {
-  const sessionData = await axios.get('/backend/users/session', {
+  const sessionData = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
   });
   sessionID.value = sessionData.data.userId;

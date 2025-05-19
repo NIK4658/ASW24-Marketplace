@@ -16,7 +16,7 @@ const formTitle = computed(() => (route.query.id ? 'Edit a Post' : 'Create a Pos
 
 const loadProduct = async (id) => {
   try {
-    const response = await axios.get(`/backend/posts/${id}`)
+    const response = await axios.get(`http://localhost:3000/posts/${id}`)
     const product = response.data
     title.value = product.title
     price.value = product.price
@@ -37,7 +37,7 @@ const resetForm = () => {
 }
 
 onMounted(async () => {
-  const response = await axios.get('/backend/users/session', {
+  const response = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
   })
   seller.value = response.data.username
@@ -84,7 +84,7 @@ const removeImage = (index) => {
 
 const handleSender = () => {
   axios
-    .post(route.query.id ? `/backend/posts/${route.query.id}` : '/backend/posts', {
+    .post(route.query.id ? `http://localhost:3000/posts/${route.query.id}` : 'http://localhost:3000/posts', {
       title: title.value,
       price: price.value,
       condition: condition.value,

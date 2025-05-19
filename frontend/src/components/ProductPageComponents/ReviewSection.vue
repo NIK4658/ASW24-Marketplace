@@ -15,10 +15,10 @@ const router = useRouter();
 
 const loadReview = async () => {
   try {
-    const response = await axios.get('/backend/review/product/' + route.params.id)
+    const response = await axios.get('http://localhost:3000/review/product/' + route.params.id)
     if(response.data.length !== 0) {
       review.value = response.data[0]
-      const responseUserReview = await axios.get('/backend/users/id/' + review.value.buyer)
+      const responseUserReview = await axios.get('http://localhost:3000/users/id/' + review.value.buyer)
       userReview.value = responseUserReview.data
     }
     else {

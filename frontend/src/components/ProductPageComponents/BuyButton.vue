@@ -13,7 +13,7 @@ const router = useRouter();
 
 const buyNow = async () => {
   try {
-    await axios.post(`/backend/posts/${route.params.id}`, {
+    await axios.post(`http://localhost:3000/posts/${route.params.id}`, {
       buyer: userLogged,
       status: 'sold',
     });

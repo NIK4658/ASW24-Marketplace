@@ -16,7 +16,7 @@ const currentImageIndex = ref(0)
 
 const loadProduct = async () => {
   try {
-    const response = await axios.get('/backend/posts/' + route.params.id)
+    const response = await axios.get('http://localhost:3000/posts/' + route.params.id)
     product.value = response.data
   } catch (error) {
     errorFlag.value = true
@@ -26,7 +26,7 @@ const loadProduct = async () => {
 
 onMounted(async () => {
   await loadProduct()
-  const response = await axios.get('/backend/users/session', {
+  const response = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
   })
   userLogged.value = response.data.username

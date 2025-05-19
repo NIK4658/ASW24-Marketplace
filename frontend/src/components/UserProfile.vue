@@ -13,13 +13,13 @@ const errorFlag = ref(false)
 const loadPosts = async () => {
   try {
     const username = route.params.username
-    const getUserField = await axios.get('/backend/users/' + username)
+    const getUserField = await axios.get('http://localhost:3000/users/' + username)
     userField.value = getUserField.data
 
-    const getUserPosts = await axios.post('/backend/posts/user/' + username)
+    const getUserPosts = await axios.post('http://localhost:3000/posts/user/' + username)
     posts.value = getUserPosts.data.filter((post) => post.buyer === null)
 
-    const getCurrentUserLogged = await axios.get('/backend/users/session', {
+    const getCurrentUserLogged = await axios.get('http://localhost:3000/users/session', {
       withCredentials: true,
     })
     userLogged.value = getCurrentUserLogged.data.username
@@ -44,7 +44,7 @@ watch(() => route.params.username, async () => {
 
 const logout = async () => {
   try {
-    await axios.post('/backend/users/session/logout', null, {
+    await axios.post('http://localhost:3000/users/session/logout', null, {
       withCredentials: true,
     })
     await router.push({ name: 'login' })

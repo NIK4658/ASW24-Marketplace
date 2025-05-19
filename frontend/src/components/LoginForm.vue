@@ -17,7 +17,7 @@ const errorMessage = ref('')
 function handleLogin() {
   axios
     .post(
-      '/backend/users/session/login',
+      'http://localhost:3000/users/session/login',
       {
         username: username.value,
         password: password.value,

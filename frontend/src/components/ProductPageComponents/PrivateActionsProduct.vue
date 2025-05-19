@@ -22,7 +22,7 @@ const editPost = () => {
 const deletePost = async () => {
   try {
     const postId = route.params.id
-    await axios.delete('/backend/posts/' + postId)
+    await axios.delete('http://localhost:3000/posts/' + postId)
     await router.push({ name: 'profile', params: { username: userLogged } }).then(() => {
       window.location.reload()
     })

@@ -13,7 +13,7 @@ const endpointUsername = ref('')
 // Load chat previews
 const loadPreviews = async () => {
   try {
-    const response = await axios.get(`/backend/chat/${sessionID.value}`)
+    const response = await axios.get(`http://localhost:3000/chat/${sessionID.value}`)
     chatPreviews.value = response.data
   } catch (error) {
     console.error('Error fetching data for previews: ', error)
@@ -22,7 +22,7 @@ const loadPreviews = async () => {
 
 // Handle chat selection, sending the user to the chat page
 const handleSelectPreview = async (chatId) => {
-  const response = await axios.get(`/backend/chat/data/${chatId}`)
+  const response = await axios.get(`http://localhost:3000/chat/data/${chatId}`)
   try {
     if (response.data.sender._id === sessionID.value) {
       endpointUsername.value = response.data.receiver.username
@@ -38,7 +38,7 @@ const handleSelectPreview = async (chatId) => {
 }
 
 onMounted(async () => {
-  const sessionData = await axios.get('/backend/users/session', {
+  const sessionData = await axios.get('http://localhost:3000/users/session', {
     withCredentials: true,
   })
   sessionID.value = sessionData.data.userId

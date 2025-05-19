@@ -16,7 +16,7 @@ const goToProfile = () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get('/backend/users/session', {
+    const response = await axios.get('http://localhost:3000/users/session', {
       withCredentials: true,
     })
     username.value = response.data.username

@@ -39,3 +39,17 @@ In the frontend folder, run:
 ```
 npm run build
 ```
+
+### Self-hosted the built frontend
+
+Move inside the nginx in the frontend and run:
+
+```
+docker compose up -d
+```
+
+Then go to the browser and open:
+
+```
+http://localhost:8080
+```
