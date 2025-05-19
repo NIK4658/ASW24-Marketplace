@@ -3,7 +3,7 @@ version: '3.8'
 services:
   nginx:
     image: nginx:stable
-    container_name: my-nginx-site
+    container_name: nginx-frontend
     ports:
       - "8080:80"
     volumes:
