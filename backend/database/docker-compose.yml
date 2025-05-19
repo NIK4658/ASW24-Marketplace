@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./database:/docker-entrypoint-initdb.d:ro
+      - .:/docker-entrypoint-initdb.d:ro
 
   mongo-express:
     depends_on:
@@ -20,12 +20,3 @@ services:
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
       ME_CONFIG_BASICAUTH: false
-
-  express:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend
-    restart: always
-    ports:
-      - "3000:3000"

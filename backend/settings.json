@@ -1,0 +1,17 @@
+{
+  "jwt": {
+    "secret": "jwtSecret123",
+    "expires": "1d"
+  },
+  "sessionSecret": "sessionSecret123",
+  "mongo": {
+    "protocol": "mongodb",
+    "username": "",
+    "password": "",
+    "host": "localhost",
+    "port": "27017",
+    "database": "webProject",
+    "authSource": "admin"
+  }
+}
+
