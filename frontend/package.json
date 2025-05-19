@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "vite build && cd nginx && docker compose up",
+    "deploy": "vite build && cd nginx && docker compose up -d",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
