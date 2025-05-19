@@ -152,4 +152,4 @@ dist-ssr
 *.sw?
 
 # Local env files
-./backend/settings-dev.json
+settings-dev.json
