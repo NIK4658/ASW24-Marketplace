@@ -3,7 +3,6 @@ const { postModel } = require('../models/postModel')
 const bcrypt = require('bcrypt')
 const defaultImage = require('fs').readFileSync('public/DefaultPfp.png')
 const jwt = require('jsonwebtoken')
-const jwtSettings = require('../../settings.json').jwt
 
 exports.searchByUsername = (req, res) => {
   userModel.findOne({ username: req.params.username })
@@ -131,7 +130,7 @@ exports.getAllUsers = (req, res) => {
     })
 }
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res, jwtSettings) => {
   const { username, password } = req.body
 
   try {

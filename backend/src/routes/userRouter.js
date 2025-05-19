@@ -1,25 +1,28 @@
-const express = require('express');
-const router = express.Router();
-const controller = require('../controllers/userController');
+const express = require('express')
+const controller = require('../controllers/userController')
 
-router.route('/')
-  // .get(controller.getAllUsers)
-  .post(controller.createUser);
+module.exports = function(jwtSettings) {
+  const router = express.Router()
 
-router.route('/session')
-  .get(controller.getSessionData);
+  router.route('/')
+    // .get(controller.getAllUsers)
+    .post(controller.createUser)
 
-router.route('/session/login')
-  .post(controller.loginUser);
+  router.route('/session')
+    .get(controller.getSessionData)
 
-router.route('/session/logout')
-  .post(controller.logoutUser);
+  router.route('/session/login')
+    .post((req, res) => controller.loginUser(req, res, jwtSettings))
 
-router.route('/:username')
-  .get(controller.searchByUsername)
-  .delete(controller.deleteUser);
+  router.route('/session/logout')
+    .post(controller.logoutUser)
 
-router.route('/id/:id')
-  .get(controller.searchById)
+  router.route('/:username')
+    .get(controller.searchByUsername)
+    .delete(controller.deleteUser)
 
-module.exports = router;
+  router.route('/id/:id')
+    .get(controller.searchById)
+
+  return router
+}
