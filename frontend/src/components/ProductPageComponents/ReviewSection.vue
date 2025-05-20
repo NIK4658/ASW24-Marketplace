@@ -116,20 +116,20 @@ const createReview = () => {
 .section-title {
   font-size: 1.2rem;
   margin-bottom: 10px;
-  color: #333;
   font-weight: 700;
+  color: var(--color-text);
 }
 
 .review-title {
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 8px;
-  color: #2c3e50;
+  color: var(--color-text);
 }
 
 .review-description {
   font-size: 1rem;
-  color: #444;
+  color: var(--color-text);
   margin-bottom: 12px;
   line-height: 1.5;
 }
@@ -143,7 +143,7 @@ const createReview = () => {
 
 .review-author {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--color-text);
   margin-bottom: 10px;
   font-style: italic;
 }
