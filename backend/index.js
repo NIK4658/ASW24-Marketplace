@@ -1,6 +1,5 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const fs = require('fs')
 const cors = require('cors')
 const session = require('express-session')
 const http = require('http')

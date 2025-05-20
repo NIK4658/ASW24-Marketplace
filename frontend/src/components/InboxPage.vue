@@ -2,8 +2,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import ChatList from '@/components/chat/ChatList.vue';
-import { socket } from "@/socket.js";
+import ChatList from '@/components/chat/ChatList.vue'
+import { socket } from '@/socket.js'
 
 const router = useRouter()
 const sessionID = ref('')
@@ -59,21 +59,30 @@ socket.value.on('newMessageNotificationClient', () => {
 
 <template>
   <div class="container">
-    <chat-list v-if="chatPreviews.length > 0" :chats="chatPreviews"
-      @select-preview="handleSelectPreview" />
+    <chat-list
+      v-if="chatPreviews.length > 0"
+      :chats="chatPreviews"
+      @select-preview="handleSelectPreview"
+    />
     <div class="placeholder" v-else>
-      No chats yet. Find an item and start a conversation!
+      <p>No chats yet.</p>
+      <br />
+      <p>Find an item and start a conversation!</p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .placeholder {
+  width: 100%;
+  height: 100%;
   font-size: 5vh;
-  color: #666;
+  color: var(--color-text);
   text-align: center;
-  padding: 20px;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -84,5 +93,4 @@ socket.value.on('newMessageNotificationClient', () => {
   background-color: var(--color-background-soft);
   border-radius: 8px;
 }
-
 </style>
