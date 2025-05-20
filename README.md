@@ -2,12 +2,12 @@
 
 Basic AWS Marketplace with Vue 3.
 
-## Start the MongoDB server on localhost
+## Start the MongoDB server on localhost with docker
 
 Go to the MongoDB dockerfile:
 
 ```
-cd backend/db/
+cd backend/database/
 ```
 
 Then run:
@@ -40,16 +40,10 @@ In the frontend folder, run:
 npm run build
 ```
 
-### Self-hosted the built frontend
+## Self-hosted the built frontend with docker
 
-Move inside the nginx in the frontend and run:
-
-```
-docker compose up -d
-```
-
-Then go to the browser and open:
+Move inside the nginx folder in the frontend and run:
 
 ```
-http://localhost:8080
+npm run deploy
 ```
