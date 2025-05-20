@@ -25,7 +25,7 @@ const emit = defineEmits(['send-message']);
 const handleSentMessage = (message) => {
   if (message.trim() !== '') {
     emit('send-message', message);
-    inputValue.value = ''; 
+    inputValue.value = '';
   }
 };
 
@@ -49,7 +49,7 @@ watch(
     <div class="chat-log-wrapper" ref="chatLogWrapper">
       <chat-log v-if="props.chatLog.length > 0" :chatTitle="props.chatTitle" :chatLog="props.chatLog" />
       <div v-else class="empty-chat-message">
-        No messages yet. Start the conversation!
+        <p>No messages yet. Start the conversation!</p>
       </div>
     </div>
     <chat-input class="chat-input" :placeholder="props.placeholder" @send-message="handleSentMessage" />
