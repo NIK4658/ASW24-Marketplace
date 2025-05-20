@@ -65,6 +65,10 @@ a {
   text-decoration: none;
   font-size: 15px;
   color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
 }
 
 .post-price {
