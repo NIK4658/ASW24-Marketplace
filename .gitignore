@@ -150,3 +150,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local env files
+settings-dev.json
