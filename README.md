@@ -1,4 +1,4 @@
-# AWS24-Marketplace
+# ASW24-Marketplace
 
 Basic AWS Marketplace with Vue 3.
 
