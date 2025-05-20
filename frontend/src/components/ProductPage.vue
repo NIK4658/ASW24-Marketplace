@@ -100,6 +100,9 @@ const nextImage = () => {
         <p class="product-description-title">Product Description:</p>
         <p class="product-description">{{ product.description }}</p>
 
+        <p class="product-condition-title">Product Condition: <span class="product-condition">{{ product.condition }}</span></p>
+
+
         <div class="seller-info">
           <p>Seller:</p>
           <p>
@@ -201,7 +204,7 @@ const nextImage = () => {
   margin-bottom: 20px;
 }
 
-.product-description-title {
+.product-description-title, .product-condition-title {
   font-weight: bold;
   margin-bottom: 10px;
 }
