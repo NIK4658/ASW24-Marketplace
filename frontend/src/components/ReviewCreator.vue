@@ -114,7 +114,7 @@ const isValidForm = computed(() => {
 <template>
   <div class="container">
     <h2>Post a review about: {{ title }}</h2>
-    <h3>Seller:</h3>
+    <h3>Seller: {{ seller.username }}</h3>
     <h3>Condition: {{ condition }}</h3>
     <h3>paid: €{{ price }}</h3>
     <form @submit.prevent="handleSender">
