@@ -1,4 +1,4 @@
-# aws24-marketplace
+# AWS24-Marketplace
 
 Basic AWS Marketplace with Vue 3.
 
@@ -42,7 +42,7 @@ npm run build
 
 ## Self-hosted the built frontend with docker
 
-Inside frontend folder run:
+Inside the frontend folder run:
 
 ```
 npm run deploy
