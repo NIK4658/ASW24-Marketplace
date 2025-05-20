@@ -42,7 +42,7 @@ npm run build
 
 ## Self-hosted the built frontend with docker
 
-Move inside the nginx folder in the frontend and run:
+Inside frontend folder run:
 
 ```
 npm run deploy
